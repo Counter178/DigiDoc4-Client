@@ -32,7 +32,6 @@ class QWin;
 #include "QPKCS11.h"
 #include "widgets/CardWidget.h"
 #include <common/QPCSC.h>
-#include <common/SslCertificate.h>
 #include <common/TokenData.h>
 
 #include <digidocpp/crypto/X509Cert.h>
@@ -72,7 +71,7 @@ static int ECDSA_SIG_set0(ECDSA_SIG *sig, BIGNUM *r, BIGNUM *s)
 #endif
 
 
-bool isMatchingType(const SslCertificate &cert)
+static bool isMatchingType(const SslCertificate &cert)
 {
 	// Check if cert is signing or authentication cert
 	return cert.keyUsage().contains(SslCertificate::KeyEncipherment) ||
@@ -80,28 +79,15 @@ bool isMatchingType(const SslCertificate &cert)
 		   cert.keyUsage().contains(SslCertificate::NonRepudiation);
 }
 
-QCardInfo *toCardInfo(const SslCertificate &c)
+static QCardInfo *toCardInfo(const SslCertificate &c)
 {
 	QCardInfo *ci = new QCardInfo;
-
-	ci->country = c.toString(QStringLiteral("C"));
 	ci->id = c.personalCode();
-	ci->isEResident = c.subjectInfo("O").contains(QStringLiteral("E-RESIDENT"));
+	if(ci->id.isEmpty())
+		ci->id = c.serialNumber(true);
 	ci->loading = false;
 	ci->type = c.type();
-	ci->valid = c.isValid();
-
-	if(c.type() & SslCertificate::TempelType)
-	{
-		ci->fullName = c.toString(QStringLiteral("CN"));
-		ci->cardType = "e-Seal";
-	}
-	else
-	{
-		ci->fullName = c.toString(QStringLiteral("GN SN"));
-		ci->cardType = c.type() & SslCertificate::DigiIDType ? "Digi ID" : "ID Card";
-	}
-
+	ci->c = c;
 	return ci;
 }
 
@@ -235,7 +221,7 @@ void QSigner::cacheCardData(const QSet<QString> & /*cards*/)
 		tokens = d->pkcs11->tokens();
 	for(const TokenData &i: qAsConst(tokens))
 	{
-		if(!d->cache.contains(i.card()) || !d->cache[i.card()]->valid)
+		if(!d->cache.contains(i.card()) || !d->cache[i.card()]->c.isValid())
 		{
 			auto sslCert = SslCertificate(i.cert());
 			if(isMatchingType(sslCert))
@@ -431,31 +417,6 @@ void QSigner::run()
 	{
 		if(QCardLock::instance().readTryLock())
 		{
-			static const QByteArray AID34 = QByteArray::fromHex("00A40400 0E F04573744549442076657220312E");
-			static const QByteArray AID35 = QByteArray::fromHex("00A40400 0F D23300000045737445494420763335");
-			static const QByteArray UPDATER_AID = QByteArray::fromHex("00A40400 0A D2330000005550443101");
-			static const QByteArray MASTER_FILE = QByteArray::fromHex("00A4000C");
-			static const QStringList atrs {
-				"3BFE1800008031FE45803180664090A4162A00830F9000EF", /*ESTEID_V3_WARM_ATR / ESTEID_V35_WARM_ATR*/
-				"3BFA1800008031FE45FE654944202F20504B4903", /*ESTEID_V35_COLD_ATR*/
-			};
-			for(const QString &readerName: QPCSC::instance().readers())
-			{
-				QPCSCReader reader(readerName, &QPCSC::instance());
-				if(!atrs.contains(reader.atr()) || !reader.connect())
-					continue;
-				if((reader.transfer(AID34).resultOk() && reader.transfer(MASTER_FILE).resultOk()) ||
-					(reader.transfer(AID35).resultOk() && reader.transfer(MASTER_FILE).resultOk()))
-					continue;
-				if(!reader.transfer(UPDATER_AID))
-				{
-					reader.transfer(AID35); // No updater found, activate AID35
-					continue;
-				}
-				reader.disconnect();
-				Q_EMIT updateRequired(readerName);
-			}
-
 			if(d->pkcs11 && !d->pkcs11->reload())
 			{
 				Q_EMIT error(tr("Failed to load PKCS#11 module"));

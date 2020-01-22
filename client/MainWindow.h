@@ -61,21 +61,18 @@ signals:
 private Q_SLOTS:
 	void activateEmail ();
 	void buttonClicked( int button );
-	void certDetailsClicked( const QString &link );
 	void changePin1Clicked( bool isForgotPin, bool isBlockedPin );
 	void changePin2Clicked( bool isForgotPin, bool isBlockedPin );
 	void changePukClicked();
 	void getEmailStatus();
 	void open(const QStringList &params, bool crypto, bool sign);
 	void openFile(const QString &file);
-	void operation(int op, bool started);
-	void pageSelected( PageIcon *const );
-	void photoClicked( const QPixmap *photo );
+	void pageSelected(PageIcon *page);
+	void photoClicked(const QPixmap &photo);
 	void savePhoto();
 	void showCardStatus();
 	void updateMyEid();
 	void warningClicked(const QString &link);
-	void removeOldCert();
 
 protected:
 	void changeEvent(QEvent* event) override;
@@ -109,7 +106,7 @@ private:
 	void onSignAction(int code, const QString &info1, const QString &info2);
 	void openContainer();
 	void openFiles(const QStringList &files, bool addFile = false, bool forceCreate = false);
-	void pinUnblock( QSmartCardData::PinType type, bool isForgotPin = false );
+	void pinUnblock(QSmartCardData::PinType type, bool isForgotPin);
 	void pinPukChange( QSmartCardData::PinType type );
 	void resetCryptoDoc(CryptoDoc *doc = nullptr);
 	void resetDigiDoc(DigiDoc *doc = nullptr, bool warnOnChange = true);
@@ -126,18 +123,13 @@ private:
 	void showCardMenu( bool show );
 	void showOverlay( QWidget *parent );
 	void showNotification( const QString &msg, bool isSuccess = false );
-	bool sign();
-	bool signMobile(const QString &idCode, const QString &phoneNumber);
+	void sign(const std::function<bool(const QString &city, const QString &state, const QString &zip, const QString &country, const QString &role)> &sign);
 	void updateCardWarnings();
-	void updateCertificate(const QString &readerName);
-	bool validateCardError( QSmartCardData::PinType type, int flags, QSmartCard::ErrorType err );
+	bool validateCardError(QSmartCardData::PinType type, QSmartCardData::PinType t, QSmartCard::ErrorType err);
 	bool validateFiles(const QString &container, const QStringList &files);
-	void showUpdateCertWarning(const QString &readerName);
 	void showPinBlockedWarning(const QSmartCardData& t);
 	void updateKeys(const QList<CKey> &keys);
 	bool wrap(const QString& wrappedFile, bool enclose);
-	void wrapAndSign();
-	void wrapAndMobileSign(const QString &idCode, const QString &phoneNumber);
 	bool wrapContainer(bool signing);
 	void containerSummary();
 	

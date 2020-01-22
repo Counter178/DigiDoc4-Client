@@ -47,19 +47,16 @@ public:
 	void update(const QSharedPointer<const QCardInfo> &ci, const QString &cardId);
 
 signals:
-	void photoClicked( const QPixmap *pixmap );
+	void photoClicked( const QPixmap &pixmap );
 	void selected( const QString &card );
 
-protected:
-	bool event( QEvent *ev ) override;
-	void changeEvent(QEvent* event) override;
-
 private:
+	bool event(QEvent *ev) override;
+	bool eventFilter(QObject *o, QEvent *e) override;
 	void clearSeal();
 
 	Ui::CardWidget *ui;
 	QString card;
-	QScopedPointer<QSvgWidget> cardIcon;
 	QSharedPointer<const QCardInfo> cardInfo;
 	QSvgWidget *seal = nullptr;
 };

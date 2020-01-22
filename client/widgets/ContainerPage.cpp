@@ -21,11 +21,11 @@
 #include "ui_ContainerPage.h"
 
 #include "DigiDoc.h"
-#include "Settings.h"
 #include "Styles.h"
 #include "crypto/CryptoDoc.h"
 #include "dialogs/AddRecipients.h"
 #include "dialogs/MobileDialog.h"
+#include "dialogs/SmartIDDialog.h"
 #include "dialogs/WarningDialog.h"
 #include "widgets/AddressItem.h"
 #include "widgets/SignatureItem.h"
@@ -35,15 +35,15 @@
 #include <QFontMetrics>
 #include <QMessageBox>
 
+#include <QtCore/QSettings>
+
 using namespace ria::qdigidoc4;
 
 ContainerPage::ContainerPage(QWidget *parent)
 : QWidget(parent)
 , ui(new Ui::ContainerPage)
 , cancelText("CANCEL")
-, changeLocationText("CHANGE")
 , convertText("ENCRYPT")
-, envelope("Envelope")
 {
 	ui->setupUi( this );
 	ui->leftPane->init(fileName);
@@ -52,7 +52,7 @@ ContainerPage::ContainerPage(QWidget *parent)
 	ui->containerFile->setFont(Styles::font(Styles::Regular, 14));
 
 	ui->changeLocation->setIcons(QStringLiteral("/images/icon_Edit.svg"),
-		QStringLiteral("/images/icon_Edit_hover.svg"), QStringLiteral("/images/icon_Edit_pressed.svg"), 4, 4, 18, 18);
+		QStringLiteral("/images/icon_Edit_hover.svg"), QStringLiteral("/images/icon_Edit_pressed.svg"), 18, 18);
 	ui->changeLocation->init( LabelButton::BoxedDeepCeruleanWithCuriousBlue, tr("CHANGE"), Actions::ContainerLocation );
 	ui->containerFile->installEventFilter(this);
 	ui->cancel->init( LabelButton::BoxedMojo, tr("CANCEL"), Actions::ContainerCancel );
@@ -62,7 +62,7 @@ ContainerPage::ContainerPage(QWidget *parent)
 	ui->summary->init( LabelButton::BoxedDeepCerulean, tr("PRINT SUMMARY"), Actions::ContainerSummary );
 	ui->save->init( LabelButton::BoxedDeepCerulean, tr("SAVE WITHOUT SIGNING"), Actions::ContainerSave );
 
-	mobileCode = Settings().value(QStringLiteral("Client/MobileCode")).toString();
+	mobileCode = QSettings().value(QStringLiteral("MobileCode")).toString();
 
 	connect(this, &ContainerPage::cardChanged, this, &ContainerPage::changeCard);
 	connect(this, &ContainerPage::cardChanged, [this](const QString& idCode, bool /*seal*/, bool /*isExpired*/, const QByteArray& serialNumber)
@@ -85,7 +85,7 @@ ContainerPage::ContainerPage(QWidget *parent)
 	connect(ui->containerFile, &QLabel::linkActivated, this, [this](const QString &link)
 		{ emit action(Actions::ContainerNavigate, link); });
 
-	ui->summary->setVisible(Settings(qApp->applicationName()).value(QStringLiteral("Client/ShowPrintSummary"), false).toBool());
+	ui->summary->setVisible(QSettings().value(QStringLiteral("ShowPrintSummary"), false).toBool());
 }
 
 ContainerPage::~ContainerPage()
@@ -128,6 +128,7 @@ bool ContainerPage::checkAction(int code, const QString& selectedCard, const QSt
 	case SignatureAdd:
 	case SignatureToken:
 	case SignatureMobile:
+	case SignatureSmartID:
 		if(ui->rightPane->hasItem(
 			[selectedCard, selectedMobile, code](Item* const item) -> bool
 			{
@@ -194,7 +195,7 @@ void ContainerPage::forward(int code)
 	case SignatureMobile:
 	{
 		MobileDialog dlg(qApp->activeWindow());
-		QString newCode = Settings().value(QStringLiteral("Client/MobileCode")).toString();
+		QString newCode = QSettings().value(QStringLiteral("MobileCode")).toString();
 		if(dlg.exec() == QDialog::Accepted)
 		{
 			if(checkAction(SignatureMobile, dlg.idCode(), dlg.phoneNo()))
@@ -213,6 +214,16 @@ void ContainerPage::forward(int code)
 		window()->setWindowTitle(tr("DigiDoc4 client"));
 		emit action(code);
 		break;
+	case SignatureSmartID:
+	{
+		SmartIDDialog dlg(qApp->activeWindow());
+		if(dlg.exec() == QDialog::Accepted)
+		{
+			if(checkAction(SignatureMobile, dlg.idCode(), QString()))
+				emit action(SignatureSmartID, dlg.country(), dlg.idCode());
+		}
+		break;
+	}
 	default:
 		if(checkAction(code, cardInReader, mobileCode))
 			emit action(code);
@@ -283,11 +294,11 @@ void ContainerPage::showMainAction(const QList<Actions> &actions)
 void ContainerPage::showSigningButton()
 {
 	if(cardInReader.isNull())
-		showMainAction({ SignatureMobile });
+		showMainAction({ SignatureMobile, SignatureSmartID });
 	else if(seal)
-		showMainAction({ SignatureToken, SignatureMobile });
+		showMainAction({ SignatureToken, SignatureMobile, SignatureSmartID });
 	else
-		showMainAction({ SignatureAdd, SignatureMobile });
+		showMainAction({ SignatureAdd, SignatureMobile, SignatureSmartID });
 }
 
 void ContainerPage::transition(CryptoDoc* container, bool canDecrypt)
@@ -383,9 +394,7 @@ void ContainerPage::updateDecryptionButton()
 
 void ContainerPage::updatePanes(ContainerState state)
 {
-	auto buttonWidth = ui->changeLocation->width();
-	bool resize = false;
-	bool showPrintSummary = Settings(qApp->applicationName()).value(QStringLiteral("Client/ShowPrintSummary"), false).toBool();
+	bool showPrintSummary = QSettings().value(QStringLiteral("ShowPrintSummary"), false).toBool();
 	auto setButtonsVisible = [](const QVector<QWidget*> &buttons, bool visible) {
 		for(QWidget *button: buttons) button->setVisible(visible);
 	};
@@ -418,7 +427,6 @@ void ContainerPage::updatePanes(ContainerState state)
 	case SignedContainer:
 		cancelText = "STARTING";
 
-		resize = !ui->changeLocation->isHidden();
 		ui->changeLocation->hide();
 		ui->leftPane->init(fileName, QStringLiteral("Content of the envelope"));
 		showRightPane(ItemSignature, QStringLiteral("Container's signatures"));
@@ -431,7 +439,6 @@ void ContainerPage::updatePanes(ContainerState state)
 	case UnencryptedContainer:
 		cancelText = "STARTING";
 		convertText = "SIGN";
-		envelope = "Container";
 
 		ui->changeLocation->show();
 		ui->leftPane->init(fileName);
@@ -443,9 +450,7 @@ void ContainerPage::updatePanes(ContainerState state)
 	case EncryptedContainer:
 		cancelText = "STARTING";
 		convertText = "SIGN";
-		envelope = "Container";
 
-		resize = !ui->changeLocation->isHidden();
 		ui->changeLocation->hide();
 		ui->leftPane->init(fileName, QStringLiteral("Encrypted files"));
 		showRightPane(ItemAddress, QStringLiteral("Recipients"));
@@ -458,12 +463,6 @@ void ContainerPage::updatePanes(ContainerState state)
 		break;
 	}
 
-	if(resize)
-	{
-		// Forcibly resize the filename widget after hiding button
-		ui->containerFile->resize(ui->containerFile->width() + buttonWidth, ui->containerFile->height());
-	}
-
 	translateLabels();
 }
 
@@ -474,11 +473,12 @@ void ContainerPage::togglePrinting(bool enable)
 
 void ContainerPage::translateLabels()
 {
-	tr("Envelope");
 	tr("STARTING");
 	tr("SIGN");
-	ui->changeLocation->setText(tr(changeLocationText));
+	ui->changeLocation->setText(tr("CHANGE"));
+	ui->changeLocation->setAccessibleName(ui->changeLocation->text().toLower());
 	ui->cancel->setText(tr(cancelText));
-	ui->container->setText(tr(envelope));
+	ui->cancel->setAccessibleName(tr(cancelText).toLower());
 	ui->convert->setText(tr(convertText));
+	ui->convert->setAccessibleName(tr(convertText).toLower());
 }

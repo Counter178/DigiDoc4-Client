@@ -20,7 +20,7 @@
 #include "FileList.h"
 #include "ui_ItemList.h"
 
-#include "FileDialog.h"
+#include "dialogs/FileDialog.h"
 #include "dialogs/WarningDialog.h"
 #include "effects/ButtonHoverFilter.h"
 #include "widgets/FileItem.h"
@@ -40,9 +40,10 @@ FileList::FileList(QWidget *parent)
 : ItemList(parent)
 {
 	ui->download->setIcons(QStringLiteral("/images/icon_download.svg"), QStringLiteral("/images/icon_download_hover.svg"),
-		QStringLiteral("/images/icon_download_pressed.svg"), 1, 1, 17, 17);
+		QStringLiteral("/images/icon_download_pressed.svg"), 17, 17);
 	ui->download->init(LabelButton::White, QString(), 0);
-
+	ui->download->installEventFilter(
+		new ButtonHoverFilter(QStringLiteral(":/images/icon_download.svg"), QStringLiteral(":/images/icon_download_hover.svg"), this));
 	connect(ui->add, &LabelButton::clicked, this, &FileList::selectFile);
 	connect(ui->download, &LabelButton::clicked, this, &FileList::saveAll);
 }
@@ -74,6 +75,8 @@ void FileList::clear()
 
 bool FileList::eventFilter(QObject *obj, QEvent *event)
 {
+	if(!qobject_cast<FileItem*>(obj))
+		return ItemList::eventFilter(obj, event);
 	switch(event->type())
 	{
 	case QEvent::MouseButtonPress:
@@ -157,9 +160,9 @@ void FileList::save(FileItem *item)
 void FileList::saveAll()
 {
 	QString dir = FileDialog::getExistingDirectory( this,
-			tr("Select folder where files will be stored") );
+		tr("Select folder where files will be stored") );
 	if( dir.isEmpty() )
-			return;
+		return;
 	int b = QMessageBox::No;	// default
 	for( int i = 0; i < documentModel->rowCount(); ++i )
 	{
@@ -172,31 +175,30 @@ void FileList::saveAll()
 					documentModel->save( i, dest );
 					continue;
 			}
-			WarningDialog dlg(tr("%1 already exists.<br />Do you want replace it?").arg( dest ), qApp->activeWindow());
+			WarningDialog dlg(tr("%1 already exists.<br />Do you want replace it?").arg( dest ), this);
 			dlg.setButtonSize(60, 5);
 			dlg.setCancelText(tr("NO"));
 			dlg.addButton(tr("YES"), QMessageBox::Yes);
 			dlg.addButton(tr("SAVE WITH OTHER NAME"), QMessageBox::No);
 			dlg.addButton(tr("REPLACE ALL"), QMessageBox::YesToAll);
+			dlg.addButton(tr("CANCEL"), QMessageBox::NoToAll);
 			b = dlg.exec();
 
-			if( b == QMessageBox::Cancel )
+			if(b == QDialog::Rejected)
+				continue;
+			if(b == QMessageBox::NoToAll)
+				break;
+			if( b == QMessageBox::No )
 			{
-					break;
-			}
-			else if( b == QMessageBox::No )
-			{
-					dest = FileDialog::getSaveFileName( this, tr("Save file"), dest );
-					if( dest.isEmpty() )
-							continue;
+				dest = FileDialog::getSaveFileName( this, tr("Save file"), dest );
+				if( dest.isEmpty() )
+					continue;
 			}
 			else
-			{
 				QFile::remove( dest );
-			}
 		}
 		documentModel->save( i, dest );
-	}	
+	}
 }
 
 void FileList::selectFile()
@@ -227,20 +229,7 @@ void FileList::setModel(DocumentModel *documentModel)
 
 void FileList::updateDownload()
 {
-	if(ui->download->isHidden())
-	{
-		if(state & (UnsignedSavedContainer | SignedContainer | UnencryptedContainer) && items.size() > 1)
-		{
-			ui->download->show();
-			ui->count->show();
-			ui->download->installEventFilter(new ButtonHoverFilter(QStringLiteral(":/images/icon_download.svg"), QStringLiteral(":/images/icon_download_hover.svg"), this));
-		}
-	}
-	else if(items.size() <= 1)
-	{
-		ui->download->hide();
-		ui->count->hide();
-	}
-
+	ui->download->setVisible(state & (UnsignedSavedContainer | SignedContainer | UnencryptedContainer) && !items.empty());
+	ui->count->setVisible(state & (UnsignedSavedContainer | SignedContainer | UnencryptedContainer) && !items.empty());
 	ui->count->setText(QString::number(items.size()));
 }

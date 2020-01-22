@@ -20,12 +20,11 @@
 #include "DigiDoc.h"
 
 #include "Application.h"
-#include "FileDialog.h"
 #include "QSigner.h"
+#include "SslCertificate.h"
+#include "dialogs/FileDialog.h"
 #include "dialogs/WarningDialog.h"
 
-#include <common/Settings.h>
-#include <common/SslCertificate.h>
 #include <common/TokenData.h>
 
 #include <digidocpp/DataFile.h>
@@ -34,11 +33,9 @@
 
 #include <QtCore/QDateTime>
 #include <QtCore/QFileInfo>
-#include <QtCore/QProcessEnvironment>
 #include <QtCore/QStringList>
 #include <QtCore/QUrl>
 #include <QtGui/QDesktopServices>
-#include <QtWidgets/QMessageBox>
 
 using namespace digidoc;
 using namespace ria::qdigidoc4;
@@ -190,7 +187,11 @@ void DigiDocSignature::setLastError( const Exception &e ) const
 	QStringList causes;
 	Exception::ExceptionCode code = Exception::General;
 	DigiDoc::parseException(e, causes, code);
-	m_lastError = causes.join('\n');
+	switch(code) {
+	case Exception::OCSPBeforeTimeStamp:
+		m_lastError = DigiDoc::tr("The timestamp added to the signature must be taken before validity confirmation"); break;
+	default: m_lastError = causes.join('\n');
+	}
 }
 
 QString DigiDocSignature::signatureMethod() const
@@ -302,19 +303,32 @@ SDocumentModel::SDocumentModel(DigiDoc *container)
 	
 }
 
-void SDocumentModel::addFile(const QString &file, const QString &mime)
+bool SDocumentModel::addFile(const QString &file, const QString &mime)
 {
-	QString fileName(QFileInfo(file).fileName());
+	QFileInfo info(file);
+	if(info.size() == 0)
+	{
+		WarningDialog dlg(tr("File you want to add is empty. Do you want to continue?"), qApp->activeWindow());
+		dlg.setCancelText(tr("NO"));
+		dlg.addButton(tr("YES"), 1);
+		if(dlg.exec() != 1)
+			return false;
+	}
+	QString fileName(info.fileName());
 	for(int row = 0; row < rowCount(); row++)
 	{
 		if(fileName == from(doc->b->dataFiles().at(size_t(row))->fileName()))
 		{
 			qApp->showWarning(DocumentModel::tr("Cannot add the file to the envelope. File '%1' is already in container.").arg(fileName), QString());
-			return;
+			return false;
 		}
 	}
 	if(doc->addFile(file, mime))
+	{
 		emit added(file);
+		return true;
+	}
+	return false;
 }
 
 void SDocumentModel::addTempReference(const QString &file)
@@ -328,14 +342,6 @@ QString SDocumentModel::data(int row) const
 		return QString();
 
 	return from(doc->b->dataFiles().at(size_t(row))->fileName());
-}
-
-QString SDocumentModel::fileId(int row) const
-{
-	if(row >= rowCount())
-		return QString();
-
-	return QString::fromUtf8(doc->b->dataFiles().at(size_t(row))->fileName().c_str());
 }
 
 QString SDocumentModel::fileSize(int row) const
@@ -359,24 +365,15 @@ void SDocumentModel::open(int row)
 	if(row >= rowCount())
 		return;
 
-	QFileInfo f(save(row, FileDialog::tempPath(
-		FileDialog::safeName(from(doc->b->dataFiles().at(size_t(row))->fileName()))
-	)));
+	QString path = FileDialog::tempPath(FileDialog::safeName(from(doc->b->dataFiles().at(size_t(row))->fileName())));
+	if(!verifyFile(path))
+		return;
+	QFileInfo f(save(row, path));
 	if( !f.exists() )
 		return;
 	doc->m_tempFiles << f.absoluteFilePath();
-#if defined(Q_OS_WIN)
-	QStringList exts = QProcessEnvironment::systemEnvironment().value( "PATHEXT" ).split( ';' );
-	exts << ".PIF" << ".SCR";
-	if( exts.contains( "." + f.suffix(), Qt::CaseInsensitive ) &&
-		QMessageBox::warning( qApp->activeWindow(), tr("DigiDoc4 client"),
-			DocumentModel::tr("This is an executable file! "
-				"Executable files may contain viruses or other malicious code that could harm your computer. "
-				"Are you sure you want to launch this file?"),
-			QMessageBox::Yes|QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
-		return;
-#else
-	QFile::setPermissions( f.absoluteFilePath(), QFile::Permissions(0x6000) );
+#if !defined(Q_OS_WIN)
+	QFile::setPermissions(f.absoluteFilePath(), QFile::Permissions(0x6000));
 #endif
 	emit openFile(f.absoluteFilePath());
 }
@@ -436,21 +433,6 @@ bool DigiDoc::addFile(const QString &file, const QString &mime)
 		return true;
 	}
 	catch( const Exception &e ) { setLastError( tr("Failed add file to container"), e ); }
-	return false;
-}
-
-bool DigiDoc::addSignature( const QByteArray &signature )
-{
-	if(!checkDoc(b->dataFiles().empty(), tr("Cannot add signature to empty container")))
-		return false;
-
-	try
-	{
-		b->addAdESSignature( std::vector<unsigned char>( signature.constData(), signature.constData() + signature.size() ) );
-		modified = true;
-		return true;
-	}
-	catch( const Exception &e ) { setLastError( tr("Failed to sign container"), e ); }
 	return false;
 }
 
@@ -552,8 +534,7 @@ bool DigiDoc::open( const QString &file )
 				"The Information System Authority does not retain information regarding the files and users of the service."), parent);
 		dlg.setCancelText(tr("CANCEL"));
 		dlg.addButton(tr("OK"), ContainerSave);
-		dlg.exec();
-		if(dlg.result() != ContainerSave)
+		if(dlg.exec() != ContainerSave)
 			return false;
 	}
 	try
@@ -595,6 +576,7 @@ bool DigiDoc::parseException(const Exception &e, QStringList &causes, Exception:
 	case Exception::CertificateUnknown:
 	case Exception::OCSPTimeSlot:
 	case Exception::OCSPRequestUnauthorized:
+	case Exception::OCSPBeforeTimeStamp:
 	case Exception::TSTooManyRequests:
 	case Exception::PINCanceled:
 	case Exception::PINFailed:
@@ -656,7 +638,7 @@ void DigiDoc::setLastError( const QString &msg, const Exception &e )
 	case Exception::CertificateUnknown:
 		qApp->showWarning(tr("Certificate status unknown"), causes.join('\n')); break;
 	case Exception::OCSPTimeSlot:
-		qApp->showWarning(tr("Check your computer time"), causes.join('\n')); break;
+		qApp->showWarning(tr("Please check your computer time. <a href='https://id.ee/index.php?id=39513'>Additional information</a>"), causes.join('\n')); break;
 	case Exception::OCSPRequestUnauthorized:
 		qApp->showWarning(tr("You have not granted IP-based access. "
 			"Check the settings of your server access certificate."), causes.join('\n')); break;
@@ -676,8 +658,8 @@ void DigiDoc::setLastError( const QString &msg, const Exception &e )
 	}
 }
 
-bool DigiDoc::sign( const QString &city, const QString &state, const QString &zip,
-	const QString &country, const QString &role, const QString &role2 )
+bool DigiDoc::sign(const QString &city, const QString &state, const QString &zip,
+	const QString &country, const QString &role, Signer *signer)
 {
 	if(!checkDoc(b->dataFiles().empty(), tr("Cannot add signature to empty container")))
 		return false;
@@ -685,17 +667,14 @@ bool DigiDoc::sign( const QString &city, const QString &state, const QString &zi
 	OpEmitter op(this, Signing);
 	try
 	{
-		qApp->signer()->setSignatureProductionPlace(
-			to(city), to(state), to(zip), to(country) );
+		signer->setSignatureProductionPlace(to(city), to(state), to(zip), to(country));
 		std::vector<std::string> roles;
-		if(!role2.isEmpty())
-			roles.push_back(to(QStringList({role, role2}).join(QStringLiteral(" / "))));
-		else if(!role.isEmpty())
+		if(!role.isEmpty())
 			roles.push_back(to(role));
-		qApp->signer()->setSignerRoles( roles );
-		qApp->signer()->setProfile("time-stamp");
+		signer->setSignerRoles(roles);
+		signer->setProfile("time-stamp");
 		qApp->waitForTSL( fileName() );
-		b->sign( qApp->signer() );
+		b->sign(signer);
 		modified = true;
 		return true;
 	}
@@ -708,7 +687,7 @@ bool DigiDoc::sign( const QString &city, const QString &state, const QString &zi
 		{
 			qApp->showWarning( tr("PIN Incorrect") );
 			if( !(qApp->signer()->tokensign().flags() & TokenData::PinLocked) )
-				return sign( city, state, zip, country, role, role2 );
+				return sign(city, state, zip, country, role, signer);
 		}
 		else
 			setLastError( tr("Failed to sign container"), e );
@@ -744,19 +723,4 @@ QList<DigiDocSignature> DigiDoc::timestamps() const
 DigiDoc::DocumentType DigiDoc::documentType() const
 {
 	return checkDoc() && b->mediaType() == "application/vnd.etsi.asic-e+zip" ? BDoc2Type : DDocType;
-}
-
-QByteArray DigiDoc::getFileDigest( unsigned int i ) const
-{
-	if( !checkDoc() || i >= b->dataFiles().size() )
-		return QByteArray();
-
-	try
-	{
-		const DataFile *file = b->dataFiles().at( i );
-		return fromVector(file->calcDigest("http://www.w3.org/2001/04/xmlenc#sha256"));
-	}
-	catch( const Exception & ) {}
-
-	return QByteArray();
 }

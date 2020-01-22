@@ -1,5 +1,5 @@
 /*
- * QDigiDoc4
+ * QEstEidCommon
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,29 +19,27 @@
 
 #pragma once
 
-#include <QtWidgets/QDialog>
+#include <QtCore/QObject>
+#include <QtCore/QRunnable>
 
-#ifdef CONFIG_URL
-class Updater: public QDialog
+class QTextStream;
+
+class Diagnostics: public QObject, public QRunnable
 {
 	Q_OBJECT
 public:
-	explicit Updater(const QString &reader, QWidget *parent = nullptr);
-	~Updater() final;
-	int exec() final;
-	int execute();
-	void reject() final;
+	Diagnostics();
+	explicit Diagnostics(QString appInfo);
 
-Q_SIGNALS:
-	void log(const QString &msg);
-	void send(const QVariantHash &data);
-	void start();
+	void run() override;
+
+signals:
+	void update( const QString &data );
 
 private:
-	void process(const QByteArray &data);
-	void run();
+	QString appInfoMsg;
+	bool hasAppInfo = true;
 
-	class Private;
-	Private *d;
+	void generalInfo(QTextStream &s) const;
+	void appInfo(QTextStream &s) const;
 };
-#endif

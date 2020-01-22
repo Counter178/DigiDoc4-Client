@@ -20,12 +20,11 @@
 #include "Accordion.h"
 #include "ui_Accordion.h"
 
-#include <common/SslCertificate.h>
+#include "QCardInfo.h"
 
-Accordion::Accordion( QWidget *parent ) :
-	StyledWidget( parent ),
-	ui( new Ui::Accordion ),
-	openSection( nullptr )
+Accordion::Accordion(QWidget *parent)
+	: StyledWidget(parent)
+	, ui(new Ui::Accordion)
 {
 	ui->setupUi( this );
 }
@@ -40,35 +39,27 @@ void Accordion::init()
 	// Initialize accordion.
 	openSection = ui->titleVerifyCert;
 
-	connect( ui->contentOtherData, &OtherData::checkEMailClicked, this, [this](){ emit checkEMail(); } );
-	connect( ui->contentOtherData, &OtherData::activateEMailClicked, this, [this](){ emit activateEMail(); } );
+	connect(ui->contentOtherData, &OtherData::checkEMailClicked, this, &Accordion::checkEMail);
+	connect(ui->contentOtherData, &OtherData::activateEMailClicked, this, &Accordion::activateEMail);
 
-	ui->titleVerifyCert->init(true, tr("PIN/PUK CODES AND CERTIFICATES"), ui->contentVerifyCert);
+	ui->titleVerifyCert->init(true, tr("PIN/PUK CODES AND CERTIFICATES"), tr("PIN/PUK codes and certificates", "accessible"), ui->contentVerifyCert);
 	ui->titleVerifyCert->setClosable(true);
-	ui->titleOtherData->init(false, tr("REDIRECTION OF EESTI.EE E-MAIL"), ui->contentOtherData);
+	ui->titleOtherData->init(false, tr("REDIRECTION OF EESTI.EE E-MAIL"), tr("Redirection of eesti.ee e-mail", "accessible"), ui->contentOtherData);
 	ui->titleOtherData->setClosable(true);
 
 	connect(ui->titleVerifyCert, &AccordionTitle::opened, this, &Accordion::closeOtherSection);
-	connect(ui->titleVerifyCert, &AccordionTitle::closed, this, 
-		[this](){open(ui->titleOtherData);});
+	connect(ui->titleVerifyCert, &AccordionTitle::closed, this, [this] {open(ui->titleOtherData);});
 	connect(ui->titleOtherData, &AccordionTitle::opened, this, &Accordion::closeOtherSection);
-	connect(ui->titleOtherData, &AccordionTitle::closed, this,
-		[this](){open(ui->titleVerifyCert);});
-
-	connect(this, &Accordion::showCertWarnings, ui->authBox, &VerifyCert::showWarningIcon);
-	connect(this, &Accordion::showCertWarnings, ui->signBox, &VerifyCert::showWarningIcon);
+	connect(ui->titleOtherData, &AccordionTitle::closed, this, [this] {open(ui->titleVerifyCert);});
 
 	connect(ui->authBox, &VerifyCert::changePinClicked, this, &Accordion::changePin1Clicked);
 	connect(ui->signBox, &VerifyCert::changePinClicked, this, &Accordion::changePin2Clicked);
 	connect(ui->pukBox, &VerifyCert::changePinClicked, this, &Accordion::changePukClicked);
 
-	connect(ui->authBox, &VerifyCert::certDetailsClicked, this, &Accordion::certDetailsClicked);
-	connect(ui->signBox, &VerifyCert::certDetailsClicked, this, &Accordion::certDetailsClicked);
-
 	// Initialize PIN/PUK content widgets.
 	ui->signBox->addBorders();
 
-	clearOtherEID();
+	clear();
 }
 
 void Accordion::clear()
@@ -76,18 +67,21 @@ void Accordion::clear()
 	ui->authBox->clear();
 	ui->signBox->clear();
 	ui->pukBox->clear();
-	clearOtherEID();
+	// Set to default Certificate Info page
+	ui->contentOtherData->update(false, QByteArray());
+	closeOtherSection(ui->titleVerifyCert);
+	ui->titleVerifyCert->setSectionOpen(true);
 }
 
 void Accordion::closeOtherSection(AccordionTitle* opened)
 {
-	openSection->closeSection();
+	openSection->setSectionOpen(false);
 	openSection = opened;
 }
 
-void Accordion::updateOtherData(const QByteArray &data)
+bool Accordion::updateOtherData(const QByteArray &data)
 {
-	ui->contentOtherData->update(false, data);
+	return ui->contentOtherData->update(false, data);
 }
 
 QString Accordion::getEmail()
@@ -99,7 +93,7 @@ void Accordion::open(AccordionTitle* opened)
 {
 	if (opened->isVisible ())
 		openSection = opened;
-	openSection->openSection();
+	openSection->setSectionOpen(true);
 }
 
 void Accordion::setFocusToEmail()
@@ -107,18 +101,17 @@ void Accordion::setFocusToEmail()
 	ui->contentOtherData->setFocusToEmail();
 }
 
-void Accordion::updateInfo(const QCardInfo &, const SslCertificate &authCert, const SslCertificate &signCert)
+void Accordion::updateInfo(const QCardInfo &info)
 {
-	ui->authBox->setVisible(!authCert.isNull());
-	if(!authCert.isNull())
-		ui->authBox->update(QSmartCardData::Pin1Type, authCert);
-
-	ui->signBox->setVisible(!signCert.isNull());
-	if (!signCert.isNull())
-		ui->signBox->update(QSmartCardData::Pin2Type, signCert);
+	bool isSign = info.c.keyUsage().contains(SslCertificate::NonRepudiation);
+	ui->authBox->setHidden(isSign);
+	ui->signBox->setVisible(isSign);
+	if(isSign)
+		ui->signBox->update(QSmartCardData::Pin2Type, info.c);
+	else
+		ui->authBox->update(QSmartCardData::Pin1Type, info.c);
 
 	ui->pukBox->hide();
-
 	ui->titleOtherData->hide();
 }
 
@@ -146,17 +139,8 @@ void Accordion::changeEvent(QEvent* event)
 	if (event->type() == QEvent::LanguageChange)
 	{
 		ui->retranslateUi(this);
-		ui->titleVerifyCert->setText(tr("PIN/PUK CODES AND CERTIFICATES"));
-		ui->titleOtherData->setText(tr("REDIRECTION OF EESTI.EE E-MAIL"));
+		ui->titleVerifyCert->setText(tr("PIN/PUK CODES AND CERTIFICATES"), tr("PIN/PUK codes and certificates", "accessible"));
+		ui->titleOtherData->setText(tr("REDIRECTION OF EESTI.EE E-MAIL"), tr("Redirection of eesti.ee e-mail", "accessible"));
 	}
-
 	QWidget::changeEvent(event);
-}
-
-void Accordion::clearOtherEID()
-{
-	// Set to default Certificate Info page
-	ui->contentOtherData->update(false, QByteArray());	// E-mail
-	closeOtherSection( ui->titleVerifyCert );
-	ui->titleVerifyCert->openSection();
 }

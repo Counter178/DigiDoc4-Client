@@ -20,11 +20,11 @@
 #include "PinPopup.h"
 #include "ui_PinPopup.h"
 #include "Styles.h"
+#include "SslCertificate.h"
 #include "effects/Overlay.h"
 #include "dialogs/WaitDialog.h"
 
 #include <common/Common.h>
-#include <common/SslCertificate.h>
 
 #include <QtCore/QTimeLine>
 #include <QtGui/QMovie>
@@ -85,7 +85,7 @@ PinPopup::PinPopup(PinFlags flags, const QString &title, TokenData::TokenFlags t
 		if( token & TokenData::PinFinalTry )
 			text += QStringLiteral("<font color='red'><b>%1</b></font><br />").arg(tr("PIN will be locked next failed attempt"));
 		else if( token & TokenData::PinCountLow )
-			text += QStringLiteral("<font color='red'><b>%1</b></font><br />").arg(tr("PIN has been entered incorrectly one time"));
+			text += QStringLiteral("<font color='red'><b>%1</b></font><br />").arg(tr("PIN has been entered incorrectly at least once"));
 
 		if( flags & Pin2Type )
 		{

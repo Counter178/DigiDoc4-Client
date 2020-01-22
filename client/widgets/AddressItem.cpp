@@ -24,7 +24,6 @@
 #include "dialogs/KeyDialog.h"
 
 #include <common/DateTime.h>
-#include <common/SslCertificate.h>
 
 #include <QResizeEvent>
 #include <QSvgWidget>
@@ -58,7 +57,7 @@ AddressItem::AddressItem(CKey k, QWidget *parent, bool showIcon)
 	ui->idType->setFont( Styles::font( Styles::Regular, 11 ) );
 
 	ui->remove->setIcons(QStringLiteral("/images/icon_remove.svg"), QStringLiteral("/images/icon_remove_hover.svg"),
-		QStringLiteral("/images/icon_remove_pressed.svg"), 1, 1, 17, 17);
+		QStringLiteral("/images/icon_remove_pressed.svg"), 17, 17);
 	ui->remove->init(LabelButton::White, QString(), 0);
 	connect(ui->add, &QToolButton::clicked, this, [this]{ emit add(this);});
 	connect(ui->remove, &LabelButton::clicked, this, [this]{ emit remove(this);});
@@ -146,6 +145,16 @@ void AddressItem::idChanged(const QString& cardCode, const QString& /*mobileCode
 	setName();
 }
 
+QWidget* AddressItem::initTabOrder(QWidget *item)
+{
+	setTabOrder(item, ui->name);
+	setTabOrder(ui->name, ui->idType);
+	setTabOrder(ui->idType, ui->remove);
+	setTabOrder(ui->remove, ui->added);
+	setTabOrder(ui->added, ui->add);
+	return ui->add;
+}
+
 void AddressItem::mouseReleaseEvent(QMouseEvent * /*event*/)
 {
 	KeyDialog dlg(key, this);
@@ -218,7 +227,7 @@ void AddressItem::setIdType()
 	else if(m_type & SslCertificate::EstEidType)
 		typeText = tr("ID-card");
 	else if(m_type & SslCertificate::TempelType)
-		typeText = tr("e-Seal");
+		typeText = tr("Certificate for Encryption");
 	else if(m_type & SslCertificate::MobileIDType)
 		typeText = tr("Mobile-ID");
 	st << typeText;

@@ -21,8 +21,10 @@
 #include "ui_RoleAddressDialog.h"
 
 #include "effects/Overlay.h"
-#include "Settings.h"
 #include "Styles.h"
+#include <common/Common.h>
+
+#include <QtCore/QSettings>
 
 #include <QtWidgets/QCompleter>
 #include <QtWidgets/QPushButton>
@@ -30,7 +32,7 @@
 class RoleAddressDialog::Private: public Ui::RoleAddressDialog
 {
 public:
-	Settings s;
+	QSettings s;
 };
 
 RoleAddressDialog::RoleAddressDialog(QWidget *parent)
@@ -40,7 +42,6 @@ RoleAddressDialog::RoleAddressDialog(QWidget *parent)
 	const QFont regularFont = Styles::font(Styles::Regular, 14);
 	const QFont buttonFont = Styles::font(Styles::Condensed, 14);
 
-	d->s.beginGroup(QStringLiteral("Client"));
 	d->setupUi(this);
 	setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint);
 	setWindowModality(Qt::ApplicationModal);
@@ -67,7 +68,7 @@ RoleAddressDialog::RoleAddressDialog(QWidget *parent)
 			if(list.size() > 10)
 				list.removeLast();
 			d->s.setValue(line->objectName(), QString()); // Uses on Windows MULTI_STRING registry
-			d->s.setValueEx(line->objectName(), list, QStringList());
+			Common::setValueEx(line->objectName(), list, QStringList());
 		});
 	}
 }
@@ -77,34 +78,19 @@ RoleAddressDialog::~RoleAddressDialog()
 	delete d;
 }
 
-QString RoleAddressDialog::city() const
+int RoleAddressDialog::get(QString &city, QString &country, QString &state, QString &zip, QString &role)
 {
-	return d->City->text();
-}
-
-QString RoleAddressDialog::country() const
-{
-	return d->Country->text();
-}
-
-int RoleAddressDialog::exec()
-{
+	if(!QSettings().value(QStringLiteral("RoleAddressInfo"), false).toBool())
+		return QDialog::Accepted;
 	Overlay overlay(parentWidget());
 	overlay.show();
-	return QDialog::exec();
-}
-
-QString RoleAddressDialog::role() const
-{
-	return d->Role->text();
-}
-
-QString RoleAddressDialog::state() const
-{
-	return d->State->text();
-}
-
-QString RoleAddressDialog::zip() const
-{
-	return d->Zip->text();
+	int result = QDialog::exec();
+	if(result == QDialog::Rejected)
+		return result;
+	role = d->Role->text();
+	city = d->City->text();
+	state = d->State->text();
+	country = d->Country->text();
+	zip = d->Zip->text();
+	return result;
 }

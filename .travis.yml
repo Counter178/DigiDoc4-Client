@@ -1,7 +1,7 @@
 language: c++
 sudo: false
-dist: trusty
-osx_image: xcode10.1
+dist: bionic
+osx_image: xcode11.2
 services:
 - docker
 matrix:
@@ -12,22 +12,19 @@ matrix:
   - os: linux
     env: TARGET=ubuntu:16.04
   - os: linux
-    env: TARGET=ubuntu:18.10
+    env: TARGET=ubuntu:19.10
 env:
   global:
   - BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
-  - PATH=${PATH}:$HOME/.local/bin:$HOME/Library/Python/2.7/bin;
   - AWS_DEFAULT_REGION=eu-west-1
 before_install: 
 - git submodule update --init --recursive && if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
     HASH=($(shasum prepare_osx_build_environment.sh));
-    sudo easy_install pip;
-    brew install --force openssl;
-    pip install --user awscli > /dev/null;
+    brew install openssl\@1.1 awscli;
     curl -s --location "https://github.com/open-eid/libdigidoc/releases/download/v3.10.3/libdigidoc_3.10.3.1214.pkg" -o libdigidoc.pkg;
     build=$(aws s3 ls s3://open-eid/libdigidocpp-nightly/ --no-sign-request |grep PRE|sed 's/.*PRE \(.*\)\/.*/\1/'|sort -n|tail -n1);
     aws s3 sync --exclude=* --include=*pkg s3://open-eid/libdigidocpp-nightly/${build} libdigidocpp-pkg --no-sign-request;
-    aws s3 cp s3://open-eid/digidoc4-cache/opensc_0.19.0.3.pkg opensc.pkg --no-sign-request;
+    aws s3 cp s3://open-eid/digidoc4-cache/opensc_0.19.0.7.pkg opensc.pkg --no-sign-request;
     aws s3 cp s3://open-eid/digidoc4-cache/${HASH}.zip ${HASH}.zip --no-sign-request;
     sudo installer -verboseR -pkg libdigidoc.pkg -target /;
     sudo installer -verboseR -pkg libdigidocpp-pkg/libdigidocpp*.pkg -target /;
@@ -35,7 +32,7 @@ before_install:
     unzip -qq -d /tmp ${HASH}.zip;
     rm -rf ${HASH}.zip opensc.pkg libdigidocpp.pkg libdigidoc.pkg;
   else
-    pip install --user awscli > /dev/null;
+    sudo apt install awscli;
     build=$(aws s3 ls s3://open-eid/libdigidocpp-nightly/ --no-sign-request |grep PRE|sed 's/.*PRE \(.*\)\/.*/\1/'|sort -n|tail -n1);
     aws s3 sync --exclude=* --include=*deb s3://open-eid/libdigidocpp-nightly/${build} libdigidocpp-pkg --no-sign-request;
     find libdigidocpp-pkg -name "*i386*" -delete;
@@ -44,13 +41,14 @@ script: case ${TARGET} in
   *osx*)
     QT_DIR=$(ls -d /tmp/Qt-*-OpenSSL | tail -n 1);
     echo "Qt - ${QT_DIR}";
-    mkdir build && cd build && cmake -DQt5_DIR=${QT_DIR}/lib/cmake/Qt5 -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl -DLDAP_ROOT=/tmp/OpenLDAP -DCMAKE_EXE_LINKER_FLAGS="-F/Library/Frameworks" ..;
+    mkdir build && cd build && cmake -DQt5_DIR=${QT_DIR}/lib/cmake/Qt5 -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl\@1.1 -DLDAP_ROOT=/tmp/OpenLDAP -DCMAKE_EXE_LINKER_FLAGS="-F/Library/Frameworks" ..;
     make zipdebug macdeployqt zip;
     cd .. && mkdir ../upload && cp build/qdigidoc4*.zip ../upload/;
     ;;
   *)
     docker run -e BUILD_NUMBER=${BUILD_NUMBER} -e COVERITY_SCAN_TOKEN=${COVERITY_SCAN_TOKEN} -e TRAVIS_BRANCH=${TRAVIS_BRANCH} -e IMAGE=${TARGET} -v ${HOME}:${HOME} -t "${TARGET}" /bin/bash -c "cd $(pwd);"'
       apt-get update -qq; 
+      export DEBIAN_FRONTEND=noninteractive;
       apt-get install -y apt-transport-https dh-make devscripts cdbs cmake libldap2-dev gettext libpcsclite-dev libminizip-dev libxml-security-c-dev libqt5svg5-dev qttools5-dev-tools qttools5-dev git curl wget ruby;
       dpkg -i libdigidocpp-pkg/*$(lsb_release -rs)*.deb;
       export VERSION=$(grep project CMakeLists.txt | egrep -o "([0-9]{1,}\.)+[0-9]{1,}");
@@ -83,7 +81,8 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-    condition: "$TRAVIS_OS_NAME = linux"
+    condition: $TARGET = "ubuntu:16.04"
+    repo: open-eid/DigiDoc4-Client
 - provider: s3
   access_key_id: $AWS_ACCESS_KEY_ID
   secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -95,4 +94,4 @@ deploy:
   acl: public_read
   on:
     branch: master
-    condition: $TRAVIS_REPO_SLUG = "open-eid/DigiDoc4-Client"
+    repo: open-eid/DigiDoc4-Client

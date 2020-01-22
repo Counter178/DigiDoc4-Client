@@ -35,18 +35,17 @@ class Accordion : public StyledWidget
 
 public:
 	explicit Accordion( QWidget *parent = nullptr );
-	~Accordion();
+	~Accordion() final;
 
 	void init();
 	void clear();
-	void clearOtherEID();
 	void closeOtherSection( AccordionTitle* opened );
 	QString getEmail();
 	void open(AccordionTitle* opened);
 	void setFocusToEmail();
-	void updateInfo(const QCardInfo &cardInfo, const SslCertificate &authCert, const SslCertificate &signCert);
+	void updateInfo(const QCardInfo &info);
 	void updateInfo( const QSmartCard *smartCard );
-	void updateOtherData(const QByteArray &data);
+	bool updateOtherData(const QByteArray &data);
 
 protected:
 	void changeEvent(QEvent* event) override;
@@ -57,10 +56,8 @@ signals:
 	void changePin1Clicked(bool isForgotPin, bool isBlockedPin);
 	void changePin2Clicked(bool isForgotPin, bool isBlockedPin);
 	void changePukClicked();
-	void certDetailsClicked( const QString &link );
-	void showCertWarnings();
 
 private:
 	Ui::Accordion *ui;
-	AccordionTitle* openSection;
+	AccordionTitle* openSection = nullptr;
 };

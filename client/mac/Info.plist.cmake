@@ -96,28 +96,6 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>p12d</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>p12d.icns</string>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/x-pkcs12</string>
-			</array>
-			<key>CFBundleTypeName</key>
-			<string>DigiDoc PKCS#12 certificate</string>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-			<key>LSHandlerRank</key>
-			<string>Default</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>ee.ria.p12d</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
 				<string>cdoc</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
@@ -169,6 +147,8 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
 		</dict>
 	</array>
 	<key>NSServices</key>
@@ -266,32 +246,7 @@
 				<key>public.filename-extension</key>
 				<string>ddoc</string>
 				<key>public.mime-type</key>
-				<array>
-					<string>application/x-ddoc</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.data</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>DigiDoc PKCS#12 certificate</string>
-			<key>UTTypeIconFile</key>
-			<string>p12d.icns</string>
-			<key>UTTypeIdentifier</key>
-			<string>ee.ria.p12d</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>p12d</string>
-				</array>
-				<key>public.mime-type</key>
-				<array>
-					<string>application/x-pkcs12</string>
-				</array>
+				<string>application/x-ddoc</string>
 			</dict>
 		</dict>
 		<dict>
@@ -313,9 +268,7 @@
 				<key>public.filename-extension</key>
 				<string>cdoc</string>
 				<key>public.mime-type</key>
-				<array>
-					<string>application/x-cdoc</string>
-				</array>
+				<string>application/x-cdoc</string>
 			</dict>
 		</dict>
 		<dict>
@@ -340,9 +293,7 @@
 					<string>scs</string>
 				</array>
 				<key>public.mime-type</key>
-				<array>
-					<string>application/vnd.etsi.asic-s+zip</string>
-				</array>
+				<string>application/vnd.etsi.asic-s+zip</string>
 			</dict>
 		</dict>
 	</array>

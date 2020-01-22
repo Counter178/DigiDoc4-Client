@@ -34,6 +34,7 @@ public:
 
 	ria::qdigidoc4::WarningType getError() const;
 	QString id() const override;
+	QWidget* initTabOrder(QWidget *item) override;
 	bool isInvalid() const;
 	bool isSelfSigned(const QString& cardCode, const QString& mobileCode) const;
 
@@ -43,7 +44,6 @@ public slots:
 protected:
 	bool event(QEvent *event) override;
 	bool eventFilter(QObject *o, QEvent *e) override;
-	void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
 	void init();

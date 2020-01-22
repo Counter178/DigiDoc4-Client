@@ -1,5 +1,5 @@
 /*
- * QDigiDoc4
+ * QDigiDocClient
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,24 +19,25 @@
 
 #pragma once
 
-#include <functional>
+#include <digidocpp/crypto/Signer.h>
 
-#include <QEvent>
-#include <QIcon>
-#include <QObject>
+#include <QCoreApplication>
 
-// Qt work-around to enable changing icon when hovering over the button
-class HoverFilter : public QObject
+class QWidget;
+
+class SmartIDProgress: public digidoc::Signer
 {
-	Q_OBJECT
-
+	Q_DECLARE_TR_FUNCTIONS(MobileProgress)
 public:
-	explicit HoverFilter( const QObject *observed, std::function<void(int)> callback, QObject *parent = nullptr );
-
-protected:
-	virtual bool eventFilter( QObject *watched, QEvent *event ) override;
+	SmartIDProgress(QWidget *parent = nullptr);
+	~SmartIDProgress() final;
+	digidoc::X509Cert cert() const final;
+	bool init(const QString &country, const QString &idCode);
+	std::vector<unsigned char> sign(const std::string &method, const std::vector<unsigned char> &digest) const final;
 
 private:
-	const QObject *observed;
-	std::function<void(int)> callback;
+	void stop();
+
+	class Private;
+	Private *d;
 };

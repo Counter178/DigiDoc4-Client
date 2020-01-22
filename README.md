@@ -54,7 +54,7 @@
 ### macOS
 
 1. Install dependencies from
-   * [XCode](https://itunes.apple.com/en/app/xcode/id497799835?mt=12)
+   * [XCode](https://apps.apple.com/us/app/xcode/id497799835?mt=12)
    * [http://www.cmake.org](http://www.cmake.org)
    * [http://qt-project.org](http://qt-project.org)
        Since Qt 5.6 default SSL backend is SecureTransport and this project depends on openssl.
@@ -115,6 +115,6 @@
 
 
 ## Support
-Official builds are provided through official distribution point [installer.id.ee](https://installer.id.ee). If you want support, you need to be using official builds. Contact for assistance by email [abi@id.ee](mailto:abi@id.ee) or [www.id.ee](http://www.id.ee).
+Official builds are provided through official distribution point [installer.id.ee](https://installer.id.ee). If you want support, you need to be using official builds. Contact our support via www.id.ee for assistance.
 
 Source code is provided on "as is" terms with no warranty (see license for more information). Do not file Github issues with generic support requests.

@@ -22,20 +22,11 @@ msiexec /a libdigidocpp-3.13.8.1378.msi /qn TARGETDIR=C:\target
 
 <?if $(var.Platform) = x64 ?>
   <?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
+  <?define OpenSSLSuffix = "-x64" ?>
 <?else ?>
   <?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
+  <?define OpenSSLSuffix = "" ?>
 <?endif ?>
-
-<?if $(env.VisualStudioVersion) = "15.0" ?>
-  <?define VCRT = "$(env.VCTOOLSREDISTDIR)\$(var.Platform)\Microsoft.VC141.CRT\vcruntime140.dll"?>
-  <?define VCP = "$(env.VCTOOLSREDISTDIR)\$(var.Platform)\Microsoft.VC141.CRT\msvcp140.dll"?>
-<?elseif $(env.VisualStudioVersion) = "14.0" ?>
-  <?define VCRT = "$(env.VCINSTALLDIR)\redist\$(var.Platform)\Microsoft.VC140.CRT\vcruntime140.dll" ?>
-  <?define VCP = "$(env.VCINSTALLDIR)\redist\$(var.Platform)\Microsoft.VC140.CRT\msvcp140.dll"?>
-<?else?>
-  <?define VCRT = "$(env.VCINSTALLDIR)\redist\$(var.Platform)\Microsoft.VC120.CRT\msvcr120.dll" ?>
-  <?define VCP = "$(env.VCINSTALLDIR)\redist\$(var.Platform)\Microsoft.VC120.CRT\msvcp120.dll"?>
-<?endif?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Name="DigiDoc4 Client" UpgradeCode="67932072-aa9e-45e3-b697-d825349f273d"
@@ -44,6 +35,7 @@ msiexec /a libdigidocpp-3.13.8.1378.msi /qn TARGETDIR=C:\target
     <MediaTemplate EmbedCab="yes" CompressionLevel="high"/>
     <Icon Id="qdigidoc4.exe" SourceFile="$(var.client_path)"/>
     <Property Id="ARPPRODUCTICON" Value="qdigidoc4.exe"/>
+    <Property Id="APPLICATIONNAME" Value="qdigidoc4"/>
     <Property Id="DESKTOP_SHORTCUT" Value="0"/>
     <Property Id="TLS12" Value="1"/>
     <MajorUpgrade AllowSameVersionUpgrades="yes" Schedule="afterInstallInitialize" DowngradeErrorMessage=
@@ -59,7 +51,7 @@ msiexec /a libdigidocpp-3.13.8.1378.msi /qn TARGETDIR=C:\target
         <Directory Id="ProgramMenuDir" Name="!(loc.idcardLabel)">
           <Component Id="ProgramMenuDir4" Guid="16A9EACF-B5D3-4FDC-8E9F-C03C8FA46DFF">
             <RemoveFolder Id="ProgramMenuDir" On="uninstall" />
-            <RegistryValue Root='HKMU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
+            <RegistryValue Root='HKMU' Key='Software\[Manufacturer]\[APPLICATIONNAME]' Type='string' Value='' KeyPath='yes' />
           </Component>
         </Directory>
       </Directory>
@@ -70,7 +62,7 @@ msiexec /a libdigidocpp-3.13.8.1378.msi /qn TARGETDIR=C:\target
           <Condition>DESKTOP_SHORTCUT = 1</Condition>
           <Shortcut Id="ClientDesktopShortcut4" Name="!(loc.qdigidoc4Label)"
                     Target="[!qdigidoc4.exe]" WorkingDirectory="APPLICATIONFOLDER"/>
-          <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="DesktopShortcut4" Value="1" Type="integer" KeyPath="yes"/>
+          <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[APPLICATIONNAME]" Name="DesktopShortcut4" Value="1" Type="integer" KeyPath="yes"/>
         </Component>
       </Directory>
 
@@ -111,11 +103,6 @@ msiexec /a libdigidocpp-3.13.8.1378.msi /qn TARGETDIR=C:\target
                 <Verb Id="open" TargetFile="qdigidoc4.exe" Command="Open" Argument='"%1"' />
               </Extension>
             </ProgId>
-            <ProgId Id="qdigidoc4.p12d" Description="DigiDoc PKCS#12 certificate" Icon="qdigidoc4.exe" IconIndex="1">
-              <Extension Id="p12d" ContentType="application/x-p12d">
-                <Verb Id="open" TargetFile="qdigidoc4.exe" Command="Open" Argument='"%1"' />
-              </Extension>
-            </ProgId>
             <ProgId Id="qdigidoc4.cdoc" Description="DigiDoc encrypted container" Icon="qdigidoc4.exe" IconIndex="3">
               <Extension Id="cdoc" ContentType="application/x-cdoc">
                 <Verb Id="open" TargetFile="qdigidoc4.exe" Command="Open" Argument='-crypto "%1"' />
@@ -153,10 +140,8 @@ msiexec /a libdigidocpp-3.13.8.1378.msi /qn TARGETDIR=C:\target
               Name="digidoc.ini" Key="CA_CERT_PATH" Value="[APPLICATIONFOLDER]certs"/>
 <?endif?>
 <?ifdef var.qt_path ?>
-            <File Source="$(var.VCP)"/>
-            <File Source="$(var.VCRT)"/>
-            <File Source="$(var.ssl_path)\libeay32.dll"/>
-            <File Source="$(var.ssl_path)\ssleay32.dll"/>
+            <File Source="$(var.ssl_path)\libcrypto-1_1$(var.OpenSSLSuffix).dll"/>
+            <File Source="$(var.ssl_path)\libssl-1_1$(var.OpenSSLSuffix).dll"/>
             <File Source="$(var.qt_path)\bin\Qt5Core.dll"/>
             <File Source="$(var.qt_path)\bin\Qt5Gui.dll"/>
             <File Source="$(var.qt_path)\bin\Qt5Network.dll"/>
@@ -182,6 +167,11 @@ msiexec /a libdigidocpp-3.13.8.1378.msi /qn TARGETDIR=C:\target
           <Directory Id="platforms" Name="platforms" FileSource="$(var.qt_path)\plugins\platforms">
             <Component Id="qwindows.dll">
               <File Name="qwindows.dll"/>
+            </Component>
+          </Directory>
+          <Directory Id="styles" Name="styles" FileSource="$(var.qt_path)\plugins\styles">
+            <Component Id="qwindowsvistastyle.dll">
+              <File Name="qwindowsvistastyle.dll"/>
             </Component>
           </Directory>
           <Directory Id="printsupport" Name="printsupport" FileSource="$(var.qt_path)\plugins\printsupport">
@@ -213,6 +203,7 @@ msiexec /a libdigidocpp-3.13.8.1378.msi /qn TARGETDIR=C:\target
 <?endif?>
 <?ifdef var.qt_path ?>
       <ComponentRef Id="qwindows.dll" />
+      <ComponentRef Id="qwindowsvistastyle.dll" />
       <ComponentRef Id="windowsprintersupport.dll" />
       <ComponentRef Id="imageformats.dll" />
 <?endif?>

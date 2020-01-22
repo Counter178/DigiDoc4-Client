@@ -15,7 +15,7 @@
 border: solid #DFE5E9;
 border-width: 1px 0px 0px 0px; </string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="OtherDataLayout">
    <property name="spacing">
     <number>9</number>
    </property>
@@ -26,6 +26,9 @@ border-width: 1px 0px 0px 0px; </string>
        <family>Roboto</family>
        <pointsize>14</pointsize>
       </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::TabFocus</enum>
      </property>
      <property name="styleSheet">
       <string notr="true">border: none;
@@ -56,6 +59,9 @@ color: #353739;</string>
        <pointsize>14</pointsize>
       </font>
      </property>
+     <property name="accessibleName">
+      <string extracomment="accessible">Check @eesti.ee e-mail status</string>
+     </property>
      <property name="styleSheet">
       <string notr="true">QPushButton { padding: 6px 9px; border-radius: 2px; border: 1px solid #006EB5; color: #006EB5; background-color: #FFFFFF;}
 QPushButton:pressed {  border: none; background-color: #006EB5; color: #FFFFFF;}
@@ -75,24 +81,18 @@ QPushButton:disabled { border: 1px solid #BEDBED; color: #BEDBED;};
        <family>Roboto</family>
       </font>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::TabFocus</enum>
+     </property>
      <property name="styleSheet">
       <string notr="true">border: none;
 color: #353739;</string>
-     </property>
-     <property name="text">
-      <string notr="true">TextLabel</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QWidget" name="activateEMail" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QVBoxLayout" name="activateEMailLayout">
       <property name="spacing">
        <number>9</number>
       </property>
@@ -114,6 +114,9 @@ color: #353739;</string>
          <font>
           <family>Roboto</family>
          </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
         </property>
         <property name="styleSheet">
          <string notr="true">border: none;
@@ -171,6 +174,9 @@ text-decoration: underline;
           <pointsize>14</pointsize>
          </font>
         </property>
+        <property name="accessibleName">
+         <string extracomment="accessible">Activate redirection</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">QPushButton { padding: 6px 9px; border-radius: 2px; border: 1px solid #006EB5; color: #006EB5; background-color: #FFFFFF;}
 QPushButton:pressed { border: 1px solid #41B6E6; color: #41B6E6;}
@@ -207,12 +213,15 @@ QPushButton:disabled { border: 1px solid #BEDBED; color: #BEDBED;};
        <pointsize>12</pointsize>
       </font>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::TabFocus</enum>
+     </property>
      <property name="styleSheet">
       <string notr="true">border: none;
 color: #75787B;</string>
      </property>
      <property name="text">
-      <string>For more detailed official email address forwarding, please visit &lt;a href='http://www.eesti.ee'&gt;&lt;span style='color: #006EB5; text-decoration: none; font-weight: 900;'&gt;eesti.ee&lt;/span&gt;&lt;/a&gt;</string>
+      <string>For more detailed official email address forwarding, please visit &lt;a href='http://www.eesti.ee/en/'&gt;&lt;span style='color: #006EB5; text-decoration: none; font-weight: 900;'&gt;eesti.ee&lt;/span&gt;&lt;/a&gt;</string>
      </property>
      <property name="openExternalLinks">
       <bool>true</bool>

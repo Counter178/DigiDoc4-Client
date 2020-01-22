@@ -21,6 +21,10 @@
 #include "ui_MainAction.h"
 #include "Styles.h"
 
+#include <QtCore/QSettings>
+
+#include <common/Common.h>
+
 using namespace ria::qdigidoc4;
 
 class MainAction::Private: public Ui::MainAction
@@ -40,6 +44,12 @@ MainAction::MainAction(QWidget *parent)
 	parent->installEventFilter(this);
 	move(parent->width() - width(), parent->height() - height());
 
+	connect(ui->mainAction, &QPushButton::clicked, this, [&]{
+		if (ui->actions.value(0) == Actions::SignatureMobile)
+			Common::setValueEx("MIDOrder", true, true);
+		if (ui->actions.value(0) == Actions::SignatureSmartID)
+			Common::setValueEx("MIDOrder", false, true);
+	});
 	connect(ui->mainAction, &QPushButton::clicked, this, [&]{ emit action(ui->actions.value(0)); });
 	connect(ui->mainAction, &QPushButton::clicked, this, &MainAction::hideDropdown);
 	connect(ui->otherCards, &QToolButton::clicked, this, &MainAction::showDropdown);
@@ -90,10 +100,11 @@ QString MainAction::label(Actions action) const
 	switch(action)
 	{
 	case SignatureMobile: return tr("SignatureMobile");
+	case SignatureSmartID: return tr("SignatureSmartID");
 	case SignatureToken: return tr("SignatureToken");
 	case EncryptContainer: return tr("EncryptContainer");
 	case DecryptContainer: return tr("DecryptContainer");
-	case DecryptToken: return tr("DecryptToken");
+	case DecryptToken: return tr("DECRYPT");
 	default: return tr("SignatureAdd");
 	}
 }
@@ -110,12 +121,17 @@ void MainAction::showDropdown()
 		for(QList<Actions>::const_iterator i = ui->actions.cbegin() + 1; i != ui->actions.cend(); ++i)
 		{
 			QPushButton *other = new QPushButton(label(*i), parentWidget());
+			other->setAccessibleName(label(*i).toLower());
 			other->resize(size());
 			other->move(pos() + QPoint(0, (-height() - 1) * (ui->list.size() + 1)));
 			other->show();
 			other->setStyleSheet(ui->mainAction->styleSheet() +
 				QStringLiteral("\nborder-top-left-radius: 2px; border-top-right-radius: 2px;"));
 			other->setFont(ui->mainAction->font());
+			if (*i == Actions::SignatureMobile)
+				connect(other, &QPushButton::clicked, this, []{ Common::setValueEx("MIDOrder", true, true); });
+			if (*i == Actions::SignatureSmartID)
+				connect(other, &QPushButton::clicked, this, []{ Common::setValueEx("MIDOrder", false, true); });
 			connect(other, &QPushButton::clicked, this, &MainAction::hideDropdown);
 			connect(other, &QPushButton::clicked, this, [=]{ emit this->action(*i); });
 			ui->list.push_back(other);
@@ -128,9 +144,19 @@ void MainAction::showDropdown()
 
 void MainAction::update(const QList<Actions> &actions)
 {
+	QList<Actions> order = actions;
 	hideDropdown();
-	ui->actions = actions;
-	ui->mainAction->setText(label(actions[0]));
-	ui->otherCards->setVisible(actions.size() > 1);
+	if(order.size() == 2 &&
+		std::all_of(order.cbegin(), order.cend(), [] (Actions action) {
+			return action == SignatureMobile || action == SignatureSmartID;
+		}) &&
+		!QSettings().value("MIDOrder", true).toBool())
+	{
+		std::reverse(order.begin(), order.end());
+	}
+	ui->actions = order;
+	ui->mainAction->setText(label(order[0]));
+	ui->mainAction->setAccessibleName(label(order[0]).toLower());
+	ui->otherCards->setVisible(order.size() > 1);
 	show();
 }

@@ -23,7 +23,7 @@
 #include "widgets/Item.h"
 
 #include <functional>
-#include <QWidget>
+#include <QScrollArea>
 
 namespace Ui {
 class ItemList;
@@ -32,13 +32,13 @@ class ItemList;
 class QLabel;
 class QSvgWidget;
 
-class ItemList : public QWidget
+class ItemList : public QScrollArea
 {
 	Q_OBJECT
 
 public:
 	explicit ItemList(QWidget *parent = nullptr);
-	virtual ~ItemList();
+	~ItemList() override;
 
 	void init(ria::qdigidoc4::ItemType itemType, const QString &header);
 	void addHeader(const QString &label);
@@ -67,19 +67,17 @@ protected slots:
 	virtual void remove(Item *item);
 	
 protected:
+	void changeEvent(QEvent* event) override;
+	bool eventFilter(QObject *o, QEvent *e) override;
 	int index(Item *item) const;
 
 	Ui::ItemList* ui;
 	std::vector<Item*> items;
 	ria::qdigidoc4::ContainerState state = ria::qdigidoc4::UnsignedContainer;
 
-protected:
-	void changeEvent(QEvent* event) override;
-
 private:
 	QString addLabel();
 	void addWidget(Item *widget, int index);
-	void focusEvent(int eventType);
 	void setRecipientTooltip();
 
 	QLabel *header = nullptr;
@@ -92,6 +90,7 @@ private:
 	QString headerText;
 	QString listText;
 	QByteArray serialNumber;
+	QWidget *tabIndex;
 
 	friend class AddRecipients;
 };

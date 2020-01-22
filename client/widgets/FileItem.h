@@ -38,25 +38,20 @@ public:
 	~FileItem() final;
 
 	QString getFile();
-	void stateChange(ria::qdigidoc4::ContainerState state) override;
+	QWidget* initTabOrder(QWidget *item) final;
+	void stateChange(ria::qdigidoc4::ContainerState state) final;
 
 signals:
 	void open(FileItem* item);
 	void download(FileItem* item);
 	
-protected:
-	void enterEvent(QEvent *event) override;
-	void leaveEvent (QEvent *event) override;
-	void mouseReleaseEvent(QMouseEvent *event) override;
-	void resizeEvent(QResizeEvent *event) override;
-
 private:
+	bool event(QEvent *event) override;
 	void setFileName(bool force);
 
 	Ui::FileItem *ui;
-	bool elided;
-	QFont fileFont;
+	bool elided = false;
 	QString fileName;
-	QFontMetrics fm;
-	int width;
+	int width = 0;
+	bool isEnabled = true;
 };

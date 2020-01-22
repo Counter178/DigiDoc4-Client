@@ -21,7 +21,6 @@
 #include "ui_ItemList.h"
 
 #include "Styles.h"
-#include "effects/HoverFilter.h"
 
 #include <QLabel>
 #include <QSvgWidget>
@@ -30,14 +29,16 @@ using namespace ria::qdigidoc4;
 
 
 ItemList::ItemList(QWidget *parent)
-: QWidget(parent)
-, ui(new Ui::ItemList)
+	: QScrollArea(parent)
+	, ui(new Ui::ItemList)
 {
 	ui->setupUi(this);
 	ui->findGroup->hide();
 	ui->download->hide();
 	ui->count->setFont(Styles::font(Styles::Condensed, 12));
 	ui->count->hide();
+	tabIndex = ui->btnFind;
+
 	connect(this, &ItemList::idChanged, this, [this](const QString &code, const QString &mobile, const QByteArray& serial)
 		{idCode = code; mobileCode = mobile; serialNumber = serial;});
 }
@@ -86,6 +87,7 @@ void ItemList::changeEvent(QEvent* event)
 
 		ui->listHeader->setText(tr(qPrintable(listText)));
 		ui->txtFind->setPlaceholderText(tr("Enter the personal code, institution or registry code"));
+		ui->txtFind->setAccessibleName(ui->txtFind->placeholderText());
 
 		if(header)
 			header->setText(tr(qPrintable(headerText)));
@@ -103,9 +105,9 @@ QString ItemList::addLabel()
 {
 	switch(itemType)
 	{
-	case ItemFile: return tr("Add more files");
-	case ItemAddress: return tr("Add addressee");
-	case ToAddAdresses: return tr("Add all");
+	case ItemFile: return tr("+ ADD MORE FILES");
+	case ItemAddress: return tr("+ ADD RECIPIENT");
+	case ToAddAdresses: return tr("ADD ALL");
 	default: return QString();
 	}
 }
@@ -119,6 +121,7 @@ void ItemList::addWidget(Item *widget, int index)
 	widget->idChanged(idCode, mobileCode, serialNumber);
 	widget->show();
 	items.push_back(widget);
+	tabIndex = widget->initTabOrder(tabIndex);
 }
 
 void ItemList::addWidget(Item *widget)
@@ -130,6 +133,7 @@ void ItemList::clear()
 {
 	ui->download->hide();
 	ui->count->hide();
+	tabIndex = ui->btnFind;
 
 	if(header)
 	{
@@ -157,10 +161,20 @@ void ItemList::details(const QString &id)
 			emit item->details();
 	}
 }
-void ItemList::focusEvent(int eventType)
+
+bool ItemList::eventFilter(QObject *o, QEvent *e)
 {
-	infoIcon->setHidden(eventType == QEvent::Enter);
-	infoHoverIcon->setVisible(eventType == QEvent::Enter);
+	if(o != ui->infoIcon)
+		return QWidget::eventFilter(o, e);
+	switch(e->type())
+	{
+	case QEvent::Enter:
+	case QEvent::Leave:
+		infoIcon->setHidden(e->type() == QEvent::Enter);
+		infoHoverIcon->setVisible(e->type() == QEvent::Enter);
+		return true;
+	default: return QWidget::eventFilter(o, e);
+	}
 }
 
 ContainerState ItemList::getState() const { return state; }
@@ -189,6 +203,7 @@ void ItemList::init(ItemType item, const QString &header)
 {
 	itemType = item;
 	ui->listHeader->setText(tr(qPrintable(header)));
+	ui->listHeader->setAccessibleName(tr(qPrintable(header)));
 	listText = header;
 	ui->listHeader->setFont( Styles::font(Styles::Regular, 20));
 
@@ -237,15 +252,15 @@ void ItemList::init(ItemType item, const QString &header)
 		infoHoverIcon->load(QStringLiteral(":/images/icon_info_hover.svg"));
 		infoHoverIcon->resize(15, 15);
 		infoHoverIcon->move(1, 1);
-		HoverFilter *filter = new HoverFilter(ui->infoIcon, [this](int eventType){ focusEvent(eventType); }, this);
-		ui->infoIcon->installEventFilter(filter);
+		ui->infoIcon->installEventFilter(this);
 		setRecipientTooltip();
 
-		connect(ui->add, &LabelButton::clicked, this, &ItemList::addressSearch);
+		connect(ui->add, &QToolButton::clicked, this, &ItemList::addressSearch);
 	}
 	else if(itemType == ToAddAdresses)
 	{
-		connect(ui->add, &LabelButton::clicked, this, &ItemList::addAll);
+		ui->add->hide();
+		connect(ui->add, &QToolButton::clicked, this, &ItemList::addAll);
 	}
 }
 

@@ -20,15 +20,13 @@
 #pragma once
 
 #include "widgets/StyledWidget.h"
-#include "QSmartCard.h"
 
-#include <common/SslCertificate.h>
+#include "QSmartCard.h"
+#include "SslCertificate.h"
 
 namespace Ui {
 class VerifyCert;
 }
-
-class QSvgWidget;
 
 class VerifyCert : public StyledWidget
 {
@@ -36,42 +34,26 @@ class VerifyCert : public StyledWidget
 
 public:
 	explicit VerifyCert( QWidget *parent = nullptr );
-	~VerifyCert() override;
+	~VerifyCert() final;
 
 	void addBorders();
 	void clear();
 	void update(QSmartCardData::PinType type, const QSmartCard *smartCard);
 	void update(QSmartCardData::PinType type, const SslCertificate &cert);
-	void update(bool warning = false);
 
 signals:
 	void changePinClicked( bool isForgotPin, bool isBlockedPin );
-	void certDetailsClicked( QString link );
-
-public slots:
-	void showWarningIcon();
-
-protected:
-	void enterEvent( QEvent * event ) override;
-	void leaveEvent( QEvent * event ) override;
-	void changeEvent(QEvent* event) override;
-	void processClickedBtn();
-	void processForgotPinLink(const QString &link);
-	void processCertDetails(const QString &link);
 
 private:
 	void changePinStyle( const QString &background ); 
+	bool event(QEvent *event) final;
+	void update();
 
 	Ui::VerifyCert *ui;
 
 	bool isValidCert = false;
 	bool isBlockedPin = false;
-	bool isTempelType = false;
 	QString borders;
-
-	QSvgWidget* greenIcon;
-	QSvgWidget* orangeIcon;
-	QSvgWidget* redIcon;
 
 	QSmartCardData::PinType pinType = QSmartCardData::Pin1Type;
 	QSmartCardData cardData;

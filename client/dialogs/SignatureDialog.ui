@@ -2,9 +2,6 @@
 <ui version="4.0">
  <class>SignatureDialog</class>
  <widget class="QDialog" name="SignatureDialog">
-  <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
-  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -76,6 +73,9 @@
              <pointsize>18</pointsize>
             </font>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::TabFocus</enum>
+           </property>
            <property name="styleSheet">
             <string notr="true">border: none;</string>
            </property>
@@ -95,6 +95,9 @@
              <pointsize>14</pointsize>
             </font>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::TabFocus</enum>
+           </property>
            <property name="styleSheet">
             <string notr="true">border: none;</string>
            </property>
@@ -105,6 +108,9 @@
          </item>
          <item row="2" column="0" colspan="2">
           <widget class="QLabel" name="info">
+           <property name="focusPolicy">
+            <enum>Qt::TabFocus</enum>
+           </property>
            <property name="styleSheet">
             <string notr="true">border: none;</string>
            </property>
@@ -190,6 +196,9 @@ QScrollBar::sub-line:vertical {
            <property name="text">
             <string>City</string>
            </property>
+           <property name="buddy">
+            <cstring>signerCity</cstring>
+           </property>
           </widget>
          </item>
          <item row="5" column="1">
@@ -223,6 +232,9 @@ background-color: #FFFFFF;</string>
            </property>
            <property name="text">
             <string>State</string>
+           </property>
+           <property name="buddy">
+            <cstring>signerState</cstring>
            </property>
           </widget>
          </item>
@@ -258,6 +270,9 @@ background-color: #FFFFFF;</string>
            <property name="text">
             <string>Country</string>
            </property>
+           <property name="buddy">
+            <cstring>signerCountry</cstring>
+           </property>
           </widget>
          </item>
          <item row="7" column="1">
@@ -292,6 +307,9 @@ background-color: #FFFFFF;</string>
            <property name="text">
             <string>Zip</string>
            </property>
+           <property name="buddy">
+            <cstring>signerZip</cstring>
+           </property>
           </widget>
          </item>
          <item row="8" column="1">
@@ -320,6 +338,9 @@ background-color: #FFFFFF;</string>
              <pointsize>14</pointsize>
             </font>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::TabFocus</enum>
+           </property>
            <property name="styleSheet">
             <string notr="true">border: none;</string>
            </property>
@@ -341,6 +362,9 @@ background-color: #FFFFFF;</string>
              <width>16777215</width>
              <height>300</height>
             </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::TabFocus</enum>
            </property>
            <property name="styleSheet">
             <string notr="true">border: 1px solid #DEE4E9;
@@ -396,6 +420,9 @@ background-color: #FFFFFF;</string>
              <family>Roboto</family>
              <pointsize>18</pointsize>
             </font>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::TabFocus</enum>
            </property>
            <property name="styleSheet">
             <string notr="true">border: none;</string>
@@ -493,6 +520,9 @@ background-color: #f7f7f7;</string>
       </property>
       <item>
        <widget class="QLabel" name="title">
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
         <property name="styleSheet">
          <string notr="true">border: none;</string>
         </property>
@@ -511,6 +541,9 @@ background-color: #f7f7f7;</string>
           <width>120</width>
           <height>20</height>
          </size>
+        </property>
+        <property name="accessibleName">
+         <string extracomment="accessible">Close</string>
         </property>
         <property name="styleSheet">
          <string notr="true">QPushButton {
@@ -547,15 +580,6 @@ QPushButton:disabled {
    <container>1</container>
   </customwidget>
  </customwidgets>
- <tabstops>
-  <tabstop>error</tabstop>
-  <tabstop>signerCity</tabstop>
-  <tabstop>signerState</tabstop>
-  <tabstop>signerCountry</tabstop>
-  <tabstop>signerZip</tabstop>
-  <tabstop>signatureView</tabstop>
-  <tabstop>close</tabstop>
- </tabstops>
  <resources/>
  <connections/>
 </ui>

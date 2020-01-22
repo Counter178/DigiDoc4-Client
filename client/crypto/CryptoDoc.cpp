@@ -20,11 +20,11 @@
 #include "CryptoDoc.h"
 
 #include "client/Application.h"
-#include "client/FileDialog.h"
 #include "client/QSigner.h"
+#include "client/SslCertificate.h"
+#include "client/dialogs/FileDialog.h"
+#include "client/dialogs/WarningDialog.h"
 
-#include <common/Settings.h>
-#include <common/SslCertificate.h>
 #include <common/TokenData.h>
 
 #include <QDebug>
@@ -34,16 +34,15 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QMimeData>
-#include <QtCore/QProcessEnvironment>
 #include <QtCore/QTemporaryFile>
 #include <QtCore/QtEndian>
 #include <QtCore/QThread>
 #include <QtCore/QUrl>
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QXmlStreamWriter>
+#include <QtCore/QSettings>
 #include <QtGui/QDesktopServices>
 #include <QtNetwork/QSslKey>
-#include <QtWidgets/QMessageBox>
 
 #include <openssl/aes.h>
 #include <openssl/err.h>
@@ -219,7 +218,11 @@ QByteArray CryptoDoc::Private::crypto(const EVP_CIPHER *cipher, const QByteArray
 	if(encrypt)
 	{
 #ifdef WIN32
+#if OPENSSL_VERSION_NUMBER >= 0x10101000L 
+		RAND_poll();
+#else
 		RAND_screen();
+#endif
 #else
 		RAND_load_file("/dev/urandom", 1024);
 #endif
@@ -339,7 +342,7 @@ void CryptoDoc::Private::run()
 		data.open(QBuffer::WriteOnly);
 
 		QString mime, name;
-		if(files.size() > 1 || Settings(qApp->applicationName()).value(QStringLiteral("cdocwithddoc"), false).toBool())
+		if(files.size() > 1 || QSettings().value(QStringLiteral("cdocwithddoc"), false).toBool())
 		{
 			qCDebug(CRYPTO) << "Creating DDoc container";
 			writeDDoc(&data);
@@ -355,7 +358,7 @@ void CryptoDoc::Private::run()
 		}
 // TODO? new check box "I would like to encrypt for recipients who are using an older DigiDoc3 Crypto\nsoftware (version 3.8 and earlier)." 
 // to SettingsDialog (like in qdigidoc3).
-		if(Settings(qApp->applicationName()).value(QStringLiteral("cdocwithddoc"), false).toBool())
+		if(QSettings().value(QStringLiteral("cdocwithddoc"), false).toBool())
 			method = AES128CBC_MTH;
 		else
 			method = AES256GCM_MTH;
@@ -797,19 +800,29 @@ CDocumentModel::CDocumentModel(CryptoDoc::Private *doc)
 		QFile::exists(QStringLiteral("%1/%2.log").arg( QDir::tempPath(), qApp->applicationName())));
 }
 
-void CDocumentModel::addFile(const QString &file, const QString &mime)
+bool CDocumentModel::addFile(const QString &file, const QString &mime)
 {
 	if( d->isEncryptedWarning() )
-		return;
+		return false;
 
-	QString fileName(QFileInfo(file).fileName());
+	QFileInfo info(file);
+	if(info.size() == 0)
+	{
+		WarningDialog dlg(tr("File you want to add is empty. Do you want to continue?"), qApp->activeWindow());
+		dlg.setCancelText(tr("NO"));
+		dlg.addButton(tr("YES"), 1);
+		if(dlg.exec() != 1)
+			return false;
+	}
+
+	QString fileName(info.fileName());
 	for(const auto &containerFile: d->files)
 	{
 		qDebug() << containerFile.name << " vs " << file;
 		if(containerFile.name == fileName)
 		{
 			d->setLastError(DocumentModel::tr("Cannot add the file to the envelope. File '%1' is already in container.").arg(fileName));
-			return;
+			return false;
 		}
 	}
 
@@ -823,6 +836,7 @@ void CDocumentModel::addFile(const QString &file, const QString &mime)
 	f.size = FileDialog::fileSize(quint64(f.data.size()));
 	d->files << f;
 	emit added(file);
+	return true;
 }
 
 void CDocumentModel::addTempReference(const QString &file)
@@ -850,11 +864,6 @@ QString CDocumentModel::data(int row) const
 	return d->files.at(row).name.normalized(QString::NormalizationForm_C);
 }
 
-QString CDocumentModel::fileId(int row) const
-{
-	return data(row);
-}
-
 QString CDocumentModel::fileSize(int /*row*/) const
 {
 	return QString();
@@ -869,22 +878,15 @@ void CDocumentModel::open(int row)
 {
 	if(d->encrypted)
 		return;
-	QFileInfo f(copy(row, FileDialog::tempPath(FileDialog::safeName(data(row)))));
+	QString path = FileDialog::tempPath(FileDialog::safeName(data(row)));
+	if(!verifyFile(path))
+		return;
+	QFileInfo f(copy(row, path));
 	if( !f.exists() )
 		return;
 	d->tempFiles << f.absoluteFilePath();
-#if defined(Q_OS_WIN)
-	QStringList exts = QProcessEnvironment::systemEnvironment().value( "PATHEXT" ).split(';');
-	exts << ".PIF" << ".SCR";
-	if( exts.contains( "." + f.suffix(), Qt::CaseInsensitive ) &&
-		QMessageBox::warning( qApp->activeWindow(), tr("DigiDoc4 client"),
-			DocumentModel::tr("This is an executable file! "
-				"Executable files may contain viruses or other malicious code that could harm your computer. "
-				"Are you sure you want to launch this file?"),
-			QMessageBox::Yes|QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
-		return;
-#else
-	QFile::setPermissions( f.absoluteFilePath(), QFile::Permissions(0x6000) );
+#if !defined(Q_OS_WIN)
+	QFile::setPermissions(f.absoluteFilePath(), QFile::Permissions(0x6000));
 #endif
 	emit openFile(f.absoluteFilePath());
 }
@@ -982,6 +984,8 @@ bool CryptoDoc::canDecrypt(const QSslCertificate &cert)
 
 QByteArray CryptoDoc::concatKDF(const QString &digestMethod, quint32 keyDataLen, const QByteArray &z, const QByteArray &otherInfo)
 {
+	if(z.isEmpty())
+		return z;
 	QCryptographicHash::Algorithm hashAlg =  Private::SHA_MTH[digestMethod];
 	quint32 hashLen = 0;
 	switch(hashAlg)

@@ -21,18 +21,9 @@
 
 #include "widgets/StyledWidget.h"
 
-#include <QWidget>
-#include <QPainter>
-#include <QSvgWidget>
-
-#include <memory>
-
-
 namespace Ui {
 class AccordionTitle;
 }
-
-class Accordion;
 
 class AccordionTitle : public StyledWidget
 {
@@ -40,25 +31,22 @@ class AccordionTitle : public StyledWidget
 
 public:
 	explicit AccordionTitle(QWidget *parent = nullptr);
-	~AccordionTitle();
+	~AccordionTitle() final;
 
 	void borderless();
-	void init(bool open, const QString& caption, QWidget* content);
+	void init(bool open, const QString &caption, const QString &accessible, QWidget *content);
 	void setClosable(bool closable);
-	void setText(const QString& caption);
-	void openSection();
-	void closeSection();
+	void setText(const QString &caption, const QString &accessible);
+	void setSectionOpen(bool open);
 
 signals:
 	void closed(AccordionTitle* opened);
 	void opened(AccordionTitle* opened);
 
-protected:
-	void mouseReleaseEvent(QMouseEvent *event) override;
-
 private:
+	bool event(QEvent *e) override;
+
 	Ui::AccordionTitle *ui;
-	std::unique_ptr<QSvgWidget> icon;
-	bool closable;
+	bool closable = false;
 	QWidget* content = nullptr;
 };

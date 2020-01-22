@@ -64,6 +64,19 @@ opacity: 0.5;
 border-radius: 2px;
 background-color: #F9FAFA;</string>
      </property>
+     <widget class="QSvgWidget" name="alternateIcon" native="true">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>25</y>
+        <width>100</width>
+        <height>100</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: none</string>
+      </property>
+     </widget>
      <widget class="QPushButton" name="btnPicture">
       <property name="geometry">
        <rect>
@@ -80,6 +93,9 @@ background-color: #F9FAFA;</string>
       </property>
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="accessibleName">
+       <string extracomment="accessible">Download picture</string>
       </property>
       <property name="styleSheet">
        <string notr="true">QPushButton {
@@ -142,11 +158,17 @@ QPushButton:hover:!pressed {
           <pointsize>12</pointsize>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="accessibleName">
+         <string extracomment="accessible">Given names</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">color: #75787B;</string>
         </property>
         <property name="text">
-         <string>Given names</string>
+         <string>GIVEN NAMES</string>
         </property>
        </widget>
       </item>
@@ -158,11 +180,17 @@ QPushButton:hover:!pressed {
           <pointsize>12</pointsize>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="accessibleName">
+         <string extracomment="accessible">Surname</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">color: #75787B;</string>
         </property>
         <property name="text">
-         <string>Surname</string>
+         <string>SURNAME</string>
         </property>
        </widget>
       </item>
@@ -173,6 +201,9 @@ QPushButton:hover:!pressed {
           <family>Roboto</family>
           <pointsize>16</pointsize>
          </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
         </property>
         <property name="styleSheet">
          <string notr="true">color: #041E42;</string>
@@ -196,6 +227,9 @@ QPushButton:hover:!pressed {
           <pointsize>16</pointsize>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
         <property name="styleSheet">
          <string notr="true">color: #041E42;</string>
         </property>
@@ -215,11 +249,17 @@ QPushButton:hover:!pressed {
           <pointsize>12</pointsize>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="accessibleName">
+         <string extracomment="accessible">Personal code</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">color: #75787B;</string>
         </property>
         <property name="text">
-         <string>Personal code</string>
+         <string>PERSONAL CODE</string>
         </property>
        </widget>
       </item>
@@ -231,11 +271,17 @@ QPushButton:hover:!pressed {
           <pointsize>12</pointsize>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="accessibleName">
+         <string extracomment="accessible">Citizenship</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">color: #75787B;</string>
         </property>
         <property name="text">
-         <string>Citizenship</string>
+         <string>CITIZENSHIP</string>
         </property>
        </widget>
       </item>
@@ -246,6 +292,9 @@ QPushButton:hover:!pressed {
           <family>Roboto</family>
           <pointsize>16</pointsize>
          </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
         </property>
         <property name="styleSheet">
          <string notr="true">color: #041E42;</string>
@@ -266,6 +315,9 @@ QPushButton:hover:!pressed {
           <pointsize>16</pointsize>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
         <property name="styleSheet">
          <string notr="true">color: #041E42;</string>
         </property>
@@ -285,11 +337,17 @@ QPushButton:hover:!pressed {
           <pointsize>12</pointsize>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="accessibleName">
+         <string extracomment="accessible">Document</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">color: #75787B;</string>
         </property>
         <property name="text">
-         <string>Document</string>
+         <string>DOCUMENT</string>
         </property>
        </widget>
       </item>
@@ -302,6 +360,9 @@ QPushButton:hover:!pressed {
             <family>Roboto</family>
             <pointsize>16</pointsize>
            </font>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
           </property>
           <property name="styleSheet">
            <string notr="true">color: #041E42;</string>
@@ -322,6 +383,9 @@ QPushButton:hover:!pressed {
             <pointsize>16</pointsize>
            </font>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
           <property name="styleSheet">
            <string notr="true">color: #041E42;</string>
           </property>
@@ -340,6 +404,28 @@ QPushButton:hover:!pressed {
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QSvgWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">QtSvg/QSvgWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>btnPicture</tabstop>
+  <tabstop>labelGivenNames</tabstop>
+  <tabstop>valueGivenNames</tabstop>
+  <tabstop>labelSurname</tabstop>
+  <tabstop>valueSurname</tabstop>
+  <tabstop>labelPersonalCode</tabstop>
+  <tabstop>valuePersonalCode</tabstop>
+  <tabstop>labelCitizenship</tabstop>
+  <tabstop>valueCitizenship</tabstop>
+  <tabstop>labelSerialNumber</tabstop>
+  <tabstop>valueSerialNumber</tabstop>
+  <tabstop>valueExpiryDate</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

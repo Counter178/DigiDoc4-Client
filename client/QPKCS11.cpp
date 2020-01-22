@@ -19,10 +19,9 @@
 
 #include "QPKCS11_p.h"
 
+#include "SslCertificate.h"
 #include "dialogs/PinPopup.h"
 #include <common/QPCSC.h>
-#include <common/Settings.h>
-#include <common/SslCertificate.h>
 #ifndef NO_PKCS11_CRYPTO
 #include <crypto/CryptoDoc.h>
 #endif
@@ -266,9 +265,19 @@ QPKCS11::PinStatus QPKCS11::login( const TokenData &_t )
 			if(d->f->C_OpenSession(slot, CKF_SERIAL_SESSION, nullptr, nullptr, &d->session) != CKR_OK)
 				continue;
 			currentSlot = slot;
+			bool isAuthSlot = false;
 			for(CK_OBJECT_HANDLE obj: d->findObject(d->session, CKO_CERTIFICATE))
 			{
-				if(_t.cert() == QSslCertificate(d->attribute(d->session, obj, CKA_VALUE), QSsl::Der))
+				SslCertificate cert(d->attribute(d->session, obj, CKA_VALUE), QSsl::Der);
+				// Hack: Workaround broken FIN pkcs11 drivers showing non-repu certificates in auth slot
+				if(d->isFinDriver)
+				{
+					if(isAuthSlot)
+						continue;
+					if(!cert.keyUsage().contains(SslCertificate::NonRepudiation))
+						isAuthSlot = true;
+				}
+				if(_t.cert() == cert)
 					return d->attribute(d->session, obj, CKA_ID);
 			}
 		}
@@ -348,11 +357,20 @@ QList<TokenData> QPKCS11::tokens() const
 		CK_SESSION_HANDLE session = 0;
 		if(d->f->C_OpenSession(slot, CKF_SERIAL_SESSION, nullptr, nullptr, &session) != CKR_OK)
 			continue;
+		bool isAuthSlot = false;
 		for( CK_OBJECT_HANDLE obj: d->findObject( session, CKO_CERTIFICATE ) )
 		{
 			SslCertificate cert(d->attribute(session, obj, CKA_VALUE), QSsl::Der);
 			if(cert.isCA())
 				continue;
+			// Hack: Workaround broken FIN pkcs11 drivers showing non-repu certificates in auth slot
+			if(d->isFinDriver)
+			{
+				if(isAuthSlot)
+					continue;
+				if(!cert.keyUsage().contains(SslCertificate::NonRepudiation))
+					isAuthSlot = true;
+			}
 			TokenData t;
 			t.setCard(toQByteArray(token.serialNumber).trimmed());
 			t.setCert(cert);
@@ -377,7 +395,6 @@ bool QPKCS11::reload()
 		{ "/Library/OpenSC/lib/opensc-pkcs11.so", "3B7B940000806212515646696E454944" },
 		{ "/Library/Frameworks/eToken.framework/Versions/Current/libeToken.dylib", "3BD5180081313A7D8073C8211030" },
 		{ "/Library/Frameworks/eToken.framework/Versions/Current/libeToken.dylib", "3BD518008131FE7D8073C82110F4" },
-		{ qApp->applicationDirPath() + "/libOcsCryptoki.dylib", "3BDB960080B1FE451F830012233F536549440F9000F1" }
 #elif defined(Q_OS_WIN)
 		{ "opensc-pkcs11.dll", QByteArray() },
 		{ "OTLvP11.dll", "3BDD18008131FE45904C41545649412D65494490008C" },
@@ -390,7 +407,6 @@ bool QPKCS11::reload()
 		{ "/usr/lib/ccs/libccpkip11.so", "3B7D94000080318065B08311C0A983009000" },
 		{ "libcryptoki.so", "3B7F9600008031B865B0850300EF1200F6829000" },
 		{ "/usr/lib/libeTPkcs11.so", "3BD518008131FE7D8073C82110F4" },
-		{ "/usr/local/AWP/lib/libOcsCryptoki.so", "3BDB960080B1FE451F830012233F536549440F9000F1" }
 #endif
 	};
 	for(const QString &reader: QPCSC::instance().readers())

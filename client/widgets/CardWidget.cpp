@@ -23,9 +23,6 @@
 #include "QCardInfo.h"
 #include "common_enums.h"
 #include "Styles.h"
-#include "widgets/LabelButton.h"
-
-#include <common/SslCertificate.h>
 
 #include <QSvgWidget>
 
@@ -46,26 +43,16 @@ CardWidget::CardWidget(QString id, QWidget *parent)
 	ui->cardCode->setFont( font );
 	ui->cardStatus->setFont( font );
 	ui->cardPhoto->init(LabelButton::None, QString(), CardPhoto);
+	ui->cardPhoto->installEventFilter(this);
 	ui->load->setFont(Styles::font(Styles::Condensed, 9));
 	ui->load->hide();
-
-	cardIcon.reset(new QSvgWidget(QStringLiteral(":/images/icon_IDkaart_green.svg"), this));
-	cardIcon->setStyleSheet(QStringLiteral("background: none;"));
-	cardIcon->resize( 17, 12 );
-	cardIcon->move( 169, 42 );
+	ui->cardIcon->load(QStringLiteral(":/images/icon_IDkaart_green.svg"));
+	ui->contentLayout->setAlignment(ui->cardIcon, Qt::AlignBaseline);
 
 	connect(ui->cardPhoto, &LabelButton::clicked, this, [this] {
 		if(!seal)
 			emit photoClicked(ui->cardPhoto->pixmap());
 	});
-	connect(ui->cardPhoto, &LabelButton::entered, this, [this] {
-		if(!ui->cardPhoto->pixmap() && !seal)
-			ui->load->show(); 
-	});
-	connect(ui->cardPhoto, &LabelButton::left, ui->load, &QLabel::hide);
-	tr("e-Seal");
-	tr("Digi ID");
-	tr("ID Card");
 }
 
 CardWidget::~CardWidget()
@@ -94,20 +81,37 @@ QString CardWidget::id() const
 
 bool CardWidget::event( QEvent *ev )
 {
-	if(ev->type() == QEvent::MouseButtonRelease)
+	switch(ev->type())
 	{
+	case QEvent::MouseButtonRelease:
 		emit selected( card );
 		return true;
+	case QEvent::LanguageChange:
+		ui->retranslateUi(this);
+		if(cardInfo)
+			update(cardInfo, card);
+		break;
+	default: break;
 	}
 	return QWidget::event( ev );
 }
 
-void CardWidget::changeEvent(QEvent* event)
+bool CardWidget::eventFilter(QObject *o, QEvent *e)
 {
-	if (event->type() == QEvent::LanguageChange && cardInfo)
-		update(cardInfo, card);
-
-	QWidget::changeEvent(event);
+	if(o != ui->cardPhoto)
+		return StyledWidget::eventFilter(o, e);
+	switch(e->type())
+	{
+	case QEvent::HoverEnter:
+		if(!ui->cardPhoto->pixmap() && !seal)
+			ui->load->show();
+		break;
+	case QEvent::HoverLeave:
+		ui->load->hide();
+		break;
+	default: break;
+	}
+	return StyledWidget::eventFilter(o, e);
 }
 
 bool CardWidget::isLoading() const
@@ -119,31 +123,46 @@ void CardWidget::update(const QSharedPointer<const QCardInfo> &ci, const QString
 {
 	cardInfo = ci;
 	card = cardId;
-	ui->cardName->setText(cardInfo->fullName);
+	if(!ci->c.subjectInfo("GN").isEmpty() || !ci->c.subjectInfo("SN").isEmpty())
+		ui->cardName->setText(ci->c.toString(QStringLiteral("GN SN")));
+	else
+		ui->cardName->setText(ci->c.toString(QStringLiteral("CN")));
+	ui->cardName->setAccessibleName(ui->cardName->text().toLower());
 	ui->cardCode->setText(cardInfo->id + "   |");
+	ui->cardCode->setAccessibleName(cardInfo->id);
 	ui->load->setText(tr("LOAD"));
 	if(cardInfo->loading)
 	{
 		ui->cardStatus->clear();
-		cardIcon->load(QStringLiteral(":/images/icon_IDkaart_disabled.svg"));
+		ui->cardIcon->load(QStringLiteral(":/images/icon_IDkaart_disabled.svg"));
 	}
 	else
 	{
-		ui->cardStatus->setText(tr("%1 in reader").arg(tr(cardInfo->cardType)));
-		cardIcon->load(QStringLiteral(":/images/icon_IDkaart_green.svg"));
+		QString type = tr("ID-card");
+		if(ci->type & SslCertificate::TempelType &&
+			ci->c.enhancedKeyUsage().contains(SslCertificate::ClientAuth))
+			type = tr("Authentication certificate");
+		else if(ci->type & SslCertificate::TempelType && (
+			ci->c.keyUsage().contains(SslCertificate::KeyEncipherment) ||
+			ci->c.keyUsage().contains(SslCertificate::KeyAgreement)))
+			type = tr("Certificate for Encryption");
+		else if(ci->type & SslCertificate::TempelType)
+			type = tr("e-Seal");
+		else if(ci->type & SslCertificate::DigiIDType)
+			type = tr("Digi-ID");
+		ui->cardStatus->setText(tr("%1 in reader").arg(type));
+		ui->cardIcon->load(QStringLiteral(":/images/icon_IDkaart_green.svg"));
 	}
 
-	if(ci->isEResident)
+	if(ci->c.subjectInfo("O").contains(QStringLiteral("E-RESIDENT")))
 	{
 		ui->horizontalSpacer->changeSize(1, 20, QSizePolicy::Fixed);
 		ui->cardPhoto->hide();
-		cardIcon->move(169 - 27, 42);
 	}
 	else
 	{
 		ui->horizontalSpacer->changeSize(10, 20, QSizePolicy::Fixed);
 		ui->cardPhoto->show();
-		cardIcon->move(169, 42);
 	}
 
 	clearSeal();
@@ -158,8 +177,6 @@ void CardWidget::update(const QSharedPointer<const QCardInfo> &ci, const QString
 		seal->setStyleSheet(QStringLiteral("border: none;"));
 		ui->cardPhoto->unsetCursor();
 	}
-
-	setAccessibleDescription(cardInfo->fullName);
 }
 
 void CardWidget::showPicture( const QPixmap &pix )

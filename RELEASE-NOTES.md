@@ -1,3 +1,36 @@
+DigiDoc4 version [4.2.4](https://github.com/open-eid/DigiDoc4-Client/releases/tag/v4.2.4) release notes
+--------------------------------------
+- Workaround Fin driver issues (#569)
+- Improve accessibility (#585, #586, #588, #587)
+- Use MID Rest API (#517)
+- SmartID support (#521)
+- Minor code, text and translation updates
+
+[Full Changelog](https://github.com/open-eid/DigiDoc4-Client/compare/v4.2.3...v4.2.4)
+
+DigiDoc4 version [4.2.3](https://github.com/open-eid/DigiDoc4-Client/releases/tag/v4.2.3) release notes
+--------------------------------------
+- Improve accessibility
+- Code cleanup and bugfixes
+- Use Qt 5.12 and OpenSSL 1.1.1
+- Token usage improvements
+
+[Full Changelog](https://github.com/open-eid/DigiDoc4-Client/compare/v4.2.2...v4.2.3)
+
+DigiDoc4 version [4.2.2](https://github.com/open-eid/DigiDoc4-Client/releases/tag/v4.2.2) release notes
+--------------------------------------
+- Improve accessibility
+- Translation and text updates
+- Updated Icons
+
+[Full Changelog](https://github.com/open-eid/DigiDoc4-Client/compare/v4.2.1...v4.2.2)
+
+DigiDoc4 version [4.2.1](https://github.com/open-eid/DigiDoc4-Client/releases/tag/v4.2.1) release notes
+--------------------------------------
+- Many UI fixes and improvements
+
+[Full Changelog](https://github.com/open-eid/DigiDoc4-Client/compare/v4.2.0...v4.2.1)
+
 DigiDoc4 version [4.2.0](https://github.com/open-eid/DigiDoc4-Client/releases/tag/v4.2.0) release notes
 --------------------------------------
 - Remove BDoc format selection option (#370)

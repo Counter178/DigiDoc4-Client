@@ -23,9 +23,8 @@
 #include "QCardInfo.h"
 #include "QSmartCard.h"
 #include "Styles.h"
-#include "effects/HoverFilter.h"
 
-#include <common/SslCertificate.h>
+#include <common/DateTime.h>
 
 #include <QSvgWidget>
 #include <QtCore/QTextStream>
@@ -38,7 +37,8 @@ InfoStack::InfoStack( QWidget *parent )
 	ui->setupUi( this );
 
 	ui->btnPicture->setFont( Styles::font( Styles::Condensed, 12 ) );
-	connect( ui->btnPicture, &QPushButton::clicked, this, [this] { emit photoClicked( ui->photo->pixmap() ); } );
+	ui->btnPicture->hide();
+	connect( ui->btnPicture, &QPushButton::clicked, this, [this] { emit photoClicked(ui->photo->pixmap() ? *ui->photo->pixmap() : QPixmap()); } );
 	
 	QFont labelFont = Styles::font(Styles::Condensed, 11);
 	ui->labelGivenNames->setFont(labelFont);
@@ -56,8 +56,7 @@ InfoStack::InfoStack( QWidget *parent )
 	ui->valueSerialNumber->setFont(font);
 	ui->valueExpiryDate->setFont( Styles::font( Styles::Regular, 16 ) );
 
-	HoverFilter *filter = new HoverFilter(ui->photo, [this](int eventType){ focusEvent(eventType); }, this);
-	ui->photo->installEventFilter(filter);
+	ui->photo->installEventFilter(this);
 }
 
 InfoStack::~InfoStack()
@@ -67,7 +66,7 @@ InfoStack::~InfoStack()
 
 void InfoStack::clearData()
 {
-	alternateIcon.clear();
+	ui->alternateIcon->hide();
 	ui->valueGivenNames->clear();
 	ui->valueSurname->clear();
 	ui->valuePersonalCode->clear();
@@ -76,7 +75,7 @@ void InfoStack::clearData()
 	ui->valueExpiryDate->clear();
 	pictureText = "DOWNLOAD";
 	ui->btnPicture->setText(tr(pictureText));
-	ui->btnPicture->show();
+	ui->btnPicture->hide();
 	clearPicture();
 }
 
@@ -97,28 +96,25 @@ void InfoStack::changeEvent(QEvent* event)
 }
 
 
-void InfoStack::focusEvent(int eventType)
+bool InfoStack::eventFilter(QObject *o, QEvent *e)
 {
-	if(alternateIcon || !ui->photo->pixmap())
-		return;
-
-	if(eventType == QEvent::Enter)
+	if(ui->photo != o || ui->alternateIcon->isVisible() || !ui->photo->pixmap())
+		return StyledWidget::eventFilter(o, e);
+	switch(e->type())
 	{
+	case QEvent::Enter:
 		ui->btnPicture->show();
-	}
-	else
-	{
-		// Ignore multiple enter-leave events sent when moving over button
-		auto boundingRect = QRect(ui->photo->mapToGlobal(ui->photo->geometry().topLeft()),
-								  ui->photo->mapToGlobal(ui->photo->geometry().bottomRight()));
-		if(!boundingRect.contains(QCursor::pos()))
-			ui->btnPicture->hide();
+		return true;
+	case QEvent::Leave:
+		ui->btnPicture->hide();
+		return true;
+	default: return StyledWidget::eventFilter(o, e);
 	}
 }
 
 void InfoStack::showPicture( const QPixmap &pixmap )
 {
-	alternateIcon.clear();
+	ui->alternateIcon->hide();
 	ui->photo->setPixmap( pixmap.scaled( 120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
 	pictureText = "SAVE THE PICTURE";
 	tr("SAVE THE PICTURE");
@@ -138,9 +134,7 @@ void InfoStack::update()
 		else
 			st << "<span style='color: #e80303;'>" << tr("Expired") << "</span>";
 	}
-	else if(certType & SslCertificate::TempelType)
-		serialNumberText = tr("You're using e-Seal");
-	else
+	else if(certType & SslCertificate::DigiIDType)
 		st << tr("You're using Digital identity card");
 
 	ui->valueGivenNames->setText(givenNamesText);
@@ -154,38 +148,30 @@ void InfoStack::update()
 	ui->btnPicture->setText(tr(pictureText));
 	ui->btnPicture->hide();
 
-	if(!certIsResident)
-		alternateIcon.clear();
-
+	ui->alternateIcon->setVisible(certIsResident || certType & SslCertificate::TempelType);
+	ui->btnPicture->setVisible(ui->alternateIcon->isHidden());
 	if(certType & SslCertificate::TempelType)
 	{
 		ui->labelGivenNames->setText(tr("NAME"));
-		ui->labelSurname->setText(QString());
+		ui->labelSurname->clear();
 		ui->labelPersonalCode->setText(tr("SERIAL"));
 		ui->labelCitizenship->setText(tr("COUNTRY"));
-		ui->labelSerialNumber->setText(tr("DEVICE"));
-		ui->valueSerialNumber->setMinimumWidth(300);
-		ui->valueSerialNumber->setMaximumWidth(300);
+		ui->labelSerialNumber->hide();
+		ui->valueSerialNumber->hide();
 
 		clearPicture();
-		alternateIcon = new QSvgWidget(ui->photo);
-		alternateIcon->load(QStringLiteral(":/images/icon_digitempel.svg"));
-		alternateIcon->resize(100, 100);
-		alternateIcon->move(10, 25);
-		alternateIcon->setStyleSheet(QStringLiteral("border: none;"));
-		alternateIcon->show();
+		ui->alternateIcon->load(QStringLiteral(":/images/icon_digitempel.svg"));
+		ui->alternateIcon->resize(100, 100);
+		ui->alternateIcon->move(10, 25);
+		ui->alternateIcon->show();
 	}
 	else
 	{
-		ui->labelGivenNames->setText(tr("Given names"));
-		ui->labelSurname->setText(tr("Surname"));
-		ui->labelPersonalCode->setText(tr("Personal code"));
-		ui->labelCitizenship->setText(tr("Citizenship"));
-		ui->labelSerialNumber->setText(tr("Document"));
-		ui->valueSerialNumber->setMinimumWidth(100);
-		ui->valueSerialNumber->setMaximumWidth(100);
-		if(!alternateIcon)
-			ui->btnPicture->show();
+		ui->labelGivenNames->setText(tr("GIVEN NAMES"));
+		ui->labelSurname->setText(tr("SURNAME"));
+		ui->labelPersonalCode->setText(tr("PERSONAL CODE"));
+		ui->labelCitizenship->setText(tr("CITIZENSHIP"));
+		ui->labelSerialNumber->setText(tr("DOCUMENT"));
 	}
 
 }
@@ -195,11 +181,10 @@ void InfoStack::update(const QCardInfo &cardInfo)
 	certType = cardInfo.type;
 	certIsValid = true;
 	expireDate.clear();
-	givenNamesText = cardInfo.fullName;
+	givenNamesText = cardInfo.c.toString(QStringLiteral("CN"));
 	surnameText.clear();
 	personalCodeText = cardInfo.id;
-	citizenshipText = cardInfo.country;
-
+	citizenshipText = cardInfo.c.toString(QStringLiteral("C"));
 	update();
 }
 
@@ -214,16 +199,14 @@ void InfoStack::update(const QSmartCardData &t)
 	certType = t.authCert().type();
 	certIsValid = t.isValid();
 	certIsResident = t.authCert().subjectInfo("O").contains(QStringLiteral("E-RESIDENT"));
-	alternateIcon.clear();
 	if(certIsResident)
 	{
-		alternateIcon = new QSvgWidget(QStringLiteral(":/images/icon_person_blue.svg"), ui->photo);
-		alternateIcon->resize(109, 118);
-		alternateIcon->setStyleSheet(QStringLiteral("border: none;"));
-		alternateIcon->move(10, 16);
-		alternateIcon->show();
-		ui->btnPicture->hide();
+		ui->alternateIcon->load(QStringLiteral(":/images/icon_person_blue.svg"));
+		ui->alternateIcon->resize(109, 118);
+		ui->alternateIcon->move(10, 16);
 	}
+	ui->btnPicture->setHidden(certIsResident);
+	ui->alternateIcon->setVisible(certIsResident);
 	expireDate = DateTime(t.data(QSmartCardData::Expiry).toDateTime()).formatDate(QStringLiteral("dd.MM.yyyy"));
 	givenNamesText = firstName.join(' ');
 	surnameText = t.data(QSmartCardData::SurName).toString();

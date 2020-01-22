@@ -1,5 +1,5 @@
 /*
- * QDigiDoc4
+ * QEstEidCommon
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,21 +17,35 @@
  *
  */
 
-#include "HoverFilter.h"
+#pragma once
 
-HoverFilter::HoverFilter( const QObject *observed, std::function<void(int)> callback, QObject *parent )
-: QObject(parent)
-, observed(observed)
-, callback(callback)
-{}
+#include "Diagnostics.h"
+#include <QObject>
+#include <QString>
+#include <QStringList>
 
-bool HoverFilter::eventFilter(QObject *watched, QEvent *event)
+class DiagnosticsTask: public QObject
 {
-	if (watched == observed && (event->type() == QEvent::Enter || event->type() == QEvent::Leave))
-	{
-		callback(event->type());
-		return true;
-	}
+	Q_OBJECT
+public:
+	DiagnosticsTask(QObject *parent, const QString &appInfo, const QString &outFile = "" );
+	QString getDiagnostics() const;
+	void complete();
 
-	return false;
-}
+public slots:
+	void run();
+	void insertHtml( const QString &text );
+
+signals:
+	void finished();
+	void failed();
+
+private:
+	QStringList html;
+	QString data;
+	QString outFile;
+	QString appInfo;
+	Diagnostics worker;
+
+	bool logDiagnostics();
+};

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <common/CliApplication.h>
+#include "CliApplication.h"
 #include <common/Common.h>
 
 #include <QtCore/QStringList>
@@ -34,7 +34,6 @@ namespace digidoc { class Exception; }
 class QAction;
 class QSmartCard;
 class QSigner;
-class ApplicationPrivate;
 class Application: public Common
 {
 	Q_OBJECT
@@ -76,6 +75,7 @@ public:
 	int run();
 	void waitForTSL( const QString &file );
 
+	static uint readTSLVersion(const QString &path);
 	static void addRecent( const QString &file );
 	static QVariant confValue( ConfParameter parameter, const QVariant &value = QVariant() );
 	static void clearConfValue( ConfParameter parameter );
@@ -83,6 +83,7 @@ public:
 
 public Q_SLOTS:
 	void showAbout();
+	void showSettings();
 	void showClient(const QStringList &params = QStringList(), bool crypto = false, bool sign = false);
 	void showWarning(const QString &msg, const QString &details = QString());
 
@@ -102,9 +103,7 @@ private:
 	void diagnostics(QTextStream &s) override;
 	bool event( QEvent *e ) override;
 	QWidget* mainWindow();
-#ifndef Q_OS_MAC
 	void migrateSettings();
-#endif
 	static void showWarning(const QString &msg, const digidoc::Exception &e);
 	QWidget* uniqueRoot();
 
@@ -113,7 +112,8 @@ private:
 	void deinitMacEvents();
 #endif
 
-	ApplicationPrivate *d;
+	class Private;
+	Private *d;
 };
 
 class REOpenEvent: public QEvent
