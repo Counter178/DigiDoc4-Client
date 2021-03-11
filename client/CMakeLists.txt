@@ -9,62 +9,29 @@ add_custom_command(
 	WORKING_DIRECTORY ${_qt5Core_install_prefix}/bin
 )
 
-include_directories( ${CMAKE_SOURCE_DIR} )
-
 configure_file( translations/tr.qrc tr.qrc COPYONLY )
 qt5_add_translation( SOURCES translations/en.ts translations/et.ts translations/ru.ts )
-qt5_add_resources( SOURCES images/images.qrc fonts/fonts.qrc ${CMAKE_CURRENT_BINARY_DIR}/tr.qrc ${CMAKE_CURRENT_BINARY_DIR}/TSL.qrc )
-qt5_wrap_ui( SOURCES
-	MainWindow.ui
-	dialogs/AddRecipients.ui
-	dialogs/CertificateDetails.ui
-	dialogs/CertificateHistory.ui
-	dialogs/FirstRun.ui
-	dialogs/KeyDialog.ui
-	dialogs/MobileDialog.ui
-	dialogs/MobileProgress.ui
-	dialogs/PinPopup.ui
-	dialogs/PinUnblock.ui
-	dialogs/RoleAddressDialog.ui
-	dialogs/SettingsDialog.ui
-	dialogs/SignatureDialog.ui
-	dialogs/SmartIDDialog.ui
-	dialogs/WaitDialog.ui
-	dialogs/WarningDialog.ui
-	widgets/Accordion.ui
-	widgets/AccordionTitle.ui
-	widgets/AddressItem.ui
-	widgets/CardWidget.ui
-	widgets/ContainerPage.ui
-	widgets/FileItem.ui
-	widgets/InfoStack.ui
-	widgets/ItemList.ui
-	widgets/MainAction.ui
-	widgets/NoCardInfo.ui
-	widgets/OtherData.ui
-	widgets/PageIcon.ui
-	widgets/SignatureItem.ui
-	widgets/VerifyCert.ui
-	widgets/WarningItem.ui
-	widgets/WarningRibbon.ui
-)
 
 add_executable( ${PROGNAME} WIN32 MACOSX_BUNDLE
 	${PROGNAME}.rc
 	${SOURCES}
 	${RESOURCE_FILES}
+	images/images.qrc
+	fonts/fonts.qrc
+	${CMAKE_CURRENT_BINARY_DIR}/tr.qrc
+	${CMAKE_CURRENT_BINARY_DIR}/TSL.qrc
 	main.cpp
-	AccessCert.cpp
 	Application.cpp
 	CheckConnection.cpp
-	CliApplication.cpp
 	DigiDoc.cpp
 	Diagnostics.cpp
 	DiagnosticsTask.cpp
 	DocumentModel.cpp
+	MainWindow.ui
 	MainWindow.cpp
 	MainWindow_MyEID.cpp
 	QCardLock.cpp
+	QCryptoBackend.cpp
 	QPKCS11.cpp
 	QSigner.cpp
 	QSmartCard.cpp
@@ -73,49 +40,87 @@ add_executable( ${PROGNAME} WIN32 MACOSX_BUNDLE
 	XmlReader.cpp
 	PrintSheet.cpp
 	SslCertificate.cpp
+	TokenData.cpp
 	crypto/CryptoDoc.cpp
 	crypto/LdapSearch.cpp
+	dialogs/AccessCert.cpp
+	dialogs/AddRecipients.ui
 	dialogs/AddRecipients.cpp
+	dialogs/CertificateDetails.ui
 	dialogs/CertificateDetails.cpp
+	dialogs/CertificateHistory.ui
 	dialogs/CertificateHistory.cpp
 	dialogs/FileDialog.cpp
+	dialogs/FirstRun.ui
 	dialogs/FirstRun.cpp
+	dialogs/KeyDialog.ui
 	dialogs/KeyDialog.cpp
+	dialogs/MobileDialog.ui
 	dialogs/MobileDialog.cpp
+	dialogs/MobileProgress.ui
 	dialogs/MobileProgress.cpp
+	dialogs/PinPopup.ui
 	dialogs/PinPopup.cpp
+	dialogs/PinUnblock.ui
 	dialogs/PinUnblock.cpp
+	dialogs/RoleAddressDialog.ui
 	dialogs/RoleAddressDialog.cpp
+	dialogs/SettingsDialog.ui
 	dialogs/SettingsDialog.cpp
+	dialogs/SignatureDialog.ui
+	dialogs/SignatureDialog.cpp
+	dialogs/SmartIDDialog.ui
 	dialogs/SmartIDDialog.cpp
 	dialogs/SmartIDProgress.cpp
-	dialogs/SignatureDialog.cpp
+	dialogs/WaitDialog.ui
 	dialogs/WaitDialog.cpp
+	dialogs/WarningDialog.ui
 	dialogs/WarningDialog.cpp
 	effects/ButtonHoverFilter.cpp
 	effects/FadeInNotification.cpp
+	effects/Overlay.cpp
+	widgets/Accordion.ui
 	widgets/Accordion.cpp
+	widgets/AccordionTitle.ui
 	widgets/AccordionTitle.cpp
+	widgets/AddressItem.ui
 	widgets/AddressItem.cpp
+	widgets/CardWidget.ui
 	widgets/CardWidget.cpp
 	widgets/CardPopup.cpp
+	widgets/CheckBox.cpp
+	widgets/ContainerPage.ui
 	widgets/ContainerPage.cpp
+	widgets/ComboBox.cpp
 	widgets/DropdownButton.cpp
+	widgets/FileItem.ui
 	widgets/FileItem.cpp
 	widgets/FileList.cpp
+	widgets/IDSelector.cpp
 	widgets/Item.cpp
+	widgets/ItemList.ui
 	widgets/ItemList.cpp
+	widgets/InfoStack.ui
 	widgets/InfoStack.cpp
 	widgets/LabelButton.cpp
+	widgets/MainAction.ui
 	widgets/MainAction.cpp
+	widgets/NoCardInfo.ui
 	widgets/NoCardInfo.cpp
+	widgets/OtherData.ui
 	widgets/OtherData.cpp
+	widgets/PageIcon.ui
 	widgets/PageIcon.cpp
+	widgets/RadioButton.cpp
+	widgets/SignatureItem.ui
 	widgets/SignatureItem.cpp
 	widgets/StyledWidget.cpp
+	widgets/VerifyCert.ui
 	widgets/VerifyCert.cpp
+	widgets/WarningItem.ui
 	widgets/WarningItem.cpp
 	widgets/WarningList.cpp
+	widgets/WarningRibbon.ui
 	widgets/WarningRibbon.cpp
 )
 add_manifest( ${PROGNAME} )
@@ -127,66 +132,59 @@ target_link_libraries( ${PROGNAME}
 	${LIBDIGIDOCPP_LIBRARY}
 	${LDAP_LIBRARIES}
 )
-
+set_target_properties(${PROGNAME} PROPERTIES
+	AUTOUIC ON
+	AUTORCC ON
+	MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/mac/Info.plist.cmake
+)
+target_include_directories(${PROGNAME} PRIVATE ${CMAKE_SOURCE_DIR} ${LIBDIGIDOCPP_INCLUDE_DIR} )
 target_compile_definitions(${PROGNAME} PRIVATE MOBILEID_URL="${MOBILEID_URL}" SMARTID_URL="${SMARTID_URL}" )
 
 if( APPLE )
-	target_sources( ${PROGNAME} PRIVATE Application_mac.mm dialogs/CertificateDetails_mac.mm Diagnostics_unix.cpp)
+	target_sources( ${PROGNAME} PRIVATE Application_mac.mm MacMenuBar.cpp dialogs/CertificateDetails_mac.mm Diagnostics_unix.cpp)
 	set_source_files_properties( Application_mac.mm dialogs/CertificateDetails_mac.mm PROPERTIES COMPILE_FLAGS "-fobjc-arc" )
 	set_source_files_properties( crypto/LdapSearch.cpp PROPERTIES COMPILE_FLAGS "-Wno-deprecated-declarations" )
-	target_link_libraries( ${PROGNAME} "-framework Security" "-framework Quartz" )
-	set_target_properties( ${PROGNAME} PROPERTIES
-		MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/mac/Info.plist.cmake
-	)
+	target_link_libraries( ${PROGNAME} "-framework Security" "-framework Quartz" "-framework Cocoa" "-fobjc-arc")
 	add_custom_command( TARGET ${PROGNAME} POST_BUILD
 		COMMAND cp -a ${PKCS11_MODULE} $<TARGET_FILE_DIR:${PROGNAME}>
-		COMMAND mkdir -p $<TARGET_FILE_DIR:${PROGNAME}>/../Library/QuickLook
-		COMMAND cp -a $<TARGET_FILE_DIR:DigiDocQL>/../../../DigiDocQL.qlgenerator
-			$<TARGET_FILE_DIR:${PROGNAME}>/../Library/QuickLook )
-	get_filename_component( PKCS11_NAME ${PKCS11_MODULE} NAME )
+		COMMAND mkdir -p $<TARGET_BUNDLE_CONTENT_DIR:${PROGNAME}>/Library/QuickLook
+		COMMAND cp -a $<TARGET_BUNDLE_DIR:DigiDocQL> $<TARGET_BUNDLE_CONTENT_DIR:${PROGNAME}>/Library/QuickLook
+	)
 	add_custom_target( macdeployqt DEPENDS ${PROGNAME}
-		COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/${PROGNAME}.app/Contents/Frameworks/
-		COMMAND cp -a /Library/Frameworks/libdigidoc.framework $<TARGET_FILE_DIR:${PROGNAME}>/../Frameworks
-		COMMAND ${_qt5Core_install_prefix}/bin/macdeployqt ${CMAKE_CURRENT_BINARY_DIR}/${PROGNAME}.app
-			-executable=${CMAKE_CURRENT_BINARY_DIR}/${PROGNAME}.app/Contents/Frameworks/libdigidoc.framework/Versions/2/libdigidoc
-			-executable=${CMAKE_CURRENT_BINARY_DIR}/${PROGNAME}.app/Contents/MacOS/${PKCS11_NAME} 
-		COMMAND find $<TARGET_FILE_DIR:${PROGNAME}>/../PlugIns/imageformats -type f -a ! -name libqgif.dylib -a ! -name libqjpeg.dylib -a ! -name libqsvg.dylib -delete
-		COMMAND rm -rf $<TARGET_FILE_DIR:${PROGNAME}>/../PlugIns/bearer
-		COMMAND cp -a /Library/Frameworks/digidocpp.framework $<TARGET_FILE_DIR:${PROGNAME}>/../Frameworks
-		COMMAND rm $<TARGET_FILE_DIR:${PROGNAME}>/../Frameworks/digidocpp.framework/Resources/digidoc-tool
-		COMMAND rm $<TARGET_FILE_DIR:${PROGNAME}>/../Frameworks/libdigidoc.framework/Resources/cdigidoc
-		COMMAND ln -sf ../Frameworks/digidocpp.framework/Libraries/libcrypto.dylib
-		    $<TARGET_FILE_DIR:${PROGNAME}>/../Frameworks/libcrypto.1.1.dylib
-		COMMAND ln -sf ../Frameworks/digidocpp.framework/Libraries/libcrypto.dylib
-			$<TARGET_FILE_DIR:${PROGNAME}>/../Frameworks/libcrypto.dylib
-		COMMAND ln -sf ../Frameworks/digidocpp.framework/Libraries/libssl.dylib
-		    $<TARGET_FILE_DIR:${PROGNAME}>/../Frameworks/libssl.1.1.dylib
-		COMMAND ln -sf ../Frameworks/digidocpp.framework/Libraries/libssl.dylib
-			$<TARGET_FILE_DIR:${PROGNAME}>/../Frameworks/libssl.dylib
-		COMMAND find $<TARGET_FILE_DIR:${PROGNAME}>/../Frameworks -name Headers | xargs rm -rf
-		COMMAND find $<TARGET_FILE_DIR:${PROGNAME}>/../Frameworks -name 'TEST*.crt' -delete
+		COMMAND ${_qt5Core_install_prefix}/bin/macdeployqt $<TARGET_BUNDLE_DIR:${PROGNAME}>
+		COMMAND rm -rf $<TARGET_BUNDLE_CONTENT_DIR:${PROGNAME}>/PlugIns/bearer
+		COMMAND cp -a /Library/Frameworks/digidocpp.framework $<TARGET_BUNDLE_CONTENT_DIR:${PROGNAME}>/Frameworks
+		COMMAND rm $<TARGET_BUNDLE_CONTENT_DIR:${PROGNAME}>/Frameworks/digidocpp.framework/Resources/digidoc-tool
+		COMMAND find $<TARGET_BUNDLE_CONTENT_DIR:${PROGNAME}>/Frameworks -name Headers | xargs rm -rf
 		COMMAND install_name_tool -delete_rpath /Library/Frameworks $<TARGET_FILE:${PROGNAME}>
-		COMMAND install_name_tool -change /Library/libdigidocpp/lib/libssl.1.1.dylib @loader_path/../../../libssl.1.1.dylib
-			${CMAKE_CURRENT_BINARY_DIR}/${PROGNAME}.app/Contents/Frameworks/libdigidoc.framework/Versions/2/libdigidoc
-		COMMAND install_name_tool -change /Library/libdigidocpp/lib/libcrypto.1.1.dylib @loader_path/../../../libcrypto.1.1.dylib
-			${CMAKE_CURRENT_BINARY_DIR}/${PROGNAME}.app/Contents/Frameworks/libdigidoc.framework/Versions/2/libdigidoc
+		# For QT
+		COMMAND ln -sf digidocpp.framework/Libraries/libcrypto.dylib
+			$<TARGET_BUNDLE_CONTENT_DIR:${PROGNAME}>/Frameworks/libcrypto.dylib
+		COMMAND ln -sf digidocpp.framework/Libraries/libssl.dylib
+			$<TARGET_BUNDLE_CONTENT_DIR:${PROGNAME}>/Frameworks/libssl.dylib
+		# For Target
+		COMMAND ln -sf digidocpp.framework/Libraries/libcrypto.dylib
+			$<TARGET_BUNDLE_CONTENT_DIR:${PROGNAME}>/Frameworks/libcrypto.1.1.dylib
+		COMMAND ln -sf digidocpp.framework/Libraries/libssl.dylib
+			$<TARGET_BUNDLE_CONTENT_DIR:${PROGNAME}>/Frameworks/libssl.1.1.dylib
 	)
 
 	add_custom_target( codesign DEPENDS ${PROGNAME}
 		COMMAND codesign -f -s \"$$SIGNCERT\"
 			$<TARGET_FILE_DIR:${PROGNAME}>/*.*
-			$<TARGET_FILE_DIR:${PROGNAME}>/../Frameworks/digidocpp.framework/Libraries/*
-			$<TARGET_FILE_DIR:${PROGNAME}>/../Frameworks/*.framework
-			$<TARGET_FILE_DIR:${PROGNAME}>/../PlugIns/*/*
-			$<TARGET_FILE_DIR:${PROGNAME}>/../Library/QuickLook/DigiDocQL.qlgenerator
+			$<TARGET_BUNDLE_CONTENT_DIR:${PROGNAME}>/Frameworks/digidocpp.framework/Libraries/*
+			$<TARGET_BUNDLE_CONTENT_DIR:${PROGNAME}>/Frameworks/*.framework
+			$<TARGET_BUNDLE_CONTENT_DIR:${PROGNAME}>/PlugIns/*/*
+			$<TARGET_BUNDLE_CONTENT_DIR:${PROGNAME}>/Library/QuickLook/DigiDocQL.qlgenerator
 		COMMAND if echo \"$$SIGNCERT\" | grep -q "Developer ID" \; then
-				codesign -f -s \"$$SIGNCERT\" $<TARGET_FILE_DIR:${PROGNAME}>/../.. --entitlements ${CMAKE_SOURCE_DIR}/${PROGNAME}.eToken.entitlements\;
+				codesign -f -s \"$$SIGNCERT\" $<TARGET_BUNDLE_DIR:${PROGNAME}> --entitlements ${CMAKE_SOURCE_DIR}/${PROGNAME}.eToken.entitlements\;
 			else
-				codesign -f -s \"$$SIGNCERT\" $<TARGET_FILE_DIR:${PROGNAME}>/../.. --entitlements ${CMAKE_SOURCE_DIR}/${PROGNAME}.entitlements\;
+				codesign -f -s \"$$SIGNCERT\" $<TARGET_BUNDLE_DIR:${PROGNAME}> --entitlements ${CMAKE_SOURCE_DIR}/${PROGNAME}.entitlements\;
 			fi
 	)
+
 	add_custom_target( productbuild DEPENDS ${PROGNAME}
-		COMMAND productbuild --component ${CMAKE_CURRENT_BINARY_DIR}/${PROGNAME}.app /Applications
+		COMMAND productbuild --component $<TARGET_BUNDLE_DIR:${PROGNAME}> /Applications
 			--sign \"$$INSTCERT\" ${CMAKE_BINARY_DIR}/qdigidoc4-store_${VERSION}$ENV{VER_SUFFIX}.pkg
 	)
 	add_custom_target( zip DEPENDS ${PROGNAME}
@@ -198,6 +196,11 @@ if( APPLE )
 	)
 elseif(WIN32)
 	target_sources( ${PROGNAME} PRIVATE QCSP.cpp QCNG.cpp QWin.cpp CertStore.cpp Diagnostics_win.cpp)
+	target_compile_options(${PROGNAME} PRIVATE "/guard:cf")
+	target_link_options(${PROGNAME} PRIVATE "/guard:cf")
+	if(CROSSSIGNCERT)
+		target_link_options(${PROGNAME} PRIVATE "/INTEGRITYCHECK")
+	endif()
 	find_package( Qt5 COMPONENTS WinExtras )
 	target_link_libraries( ${PROGNAME} Qt5::WinExtras NCrypt Crypt32 Cryptui )
 	get_filename_component(LIBS_PATH ${LIBDIGIDOCPP_LIBRARIES} DIRECTORY)
@@ -217,11 +220,11 @@ elseif(WIN32)
 	list(APPEND CANDLE_CMD "$ENV{WIX}bin\\candle.exe" -nologo -arch ${PLATFORM} -dMSI_VERSION=${VERSION} -dPlatform=${PLATFORM}
 		-dssl_path="${SSL_PATH}" -dlibs_path="${LIBS_PATH}" -dclient_path=$<TARGET_FILE:${PROGNAME}> -dqtconf=${CMAKE_SOURCE_DIR}/qt.conf
 		-dschemasLocation=${LIBS_PATH}/schema SchemasFragment.wxs ${CMAKE_SOURCE_DIR}/qdigidoc4.wxs
-		${CMAKE_SOURCE_DIR}/cmake/modules/WelcomeDlg2.wxs ${CMAKE_SOURCE_DIR}/cmake/modules/WixUI_Minimal2.wxs)
+        ${CMAKE_MODULE_PATH}/WelcomeDlg2.wxs ${CMAKE_MODULE_PATH}/WixUI_Minimal2.wxs)
 	list(APPEND LIGHT_CMD "$ENV{WIX}bin\\light.exe" -nologo -ext WixUIExtension
 		qdigidoc4.wixobj SchemasFragment.wixobj WelcomeDlg2.wixobj WixUI_Minimal2.wixobj
-		-dWixUIDialogBmp=${CMAKE_SOURCE_DIR}/cmake/modules/dlgbmp.bmp
-		-dWixUIBannerBmp=${CMAKE_SOURCE_DIR}/cmake/modules/banner.bmp)
+        -dWixUIDialogBmp=${CMAKE_MODULE_PATH}/dlgbmp.bmp
+        -dWixUIBannerBmp=${CMAKE_MODULE_PATH}/banner.bmp)
 	if(EXISTS ${LIBS_PATH}/../certs)
 		list(APPEND CANDLE_CMD -dcertsLocation=CertsFragment CertsFragment.wxs)
 		list(APPEND LIGHT_CMD CertsFragment.wixobj)
@@ -252,7 +255,8 @@ elseif(WIN32)
 		list(APPEND SIGNCMD signtool.exe sign /a /v /s MY /n "${SIGNCERT}" /fd SHA256
 			/du http://installer.id.ee /tr http://sha256timestamp.ws.symantec.com/sha256/timestamp /td SHA256)
 		add_custom_command(TARGET ${PROGNAME} POST_BUILD
-			COMMAND ${SIGNCMD} $<TARGET_FILE:${PROGNAME}>
+			COMMAND ${SIGNCMD} "$<$<BOOL:${CROSSSIGNCERT}>:/ph;/ac;${CROSSSIGNCERT}>" $<TARGET_FILE:${PROGNAME}>
+			COMMAND_EXPAND_LISTS
 		)
 		add_custom_command(TARGET msi POST_BUILD
 			COMMAND ${SIGNCMD} "${MSI_FILE}.en-US.msi" "${MSI_FILE}.et-EE.msi" "${MSI_FILE}.en-US.qt.msi" "${MSI_FILE}.et-EE.qt.msi"
@@ -314,23 +318,33 @@ else()
 	install( FILES ${CMAKE_CURRENT_BINARY_DIR}/qdigidoc4.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1 )
 	install( FILES qdigidoc4.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications )
 	install( FILES qdigidoc4.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/mime/packages )
-	foreach(RES 16 22 32 48 128)
-		foreach(TGT application-vnd.etsi.asic-e+zip.png application-vnd.etsi.asic-s+zip.png application-x-ddoc.png application-vnd.lt.archyvai.adoc-2008.png)
-			install(
-				FILES images/qdigidoc_client_document_${RES}x${RES}.png
-				DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${RES}x${RES}/mimetypes/
-				RENAME ${TGT}
-			)
-		endforeach()
+	foreach(RES 16 22 32 48 128 256 512)
 		install(
-			FILES images/qdigidoc_crypto_document_${RES}x${RES}.png
-			DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${RES}x${RES}/mimetypes/
-			RENAME application-x-cdoc.png
-		)
-		install(
-			FILES images/digidoc_icon_${RES}x${RES}.png
+			FILES images/digidoc_${RES}.png
 			DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${RES}x${RES}/apps/
 			RENAME qdigidoc4.png
 		)
+		install(
+			FILES images/qdigidoc_client_document_${RES}.png
+			DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${RES}x${RES}/mimetypes/
+			RENAME application-vnd.etsi.asic-e+zip.png
+		)
+		install(
+			FILES images/qdigidoc_crypto_document_${RES}.png
+			DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${RES}x${RES}/mimetypes/
+			RENAME application-x-cdoc.png
+		)
+		foreach(TGT application-vnd.etsi.asic-s+zip.png application-x-ddoc.png application-vnd.lt.archyvai.adoc-2008.png)
+			install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink application-vnd.etsi.asic-e+zip.png \
+				\$ENV{DESTDIR}/${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/${RES}x${RES}/mimetypes/${TGT})")
+		endforeach()
+		# Workaround Ubuntu 20.10 Yaru icon theme issues
+		install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory \
+			\$ENV{DESTDIR}/${CMAKE_INSTALL_FULL_DATADIR}/icons/Yaru/${RES}x${RES}/mimetypes/)")
+		foreach(TGT application-vnd.etsi.asic-e+zip.png application-vnd.etsi.asic-s+zip.png application-x-ddoc.png application-vnd.lt.archyvai.adoc-2008.png application-x-cdoc.png)
+			install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \
+				${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/${RES}x${RES}/mimetypes/${TGT} \
+				\$ENV{DESTDIR}/${CMAKE_INSTALL_FULL_DATADIR}/icons/Yaru/${RES}x${RES}/mimetypes/${TGT})")
+		endforeach()
 	endforeach()
 endif()

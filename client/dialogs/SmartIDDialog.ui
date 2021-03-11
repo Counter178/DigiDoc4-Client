@@ -23,27 +23,43 @@ padding: 0px 10px;
 border: 1px solid #DEE4E9;
 border-radius: 2px;
 }
-QComboBox QAbstractItemView {
+QComboBox QWidget#popup {
+background-color: transparent;
+}
+QComboBox QWidget#content {
 border: 1px solid #DEE4E9;
 border-radius: 2px;
-padding: 3px 3px 3px 3px;
 background-color: #FFFFFF;
 }
-QComboBox:item {
-background-color: #FFFFFF;
+QComboBox QPushButton {
+margin: 3px;
+padding: 0px 8px 0px 4px;
+border: 0px;
 color: #353739;
+text-align: left;
+qproperty-iconSize: 14px 9px;
+qproperty-layoutDirection: RightToLeft;
 }
-QComboBox:item:selected {
+QComboBox QPushButton#selected {
+qproperty-icon: url(:/images/arrow_up.svg);
+}
+QComboBox QPushButton:hover {
 background-color: #006EB5;
 color: #FFFFFF;
 }
+QComboBox QPushButton:hover#selected {
+qproperty-icon: url(:/images/arrow_up_white.svg);
+}
 QComboBox::drop-down {
-width: 0px;
-border: none;
+background-color: #FFFFFF;
+width: 25px;
 }
 QComboBox::down-arrow {
-border: none;
-image: none;
+image: url(:/images/arrow_down.svg);
+}
+QComboBox::down-arrow:on {
+top: 1px;
+left: 1px;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="SmartIDDialogLayout">
@@ -114,7 +130,7 @@ image: none;
     </widget>
    </item>
    <item>
-    <widget class="QComboBox" name="idCountry">
+    <widget class="ComboBox" name="idCountry">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -172,10 +188,26 @@ padding-top: 8px;</string>
     </widget>
    </item>
    <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>8</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
     <widget class="QCheckBox" name="cbRemember">
      <property name="styleSheet">
       <string notr="true">color: #353739;
-padding-top: 8px;</string>
+</string>
      </property>
      <property name="text">
       <string>Remember me</string>
@@ -251,6 +283,9 @@ QPushButton:hover:!pressed {
          <pointsize>14</pointsize>
         </font>
        </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
 	border-radius: 2px; 
@@ -280,6 +315,13 @@ QPushButton:disabled {
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ComboBox</class>
+   <extends>QComboBox</extends>
+   <header>widgets/ComboBox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

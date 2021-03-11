@@ -19,35 +19,18 @@
 
 #pragma once
 
-#include <QObject>
+#include "QCryptoBackend.h"
 
 #include <qt_windows.h>
 #include <ncrypt.h>
 
-class TokenData;
-class SslCertificate;
-
-class QWin: public QObject
+class QWin: public QCryptoBackend
 {
 	Q_OBJECT
 public:
-	enum PinStatus
-	{
-		PinOK,
-		PinCanceled,
-		PinUnknown,
-	};
+	explicit QWin(QObject *parent = nullptr): QCryptoBackend(parent) {}
 
-	explicit QWin(QObject *parent = nullptr): QObject(parent) {}
-	~QWin() override = default;
-
-	virtual QList<TokenData> tokens() const = 0;
-	virtual QByteArray decrypt( const QByteArray &data ) = 0;
-	virtual QByteArray deriveConcatKDF(const QByteArray &publicKey, const QString &digest, int keySize,
-		const QByteArray &algorithmID, const QByteArray &partyUInfo, const QByteArray &partyVInfo) const = 0;
-	virtual PinStatus lastError() const = 0;
-	virtual TokenData selectCert( const SslCertificate &cert ) = 0;
-	virtual QByteArray sign( int method, const QByteArray &digest ) const = 0;
+	void logout() override {};
 
 protected:
 	int derive(NCRYPT_PROV_HANDLE prov, NCRYPT_KEY_HANDLE key, const QByteArray &publicKey, const QString &digest, int keySize,

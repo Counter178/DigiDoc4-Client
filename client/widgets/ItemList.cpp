@@ -39,8 +39,7 @@ ItemList::ItemList(QWidget *parent)
 	ui->count->hide();
 	tabIndex = ui->btnFind;
 
-	connect(this, &ItemList::idChanged, this, [this](const QString &code, const QString &mobile, const QByteArray& serial)
-		{idCode = code; mobileCode = mobile; serialNumber = serial;});
+	connect(this, &ItemList::idChanged, this, [this](const SslCertificate &cert){ this->cert = cert; });
 }
 
 ItemList::~ItemList()
@@ -59,7 +58,7 @@ void ItemList::addHeader(const QString &label)
 	header->setFixedHeight(64);
 	header->setFont( Styles::font(Styles::Regular, 20));
 	header->setStyleSheet(QStringLiteral("border: solid rgba(217, 217, 216, 0.45);"
-			"border-width: 0px 0px 1px 0px;"));
+			"border-width: 0px 0px 1px 0px; color: #041E42;"));
 	ui->itemLayout->insertWidget(0, header);
 	headerItems++;
 }
@@ -98,7 +97,7 @@ void ItemList::changeEvent(QEvent* event)
 			setRecipientTooltip();
 	}
 
-	QWidget::changeEvent(event);
+	QFrame::changeEvent(event);
 }
 
 QString ItemList::addLabel()
@@ -118,7 +117,7 @@ void ItemList::addWidget(Item *widget, int index)
 	connect(widget, &Item::remove, this, &ItemList::remove);
 	connect(this, &ItemList::idChanged, widget, &Item::idChanged);
 	widget->stateChange(state);
-	widget->idChanged(idCode, mobileCode, serialNumber);
+	widget->idChanged(cert);
 	widget->show();
 	items.push_back(widget);
 	tabIndex = widget->initTabOrder(tabIndex);
@@ -165,7 +164,7 @@ void ItemList::details(const QString &id)
 bool ItemList::eventFilter(QObject *o, QEvent *e)
 {
 	if(o != ui->infoIcon)
-		return QWidget::eventFilter(o, e);
+		return QFrame::eventFilter(o, e);
 	switch(e->type())
 	{
 	case QEvent::Enter:
@@ -173,7 +172,7 @@ bool ItemList::eventFilter(QObject *o, QEvent *e)
 		infoIcon->setHidden(e->type() == QEvent::Enter);
 		infoHoverIcon->setVisible(e->type() == QEvent::Enter);
 		return true;
-	default: return QWidget::eventFilter(o, e);
+	default: return QFrame::eventFilter(o, e);
 	}
 }
 
@@ -218,14 +217,14 @@ void ItemList::init(ItemType item, const QString &header)
 		ui->txtFind->setFont(Styles::font(Styles::Regular, 12));
 		ui->findGroup->show();
 		ui->txtFind->setPlaceholderText(tr("Enter personal code, company or registry code"));
-		connect(ui->txtFind, &QLineEdit::returnPressed, [this]{ emit search(ui->txtFind->text()); });
-		connect(ui->btnFind, &QPushButton::clicked, [this]{ emit search(ui->txtFind->text()); });
+		connect(ui->txtFind, &QLineEdit::returnPressed, this, [this]{ if(!ui->txtFind->text().isEmpty()) emit search(ui->txtFind->text()); });
+		connect(ui->btnFind, &QPushButton::clicked, this, [this]{ emit search(ui->txtFind->text()); });
 		ui->btnFind->setDisabled(ui->txtFind->text().isEmpty());
-		connect(ui->txtFind, &QLineEdit::textChanged, [=](const QString &text){
+		connect(ui->txtFind, &QLineEdit::textChanged, this, [this](const QString &text){
 			ui->btnFind->setDisabled(text.isEmpty());
 			ui->btnFind->setDefault(text.isEmpty());
 			ui->btnFind->setAutoDefault(text.isEmpty());
-		});		
+		});
 		headerItems = 2;
 	}
 

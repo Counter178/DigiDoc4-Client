@@ -20,16 +20,17 @@
 #pragma once
 
 #include "widgets/StyledWidget.h"
-#include "QSmartCard.h"
+
+class QSmartCardData;
+class SslCertificate;
 
 namespace Ui {
 class Accordion;
 }
 
 class AccordionTitle;
-struct QCardInfo;
 
-class Accordion : public StyledWidget
+class Accordion final : public StyledWidget
 {
 	Q_OBJECT
 
@@ -37,20 +38,14 @@ public:
 	explicit Accordion( QWidget *parent = nullptr );
 	~Accordion() final;
 
-	void init();
 	void clear();
-	void closeOtherSection( AccordionTitle* opened );
 	QString getEmail();
-	void open(AccordionTitle* opened);
 	void setFocusToEmail();
-	void updateInfo(const QCardInfo &info);
-	void updateInfo( const QSmartCard *smartCard );
+	void updateInfo(const SslCertificate &info);
+	void updateInfo(const QSmartCardData &data);
 	bool updateOtherData(const QByteArray &data);
 
-protected:
-	void changeEvent(QEvent* event) override;
-
-signals:
+Q_SIGNALS:
 	void checkEMail();
 	void activateEMail();
 	void changePin1Clicked(bool isForgotPin, bool isBlockedPin);
@@ -58,6 +53,7 @@ signals:
 	void changePukClicked();
 
 private:
+	void changeEvent(QEvent* event) override;
+
 	Ui::Accordion *ui;
-	AccordionTitle* openSection = nullptr;
 };

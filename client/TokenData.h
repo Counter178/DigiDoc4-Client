@@ -1,5 +1,5 @@
 /*
- * QDigiDocClient
+ * QDigiDocCommon
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,29 +19,39 @@
 
 #pragma once
 
-#include "dialogs/WarningDialog.h"
+#include <QtCore/QSharedDataPointer>
 
 class QSslCertificate;
-class AccessCert: public WarningDialog
+class QVariant;
+class TokenData
 {
-	Q_OBJECT
-
 public:
-	explicit AccessCert(QWidget *parent = nullptr);
-	~AccessCert() final;
+	TokenData();
+	TokenData( const TokenData &other );
+	TokenData(TokenData &&other) Q_DECL_NOEXCEPT;
+	~TokenData();
 
-	bool validate();
+	QString card() const;
+	void setCard( const QString &card );
 
-	static QSslCertificate cert();
-	void increment();
-	bool installCert( const QByteArray &data, const QString &password );
-	void remove();
+	QSslCertificate cert() const;
+	void setCert( const QSslCertificate &cert );
+
+	QString reader() const;
+	void setReader(const QString &reader);
+
+	void clear();
+	bool isNull() const;
+
+	QVariant data(const QString &key) const;
+	void setData(const QString &key, const QVariant &value);
+
+	TokenData& operator =( const TokenData &other );
+	TokenData& operator =(TokenData &&other) Q_DECL_NOEXCEPT;
+	bool operator !=( const TokenData &other ) const;
+	bool operator ==( const TokenData &other ) const;
 
 private:
-	unsigned int count( const QString &date ) const;
-	bool isDefaultCert( const QSslCertificate &cert ) const;
-	void showWarning( const QString &msg );
-
 	class Private;
-	Private *d;
+	QSharedDataPointer<Private> d;
 };

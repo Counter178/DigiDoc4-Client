@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include "CliApplication.h"
 #include <common/Common.h>
 
 #include <QtCore/QStringList>
@@ -32,19 +31,14 @@
 
 namespace digidoc { class Exception; }
 class QAction;
-class QSmartCard;
 class QSigner;
-class Application: public Common
+class Application final: public Common
 {
 	Q_OBJECT
 
 public:
 	enum ConfParameter
 	{
-		LDAP_PERSON_URL,
-		LDAP_CORP_URL,
-		MobileID_URL,
-		MobileID_TEST_URL,
 		SiVaUrl,
 		ProxyHost,
 		ProxyPort,
@@ -67,31 +61,32 @@ public:
 #ifdef Q_OS_WIN
 	void addTempFile(const QString &file);
 #endif
-	bool initialized();
 	void loadTranslation( const QString &lang );
+	QWidget* mainWindow();
 	bool notify( QObject *o, QEvent *e ) override;
+	void openHelp();
 	QSigner* signer() const;
-	QSmartCard* smartcard() const;
 	int run();
 	void waitForTSL( const QString &file );
 
+	static void initDiagnosticConf();
 	static uint readTSLVersion(const QString &path);
 	static void addRecent( const QString &file );
-	static QVariant confValue( ConfParameter parameter, const QVariant &value = QVariant() );
+	static QVariant confValue(ConfParameter parameter, const QVariant &value = {});
 	static void clearConfValue( ConfParameter parameter );
 	static void setConfValue( ConfParameter parameter, const QVariant &value );
 
 public Q_SLOTS:
 	void showAbout();
 	void showSettings();
-	void showClient(const QStringList &params = QStringList(), bool crypto = false, bool sign = false);
-	void showWarning(const QString &msg, const QString &details = QString());
+	void showClient(const QStringList &params = {}, bool crypto = false, bool sign = false, bool newWindow = false);
+	void showWarning(const QString &msg, const QString &details = {});
 
 private Q_SLOTS:
 	void browse( const QUrl &url );
 	void closeWindow();
 	void mailTo( const QUrl &url );
-	void parseArgs( const QString &msg = QString() );
+	void parseArgs(const QString &msg = {});
 	void parseArgs( const QStringList &args );
 	void showTSLWarning( QEventLoop *e );
 
@@ -100,9 +95,7 @@ Q_SIGNALS:
 
 private:
 	void activate( QWidget *w );
-	void diagnostics(QTextStream &s) override;
 	bool event( QEvent *e ) override;
-	QWidget* mainWindow();
 	void migrateSettings();
 	static void showWarning(const QString &msg, const digidoc::Exception &e);
 	QWidget* uniqueRoot();
@@ -121,13 +114,4 @@ class REOpenEvent: public QEvent
 public:
 	enum { Type = QEvent::User + 1 };
 	REOpenEvent(): QEvent( QEvent::Type(Type) ) {}
-};
-
-class DdCliApplication: public CliApplication
-{
-public:
-	DdCliApplication( int &argc, char **argv );
-
-protected:
-	virtual void diagnostics( QTextStream &s ) const;
 };

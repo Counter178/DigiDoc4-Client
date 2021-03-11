@@ -50,7 +50,7 @@ public:
 	DigiDocSignature(const digidoc::Signature *signature, const DigiDoc *parent);
 
 	QSslCertificate	cert() const;
-	QDateTime	dateTime() const;
+	QDateTime	claimedTime() const;
 	QString		id() const;
 	QString		lastError() const;
 	QString		location() const;
@@ -65,8 +65,8 @@ public:
 	QStringList	roles() const;
 	QString		signatureMethod() const;
 	QString		signedBy() const;
-	QDateTime	signTime() const;
 	QString		spuri() const;
+	QDateTime	trustedTime() const;
 	QSslCertificate tsCert() const;
 	QDateTime	tsTime() const;
 	QSslCertificate tsaCert() const;
@@ -78,6 +78,7 @@ private:
 	void setLastError( const digidoc::Exception &e ) const;
 	void parseException( SignatureStatus &result, const digidoc::Exception &e ) const;
 	SignatureStatus validate(const std::string &policy) const;
+	QSslCertificate toCertificate(const std::vector<unsigned char> &der) const;
 	QDateTime toTime(const std::string &time) const;
 
 	const digidoc::Signature *s;
@@ -117,17 +118,6 @@ class DigiDoc: public QObject
 {
 	Q_OBJECT
 public:
-	enum DocumentType {
-		DDocType,
-		BDoc2Type
-	};
-
-	enum Operation {
-		Saving,
-		Signing,
-		Validation
-	};
-
 	explicit DigiDoc(QObject *parent = nullptr);
 	~DigiDoc();
 
@@ -157,13 +147,9 @@ public:
 	QList<DigiDocSignature> signatures() const;
 	ria::qdigidoc4::ContainerState state();
 	QList<DigiDocSignature> timestamps() const;
-	DocumentType documentType() const;
 
-	static bool parseException( const digidoc::Exception &e, QStringList &causes,
+	static void parseException( const digidoc::Exception &e, QStringList &causes,
 		digidoc::Exception::ExceptionCode &code);
-
-signals:
-	void operation(Operation op, bool started);
 
 private:
 	bool checkDoc( bool status = false, const QString &msg = QString() ) const;

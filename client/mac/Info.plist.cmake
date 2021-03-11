@@ -26,12 +26,18 @@
 	<string>NSApplication</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>DigiDoc4 Client can use AppleScript to talk with apps, for example to insert attachments to emails.</string>
 	<key>LSHasLocalizedDisplayName</key>
 	<true/>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.productivity</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>${CMAKE_OSX_DEPLOYMENT_TARGET}</string>
+	<key>NSRequiresAquaSystemAppearance</key>
+	<string>True</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<true/>
 	<key>NSUbiquitousContainers</key>
 	<dict>
 		<key>iCloud.ee.ria.qdigidoc4</key>

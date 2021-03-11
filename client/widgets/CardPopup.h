@@ -17,27 +17,19 @@
  *
  */
 
-#pragma once 
+#pragma once
 
-#include "QCardInfo.h"
-#include "widgets/CardWidget.h"
 #include "widgets/StyledWidget.h"
 
-#include <QMap>
-#include <QSet>
-#include <QSharedPointer>
+class TokenData;
 
 class CardPopup : public StyledWidget
 {
 	Q_OBJECT
 
 public:
-	explicit CardPopup(const QSet<QString> &cards, const QString &selectedCard,
-		const QMap<QString, QSharedPointer<QCardInfo>> &cache, QWidget *parent = nullptr);
+	explicit CardPopup(const QVector<TokenData> &cache, QWidget *parent = nullptr);
 
 signals:
-	void activated( const QString &card );
-
-private:
-	QList<CardWidget*> cardWidgets;
+	void activated(const TokenData &token);
 };

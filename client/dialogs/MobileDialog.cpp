@@ -19,8 +19,8 @@
 
 #include "MobileDialog.h"
 #include "ui_MobileDialog.h"
-#include <common/Common.h>
 #include "Styles.h"
+#include "dialogs/SettingsDialog.h"
 #include "effects/Overlay.h"
 
 #include <QtCore/QSettings>
@@ -28,11 +28,14 @@
 #include <common/IKValidator.h>
 
 #define COUNTRY_CODE_EST QStringLiteral("372")
+#define COUNTRY_CODE_LAT QStringLiteral("371")
+#define COUNTRY_CODE_LTU QStringLiteral("370")
 
 MobileDialog::MobileDialog(QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::MobileDialog)
 {
+	new Overlay(this, parent->topLevelWidget());
 	ui->setupUi(this);
 	setWindowFlags( Qt::Dialog | Qt::FramelessWindowHint );
 	setWindowModality( Qt::ApplicationModal );
@@ -42,32 +45,33 @@ MobileDialog::MobileDialog(QWidget *parent) :
 	connect( ui->cancel, &QPushButton::clicked, this, &MobileDialog::reject );
 	connect( this, &MobileDialog::finished, this, &MobileDialog::close );
 
-	QFont condensed12 = Styles::font( Styles::Condensed, 12 );
-	QFont condensed14 = Styles::font( Styles::Condensed, 14 );
-	QFont header = Styles::font( Styles::Regular, 14 );
+	QFont condensed = Styles::font(Styles::Condensed, 14);
+	QFont header = Styles::font(Styles::Regular, 16, QFont::DemiBold);
 	QFont regularFont = Styles::font(Styles::Regular, 14);
-	header.setWeight( QFont::DemiBold );
-	ui->labelNameId->setFont( header );
-	ui->labelPhone->setFont( condensed12 );
-	ui->labelIdCode->setFont( condensed12 );
+	ui->labelNameId->setFont(header);
+	ui->labelPhone->setFont(regularFont);
+	ui->labelIdCode->setFont(regularFont);
 	ui->phoneNo->setFont(regularFont);
 	ui->idCode->setFont(regularFont);
-	ui->cbRemember->setFont( Styles::font( Styles::Regular, 14 ) );
-	ui->sign->setFont( condensed14 );
-	ui->cancel->setFont( condensed14 );
+	ui->cbRemember->setFont(regularFont);
+	ui->sign->setFont(condensed);
+	ui->cancel->setFont(condensed);
 
 	// Mobile
 	ui->idCode->setValidator( new IKValidator( ui->idCode ) );
 	ui->idCode->setText(QSettings().value(QStringLiteral("MobileCode")).toString());
+	ui->idCode->setAttribute(Qt::WA_MacShowFocusRect, 0);
 	ui->phoneNo->setValidator( new NumberValidator( ui->phoneNo ) );
 	ui->phoneNo->setText(QSettings().value(QStringLiteral("MobileNumber"), COUNTRY_CODE_EST).toString());
+	ui->phoneNo->setAttribute(Qt::WA_MacShowFocusRect, 0);
 	ui->cbRemember->setChecked(QSettings().value(QStringLiteral("MobileSettings"), true).toBool());
+	ui->cbRemember->setAttribute(Qt::WA_MacShowFocusRect, 0);
 	connect(ui->idCode, &QLineEdit::textEdited, this, &MobileDialog::enableSign);
 	connect(ui->phoneNo, &QLineEdit::textEdited, this, &MobileDialog::enableSign);
 	connect(ui->cbRemember, &QCheckBox::clicked, this, [=](bool checked) {
-		Common::setValueEx(QStringLiteral("MobileCode"), checked ? ui->idCode->text() : QString(), QString());
-		Common::setValueEx(QStringLiteral("MobileNumber"), checked ? ui->phoneNo->text() : QString(), QString());
-		Common::setValueEx(QStringLiteral("MobileSettings"), checked, true);
+		SettingsDialog::setValueEx(QStringLiteral("MobileCode"), checked ? ui->idCode->text() : QString());
+		SettingsDialog::setValueEx(QStringLiteral("MobileNumber"), checked ? ui->phoneNo->text() : QString());
+		SettingsDialog::setValueEx(QStringLiteral("MobileSettings"), checked, true);
 	});
 
 	enableSign();
@@ -80,30 +84,22 @@ MobileDialog::~MobileDialog()
 
 void MobileDialog::enableSign()
 {
+	static const QStringList countryCodes {COUNTRY_CODE_EST, COUNTRY_CODE_LAT, COUNTRY_CODE_LTU};
 	if( ui->cbRemember->isChecked() )
 	{
-		Common::setValueEx(QStringLiteral("MobileCode"), ui->idCode->text(), QString());
-		Common::setValueEx(QStringLiteral("MobileNumber"), ui->phoneNo->text(),
+		SettingsDialog::setValueEx(QStringLiteral("MobileCode"), ui->idCode->text());
+		SettingsDialog::setValueEx(QStringLiteral("MobileNumber"), ui->phoneNo->text(),
 			ui->phoneNo->text() == COUNTRY_CODE_EST ? COUNTRY_CODE_EST : QString());
 	}
 	ui->sign->setToolTip(QString());
 	if( !IKValidator::isValid( ui->idCode->text() ) )
 		ui->sign->setToolTip( tr("Personal code is not valid") );
-	if(ui->phoneNo->text().isEmpty() || ui->phoneNo->text() == COUNTRY_CODE_EST)
+	if(ui->phoneNo->text().size() < 8 || countryCodes.contains(ui->phoneNo->text()))
 		ui->sign->setToolTip( tr("Phone number is not entered") );
+	if(!countryCodes.contains(ui->phoneNo->text().left(3)))
+		ui->sign->setToolTip(tr("Invalid country code"));
 	ui->sign->setEnabled( ui->sign->toolTip().isEmpty() );
 }
-
-int MobileDialog::exec()
-{
-	Overlay overlay(parentWidget());
-	overlay.show();
-	auto rc = QDialog::exec();
-	overlay.close();
-
-	return rc;
-}
-
 
 QString MobileDialog::idCode()
 {

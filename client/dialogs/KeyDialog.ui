@@ -9,13 +9,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>450</width>
+    <width>500</width>
     <height>222</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>450</width>
+    <width>500</width>
     <height>222</height>
    </size>
   </property>
@@ -29,13 +29,6 @@ QWidget#KeyDialog{ border-radius: 2px; }
   </property>
   <layout class="QVBoxLayout" name="KeyDialogLayout">
    <item>
-    <widget class="QLabel" name="title">
-     <property name="styleSheet">
-      <string notr="true">border: none;</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QTreeWidget" name="view">
      <property name="styleSheet">
       <string notr="true">#view {
@@ -43,7 +36,7 @@ QWidget#KeyDialog{ border-radius: 2px; }
 }
 QHeaderView::section {
 	border: 1px solid #D9D9D8;
-	border-width: 0px 1px 1px 0px;
+	border-width: 0px 0px 1px 0px;
 	padding: 2px 0px 3px 5px;
 	background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
                                       stop:0 #FFFFFF, stop:1 #FFFFFF);
@@ -92,6 +85,9 @@ QHeaderView::section {
          <pointsize>14</pointsize>
         </font>
        </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="accessibleName">
         <string extracomment="accessible">Close</string>
        </property>
@@ -100,13 +96,13 @@ QHeaderView::section {
 	border-radius: 2px; 
 	border: none;
 	color: #ffffff;
-	background-color: #006EB5;
+	background-color: #981E32;
 }
 QPushButton:pressed {
-	background-color: #41B6E6;
+	background-color: #F24A66;
 }
 QPushButton:hover:!pressed {
-	background-color: #008DCF;
+	background-color: #CD2541;
 }
 QPushButton:disabled {
 	background-color: #BEDBED;
@@ -132,6 +128,9 @@ QPushButton:disabled {
         <font>
          <pointsize>14</pointsize>
         </font>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
        </property>
        <property name="accessibleName">
         <string extracomment="accessible">Show certificate</string>

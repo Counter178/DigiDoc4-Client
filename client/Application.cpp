@@ -23,7 +23,14 @@
 
 #include "MainWindow.h"
 #include "QSigner.h"
+#include "QSmartCard.h"
 #include "DigiDoc.h"
+#ifdef Q_OS_MAC
+#include "MacMenuBar.h"
+#else
+class MacMenuBar;
+#endif
+#include "TokenData.h"
 #include "dialogs/FirstRun.h"
 #include "dialogs/SettingsDialog.h"
 #include "dialogs/WaitDialog.h"
@@ -52,17 +59,10 @@
 #include <QtGui/QDesktopServices>
 #include <QtGui/QFileOpenEvent>
 #include <QtNetwork/QNetworkProxy>
-#include <QtNetwork/QSslConfiguration>
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QProgressBar>
 #include <QtWidgets/QProgressDialog>
 #include <QtWidgets/QAction>
-
-#if defined(Q_OS_MAC)
-#include <common/MacMenuBar.h>
-#else
-class MacMenuBar;
-#endif
 
 #ifdef Q_OS_WIN32
 #include <QtCore/QLibrary>
@@ -75,21 +75,18 @@ class DigidocConf: public digidoc::XmlConfCurrent
 public:
 	DigidocConf()
 	{
-		Configuration::connect(&Configuration::instance(), &Configuration::updateReminder, [&](bool expired, const QString &title, const QString &message){
-			WarningDialog dlg(message, qApp->activeWindow());
-			dlg.exec();
-		});
+		debug = s.value("LibdigidocppDebug", false).toBool();
+		s.remove("LibdigidocppDebug");
 
 #ifdef CONFIG_URL
+		Configuration::connect(&Configuration::instance(), &Configuration::updateReminder,
+				[&](bool /* expired */, const QString & /* title */, const QString &message){
+			WarningDialog(message, qApp->activeWindow()).exec();
+		});
+
 		reload();
 #ifdef Q_OS_MAC
-		QTimer *t = new QTimer();
-		t->setSingleShot(true);
-		QTimer::connect(t, &QTimer::timeout, [=] {
-			t->deleteLater();
-			Configuration::instance().checkVersion(QStringLiteral("QDIGIDOC4"));
-		});
-		t->start(0);
+		QTimer::singleShot(0, [] { Configuration::instance().checkVersion(QStringLiteral("QDIGIDOC4")); });
 #else
 		Configuration::instance().checkVersion("QDIGIDOC4");
 #endif
@@ -101,11 +98,21 @@ public:
 		SettingsDialog::loadProxy(this);
 	}
 
+	int logLevel() const override
+	{
+		return debug ? 4 : digidoc::XmlConfCurrent::logLevel();
+	}
+
+	std::string logFile() const override
+	{
+		return debug ? QStringLiteral("%1/libdigidocpp.log").arg(QDir::tempPath()).toStdString() : digidoc::XmlConfCurrent::logFile();
+	}
+
 	std::string proxyHost() const override
 	{
 		switch(s.value(QStringLiteral("ProxyConfig")).toUInt())
 		{
-		case 0: return std::string();
+		case 0: return {};
 		case 1: return systemProxy().hostName().toStdString();
 		default: return s.value(QStringLiteral("ProxyHost"), QString::fromStdString(digidoc::XmlConfCurrent::proxyHost()) ).toString().toStdString();
 		}
@@ -115,7 +122,7 @@ public:
 	{
 		switch(s.value(QStringLiteral("ProxyConfig")).toUInt())
 		{
-		case 0: return std::string();
+		case 0: return {};
 		case 1: return QString::number(systemProxy().port()).toStdString();
 		default: return s.value(QStringLiteral("ProxyPort"), QString::fromStdString(digidoc::XmlConfCurrent::proxyPort()) ).toString().toStdString();
 		}
@@ -125,7 +132,7 @@ public:
 	{
 		switch(s.value(QStringLiteral("ProxyConfig")).toUInt())
 		{
-		case 0: return std::string();
+		case 0: return {};
 		case 1: return systemProxy().user().toStdString();
 		default: return s.value(QStringLiteral("ProxyUser"), QString::fromStdString(digidoc::XmlConfCurrent::proxyUser()) ).toString().toStdString();
 		}
@@ -135,7 +142,7 @@ public:
 	{
 		switch(s.value(QStringLiteral("ProxyConfig")).toUInt())
 		{
-		case 0: return std::string();
+		case 0: return {};
 		case 1: return systemProxy().password().toStdString();
 		default: return s.value(QStringLiteral("ProxyPass"), QString::fromStdString(digidoc::XmlConfCurrent::proxyPass())).toString().toStdString();
 		}
@@ -152,26 +159,31 @@ public:
 	{ return s.value(QStringLiteral("TSLOnlineDigest"), digidoc::XmlConfCurrent::TSLOnlineDigest()).toBool(); }
 
 	void setProxyHost( const std::string &host ) override
-	{ Common::setValueEx(QStringLiteral("ProxyHost"), QString::fromStdString( host ), QString()); }
+	{ SettingsDialog::setValueEx(QStringLiteral("ProxyHost"), QString::fromStdString( host )); }
 	void setProxyPort( const std::string &port ) override
-	{ Common::setValueEx(QStringLiteral("ProxyPort"), QString::fromStdString( port ), QString()); }
+	{ SettingsDialog::setValueEx(QStringLiteral("ProxyPort"), QString::fromStdString( port )); }
 	void setProxyUser( const std::string &user ) override
-	{ Common::setValueEx(QStringLiteral("ProxyUser"), QString::fromStdString( user ), QString()); }
+	{ SettingsDialog::setValueEx(QStringLiteral("ProxyUser"), QString::fromStdString( user )); }
 	void setProxyPass( const std::string &pass ) override
-	{ Common::setValueEx(QStringLiteral("ProxyPass"), QString::fromStdString( pass ), QString()); }
+	{ SettingsDialog::setValueEx(QStringLiteral("ProxyPass"), QString::fromStdString( pass )); }
 	void setProxyTunnelSSL( bool enable ) override
-	{ Common::setValueEx(QStringLiteral("ProxyTunnelSSL"), enable, digidoc::XmlConfCurrent::proxyTunnelSSL()); }
+	{ SettingsDialog::setValueEx(QStringLiteral("ProxyTunnelSSL"), enable, digidoc::XmlConfCurrent::proxyTunnelSSL()); }
 	void setPKCS12Cert( const std::string & /*cert*/) override {}
 	void setPKCS12Pass( const std::string & /*pass*/) override {}
 	void setPKCS12Disable( bool disable ) override
-	{ Common::setValueEx(QStringLiteral("PKCS12Disable"), disable, digidoc::XmlConfCurrent::PKCS12Disable()); }
+	{ SettingsDialog::setValueEx(QStringLiteral("PKCS12Disable"), disable, digidoc::XmlConfCurrent::PKCS12Disable()); }
 	void setTSLOnlineDigest( bool enable ) override
-	{ Common::setValueEx(QStringLiteral("TSLOnlineDigest"), enable, digidoc::XmlConfCurrent::TSLOnlineDigest()); }
+	{ SettingsDialog::setValueEx(QStringLiteral("TSLOnlineDigest"), enable, digidoc::XmlConfCurrent::TSLOnlineDigest()); }
 #endif
 
-	std::string TSUrl() const override { return valueUserScope(QStringLiteral("TSA-URL"), digidoc::XmlConfCurrent::TSUrl()); }
+	std::string TSUrl() const override
+	{
+		if(s.value(QStringLiteral("TSA-URL-CUSTOM"), s.contains(QStringLiteral("TSA-URL"))).toBool())
+			return valueUserScope(QStringLiteral("TSA-URL"), digidoc::XmlConfCurrent::TSUrl());
+		return valueSystemScope(QStringLiteral("TSA-URL"), digidoc::XmlConfCurrent::TSUrl());
+	}
 	void setTSUrl(const std::string &url) override
-	{ Common::setValueEx(QStringLiteral("TSA-URL"), QString::fromStdString(url), QString()); }
+	{ SettingsDialog::setValueEx(QStringLiteral("TSA-URL"), QString::fromStdString(url)); }
 
 	std::string TSLUrl() const override { return valueSystemScope(QStringLiteral("TSL-URL"), digidoc::XmlConfCurrent::TSLUrl()); }
 	digidoc::X509Cert verifyServiceCert() const override
@@ -181,6 +193,17 @@ public:
 		QByteArray cert = QByteArray::fromBase64(obj.value(QStringLiteral("SIVA-CERT")).toString().toLatin1());
 		return digidoc::X509Cert((const unsigned char*)cert.constData(), size_t(cert.size()));
 	}
+	std::vector<digidoc::X509Cert> verifyServiceCerts() const override
+	{
+		std::vector<digidoc::X509Cert> list;
+		list.push_back(verifyServiceCert());
+		for(const QJsonValue &cert: obj.value(QStringLiteral("CERT-BUNDLE")).toArray())
+		{
+			QByteArray der = QByteArray::fromBase64(cert.toString().toLatin1());
+			list.emplace_back((const unsigned char*)der.constData(), size_t(der.size()));
+		}
+		return list;
+	}
 	std::string verifyServiceUri() const override { return valueSystemScope(QStringLiteral("SIVA-URL"), digidoc::XmlConfCurrent::verifyServiceUri()); }
 	std::vector<digidoc::X509Cert> TSLCerts() const override
 	{
@@ -188,7 +211,7 @@ public:
 		for(const QJsonValue &val: obj.value(QStringLiteral("TSL-CERTS")).toArray())
 		{
 			QByteArray cert = QByteArray::fromBase64(val.toString().toLatin1());
-			tslcerts.emplace_back(digidoc::X509Cert((const unsigned char*)cert.constData(), size_t(cert.size())));
+			tslcerts.emplace_back((const unsigned char*)cert.constData(), size_t(cert.size()));
 		}
 		return tslcerts.empty() ? digidoc::XmlConfCurrent::TSLCerts() : tslcerts;
 	}
@@ -226,7 +249,7 @@ private:
 	{
 		obj = Configuration::instance().object();
 		if(s.value(QStringLiteral("TSA-URL")) == obj.value(QStringLiteral("TSA-URL")))
-			s.remove(QStringLiteral("TSA-URL"));
+			s.remove(QStringLiteral("TSA-URL")); // Cleanup user conf if it is default url
 		QList<QSslCertificate> list;
 		for(const QJsonValue &cert: obj.value(QStringLiteral("CERT-BUNDLE")).toArray())
 			list << QSslCertificate(QByteArray::fromBase64(cert.toString().toLatin1()), QSsl::Der);
@@ -241,7 +264,7 @@ private:
 			if(proxy.type() == QNetworkProxy::HttpProxy)
 				return proxy;
 		}
-		return QNetworkProxy();
+		return {};
 	}
 
 	std::string valueSystemScope(const QString &key, const std::string &defaultValue) const
@@ -255,6 +278,7 @@ private:
 	}
 
 	QSettings s;
+	bool	debug = false;
 public:
 	QJsonObject obj;
 };
@@ -262,7 +286,7 @@ public:
 class Application::Private
 {
 public:
-	QAction		*closeAction = nullptr, *newClientAction = nullptr, *newCryptoAction = nullptr;
+	QAction		*closeAction = nullptr, *newClientAction = nullptr, *newCryptoAction = nullptr, *helpAction = nullptr;
 	MacMenuBar	*bar = nullptr;
 	QSigner		*signer = nullptr;
 
@@ -270,17 +294,18 @@ public:
 	QString		lang;
 	QTimer		lastWindowTimer;
 	volatile bool ready = false;
-	bool		initialized = false;
-	bool		macEvents = false;
 #ifdef Q_OS_WIN
 	QStringList	tempFiles;
 #endif // Q_OS_WIN
 };
 
 Application::Application( int &argc, char **argv )
-	: Common(argc, argv, QStringLiteral(APP), QStringLiteral(":/images/digidoc_icon_128x128.png"))
+	: Common(argc, argv, QStringLiteral("qdigidoc4"), QStringLiteral(":/images/digidoc_128.png"))
 	, d(new Private)
 {
+	qRegisterMetaType<TokenData>("TokenData");
+	qRegisterMetaType<QSmartCardData>("QSmartCardData");
+
 	QStringList args = arguments();
 	args.removeFirst();
 #ifndef Q_OS_MAC
@@ -301,20 +326,20 @@ Application::Application( int &argc, char **argv )
 	loadTranslation( Common::language() );
 
 	// Actions
-	d->closeAction = new QAction( tr("Close window"), this );
+	d->closeAction = new QAction( tr("Close Window"), this );
 	d->closeAction->setShortcut( Qt::CTRL + Qt::Key_W );
 	connect(d->closeAction, &QAction::triggered, this, &Application::closeWindow);
-	d->newClientAction = new QAction( tr("New Client window"), this );
+	d->newClientAction = new QAction( tr("New Window"), this );
 	d->newClientAction->setShortcut( Qt::CTRL + Qt::Key_N );
-	connect(d->newClientAction, &QAction::triggered, this, [&]{ showClient(); });
+	connect(d->newClientAction, &QAction::triggered, this, [&]{ showClient({}, false, false, true); });
 
 	// This is needed to release application from memory (Windows)
 	setQuitOnLastWindowClosed( true ); 
 	d->lastWindowTimer.setSingleShot(true);
-	connect(&d->lastWindowTimer, &QTimer::timeout, [](){ if(topLevelWindows().isEmpty()) quit(); });
-	connect(this, &Application::lastWindowClosed, [&](){ d->lastWindowTimer.start(10*1000); });
+	connect(&d->lastWindowTimer, &QTimer::timeout, []{ if(topLevelWindows().isEmpty()) quit(); });
+	connect(this, &Application::lastWindowClosed, [&]{ d->lastWindowTimer.start(10*1000); });
 
-#if defined(Q_OS_MAC)
+#ifdef Q_OS_MAC
 	d->bar = new MacMenuBar;
 	d->bar->addAction( MacMenuBar::AboutAction, this, SLOT(showAbout()) );
 	d->bar->addAction( MacMenuBar::PreferencesAction, this, SLOT(showSettings()) );
@@ -323,6 +348,7 @@ Application::Application( int &argc, char **argv )
 	d->bar->fileMenu()->addAction( d->closeAction );
 	d->bar->dockMenu()->addAction( d->newClientAction );
 	d->bar->dockMenu()->addAction( d->newCryptoAction );
+	d->helpAction = d->bar->helpMenu()->addAction(tr("DigiDoc4 Client Help"), this, &Application::openHelp);
 #endif
 
 	QSigner::ApiType api = QSigner::PKCS11;
@@ -355,7 +381,7 @@ Application::Application( int &argc, char **argv )
 		}
 
 		qRegisterMetaType<QEventLoop*>("QEventLoop*");
-		digidoc::initialize(QStringLiteral("%1/%2 (%3)")
+		digidoc::initialize(applicationName().toUtf8().constData(), QStringLiteral("%1/%2 (%3)")
 			.arg(applicationName(), applicationVersion(), applicationOs()).toUtf8().constData(),
 			[](const digidoc::Exception *ex) {
 				qDebug() << "TSL loading finished";
@@ -384,6 +410,8 @@ Application::Application( int &argc, char **argv )
 
 Application::~Application()
 {
+	for(QWidget *top: topLevelWidgets())
+		top->close();
 #ifdef Q_OS_WIN
 	for(const QString &file: d->tempFiles)
 		QFile::remove(file);
@@ -473,10 +501,6 @@ void Application::clearConfValue( ConfParameter parameter )
 		case ProxySSL:
 		case PKCS12Disable:
 		case TSLOnlineDigest:
-		case LDAP_PERSON_URL:
-		case LDAP_CORP_URL:
-		case MobileID_URL:
-		case MobileID_TEST_URL:
 		case SiVaUrl:
 		case TSAUrl:
 		case TSLCerts:
@@ -512,10 +536,6 @@ QVariant Application::confValue( ConfParameter parameter, const QVariant &value 
 	QByteArray r;
 	switch( parameter )
 	{
-	case LDAP_PERSON_URL: return i->obj.value(QStringLiteral("LDAP-PERSON-URL")).toString(QStringLiteral("ldaps://esteid.ldap.sk.ee"));
-	case LDAP_CORP_URL: return i->obj.value(QStringLiteral("LDAP-CORP-URL")).toString(QStringLiteral("ldaps://k3.ldap.sk.ee"));
-	case MobileID_URL: return i->obj.value(QStringLiteral("MID-SIGN-URL")).toString(QStringLiteral("https://digidocservice.sk.ee"));
-	case MobileID_TEST_URL: return i->obj.value(QStringLiteral("MID-SIGN-TEST-URL")).toString(QStringLiteral("https://tsp.demo.sk.ee"));
 	case SiVaUrl: r = i->verifyServiceUri().c_str(); break;
 	case ProxyHost: r = i->proxyHost().c_str(); break;
 	case ProxyPort: r = i->proxyPort().c_str(); break;
@@ -544,24 +564,6 @@ QVariant Application::confValue( ConfParameter parameter, const QVariant &value 
 	return r.isEmpty() ? value.toString() : QString::fromUtf8( r );
 }
 
-void Application::diagnostics(QTextStream &s)
-{
-	QString cache = confValue(TSLCache).toString();
-	QString file = QFileInfo(confValue(TSLUrl).toString()).fileName();
-	s << "<br />TSL_URL: " << confValue(TSLUrl).toString() << " (" << readTSLVersion(cache + "/" + file) << ")"
-		<< "<br />TSA_URL: " << confValue(TSAUrl).toString()
-		<< "<br />SIVA_URL: " << confValue(SiVaUrl).toString()
-#ifdef MOBILEID_URL
-		<< "<br />MOBILEID_URL: " << MOBILEID_URL
-#endif
-#ifdef SMARTID_URL
-		<< "<br />SMARTID_URL: " << SMARTID_URL
-#endif
-		<< "<br /><br /><b>" << tr("TSL signing certs") << ":</b>";
-	for(const QSslCertificate &cert: confValue(TSLCerts).value<QList<QSslCertificate>>())
-		s << "<br />" << cert.subjectInfo("CN").value(0);
-}
-
 bool Application::event( QEvent *e )
 {
 	switch( int(e->type()) )
@@ -576,23 +578,16 @@ bool Application::event( QEvent *e )
 #ifdef Q_OS_MAC
 	// Load here because cocoa NSApplication overides events
 	case QEvent::ApplicationActivate:
-		if(!d->macEvents)
-		{
-			initMacEvents();
-			d->macEvents = true;
-		}
+		initMacEvents();
 		return Common::event( e );
 #endif
 	default: return Common::event( e );
 	}
 }
 
-bool Application::initialized()
+void Application::initDiagnosticConf()
 {
-	bool isInitialized = d->initialized;
-	d->initialized = true; 
-
-	return isInitialized;
+	digidoc::Conf::init(new DigidocConf);
 }
 
 void Application::loadTranslation( const QString &lang )
@@ -605,12 +600,13 @@ void Application::loadTranslation( const QString &lang )
 	else if(lang == QStringLiteral("ru")) QLocale::setDefault(QLocale( QLocale::Russian, QLocale::RussianFederation));
 	else QLocale::setDefault(QLocale(QLocale::Estonian, QLocale::Estonia));
 
-	d->appTranslator.load( ":/translations/" + lang );
-	d->commonTranslator.load( ":/translations/common_" + lang );
-	d->qtTranslator.load( ":/translations/qt_" + lang );
-	if( d->closeAction ) d->closeAction->setText( tr("Close window") );
-	if( d->newClientAction ) d->newClientAction->setText( tr("New Client window") );
+	d->appTranslator.load(QStringLiteral(":/translations/") + lang);
+	d->commonTranslator.load(QStringLiteral(":/translations/common_") + lang);
+	d->qtTranslator.load(QStringLiteral(":/translations/qt_") + lang);
+	if( d->closeAction ) d->closeAction->setText( tr("Close Window") );
+	if( d->newClientAction ) d->newClientAction->setText( tr("New Window") );
 	if( d->newCryptoAction ) d->newCryptoAction->setText( tr("New Crypto window") );
+	if(d->helpAction) d->helpAction->setText(tr("DigiDoc4 Client Help"));
 }
 
 #ifndef Q_OS_MAC
@@ -625,11 +621,11 @@ void Application::mailTo( const QUrl &url )
 		QString filePath = QDir::toNativeSeparators( file );
 		QString fileName = QFileInfo( file ).fileName();
 		QString subject = q.queryItemValue( "subject", QUrl::FullyDecoded );
-		MapiFileDescW doc = { 0, 0, 0, nullptr, nullptr, nullptr };
+		MapiFileDescW doc = {};
 		doc.nPosition = -1;
 		doc.lpszPathName = PWSTR(filePath.utf16());
 		doc.lpszFileName = PWSTR(fileName.utf16());
-		MapiMessageW message = { 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, nullptr, 0, nullptr, 0, nullptr };
+		MapiMessageW message = {};
 		message.lpszSubject = PWSTR(subject.utf16());
 		message.lpszNoteText = L"";
 		message.nFileCount = 1;
@@ -648,11 +644,11 @@ void Application::mailTo( const QUrl &url )
 		QByteArray filePath = QDir::toNativeSeparators( file ).toLocal8Bit();
 		QByteArray fileName = QFileInfo( file ).fileName().toLocal8Bit();
 		QByteArray subject = q.queryItemValue( "subject", QUrl::FullyDecoded ).toLocal8Bit();
-		MapiFileDesc doc = { 0, 0, 0, nullptr, nullptr, nullptr };
+		MapiFileDesc doc = {};
 		doc.nPosition = -1;
 		doc.lpszPathName = LPSTR(filePath.constData());
 		doc.lpszFileName = LPSTR(fileName.constData());
-		MapiMessage message = { 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, nullptr, 0, nullptr, 0, nullptr };
+		MapiMessage message = {};
 		message.lpszSubject = LPSTR(subject.constData());
 		message.lpszNoteText = "";
 		message.nFileCount = 1;
@@ -672,10 +668,10 @@ void Application::mailTo( const QUrl &url )
 	QStringList env = QProcess::systemEnvironment();
 	if( env.indexOf( QRegExp("KDE_FULL_SESSION.*") ) != -1 )
 	{
-		p.start( "kreadconfig", QStringList()
-			<< "--file" << "emaildefaults"
-			<< "--group" << "PROFILE_Default"
-			<< "--key" << "EmailClient" );
+		p.start("kreadconfig", {
+			"--file", "emaildefaults",
+			"--group", "PROFILE_Default",
+			"--key", "EmailClient"});
 		p.waitForFinished();
 		QByteArray data = p.readAllStandardOutput().trimmed();
 		if( data.contains("thunderbird") )
@@ -703,16 +699,16 @@ void Application::mailTo( const QUrl &url )
 	bool status = false;
 	if( !thunderbird.isEmpty() )
 	{
-		status = p.startDetached( thunderbird, QStringList() << "-compose"
-			<< QString( "subject='%1',attachment='%2'" )
+		status = p.startDetached(thunderbird, {"-compose",
+			QStringLiteral("subject='%1',attachment='%2'")
 				.arg( q.queryItemValue( "subject" ) )
-				.arg( QUrl::fromLocalFile( q.queryItemValue( "attachment" ) ).toString() ) );
+				.arg(QUrl::fromLocalFile(q.queryItemValue("attachment")).toString())});
 	}
 	else
 	{
-		status = p.startDetached( "xdg-email", QStringList()
-			<< "--subject" << q.queryItemValue( "subject" )
-			<< "--attach" << q.queryItemValue( "attachment" ) );
+		status = p.startDetached(QStringLiteral("xdg-email"), {
+			"--subject", q.queryItemValue("subject"),
+			"--attach", q.queryItemValue("attachment")});
 	}
 	if( status )
 		return;
@@ -770,6 +766,7 @@ void Application::migrateSettings()
 	QSettings oldAppSettings(QStringLiteral("Estonian ID Card"), QStringLiteral("qdigidoc4"));
 	QSettings newSettings;
 #endif
+	newSettings.remove(QStringLiteral("Client/Type"));
 
 	if(newSettings.value(QStringLiteral("SettingsMigrated"), false).toBool())
 		return;
@@ -794,7 +791,7 @@ void Application::migrateSettings()
 	}
 #endif
 
-	QList< QPair<QString, QString> > orgOldNewKeys = {
+	static const QVector<QPair<QString,QString>> orgOldNewKeys {
 		{"showIntro", "showIntro"},
 		{"PKCS12Disable","PKCS12Disable"},
 		{"Client/MobileCode","MobileCode"},
@@ -814,7 +811,7 @@ void Application::migrateSettings()
 		{"ProxyTunnelSSL","ProxyTunnelSSL"}
 	};
 
-	QList< QPair<QString, QString> > appOldNewKeys = {
+	static const QVector<QPair<QString,QString>> appOldNewKeys {
 		{"TSLOnlineDigest", "TSLOnlineDigest"},
 		{"Client/proxyConfig", "ProxyConfig"},
 		{"lastPath", "lastPath"},
@@ -827,10 +824,9 @@ void Application::migrateSettings()
 		{"cdocwithddoc", "cdocwithddoc"}
 	};
 
-	for( QPair<const QString&, const QString&> keypairs : orgOldNewKeys){
-
-		QString oldKey = keypairs.first;
-		QString newKey = keypairs.second;
+	for(const QPair<QString,QString> &keypairs: orgOldNewKeys) {
+		const QString &oldKey = keypairs.first;
+		const QString &newKey = keypairs.second;
 
 		if(oldOrgSettings.contains(oldKey)){
 			newSettings.setValue(newKey, oldOrgSettings.value(oldKey));
@@ -842,10 +838,9 @@ void Application::migrateSettings()
 		}
 	}
 
-	for( QPair<const QString&, const QString&> keypairs : appOldNewKeys){
-
-		QString oldKey = keypairs.first;
-		QString newKey = keypairs.second;
+	for(const QPair<QString,QString> &keypairs: appOldNewKeys) {
+		const QString &oldKey = keypairs.first;
+		const QString &newKey = keypairs.second;
 
 		if(oldAppSettings.contains(oldKey)){
 			newSettings.setValue(newKey, oldAppSettings.value(oldKey));
@@ -905,6 +900,15 @@ bool Application::notify( QObject *o, QEvent *e )
 	return false;
 }
 
+void Application::openHelp()
+{
+	QString lang = language();
+	QUrl u(QStringLiteral("http://www.id.ee/index.php?id=10583"));
+	if(lang == QStringLiteral("en")) u = QStringLiteral("http://www.id.ee/index.php?id=30466");
+	if(lang == QStringLiteral("ru")) u = QStringLiteral("http://www.id.ee/index.php?id=30515");
+	QDesktopServices::openUrl(u);
+}
+
 void Application::parseArgs( const QString &msg )
 {
 	QStringList params;
@@ -920,16 +924,18 @@ void Application::parseArgs( const QStringList &args )
 {
 	bool crypto = args.contains(QStringLiteral("-crypto"));
 	bool sign = args.contains(QStringLiteral("-sign"));
+	bool newWindow = args.contains(QStringLiteral("-newWindow"));
 	QStringList params = args;
 	params.removeAll(QStringLiteral("-sign"));
 	params.removeAll(QStringLiteral("-crypto"));
+	params.removeAll(QStringLiteral("-newWindow"));
 	params.removeAll(QStringLiteral("-capi"));
 	params.removeAll(QStringLiteral("-cng"));
 	params.removeAll(QStringLiteral("-pkcs11"));
 	params.removeAll(QStringLiteral("-noNativeFileDialog"));
 
 	QString suffix = params.size() == 1 ? QFileInfo(params.value(0)).suffix() : QString();
-	showClient(params, crypto || (suffix.compare(QStringLiteral("cdoc"), Qt::CaseInsensitive) == 0), sign);
+	showClient(params, crypto || (suffix.compare(QStringLiteral("cdoc"), Qt::CaseInsensitive) == 0), sign, newWindow);
 }
 
 uint Application::readTSLVersion(const QString &path)
@@ -977,10 +983,6 @@ void Application::setConfValue( ConfParameter parameter, const QVariant &value )
 		case PKCS12Disable: i->setPKCS12Disable( value.toBool() ); break;
 		case TSLOnlineDigest: i->setTSLOnlineDigest( value.toBool() ); break;
 		case TSAUrl: i->setTSUrl(v.isEmpty()? std::string() : v.constData()); break;
-		case LDAP_PERSON_URL:
-		case LDAP_CORP_URL:
-		case MobileID_URL:
-		case MobileID_TEST_URL:
 		case SiVaUrl:
 		case TSLCerts:
 		case TSLUrl:
@@ -1005,7 +1007,7 @@ void Application::showSettings()
 		w->showSettings(SettingsDialog::GeneralSettings);
 }
 
-void Application::showClient(const QStringList &params, bool crypto, bool sign)
+void Application::showClient(const QStringList &params, bool crypto, bool sign, bool newWindow)
 {
 	if(sign)
 	{
@@ -1013,12 +1015,12 @@ void Application::showClient(const QStringList &params, bool crypto, bool sign)
 		sign = !(params.size() == 1 && canAddSignature.contains(QFileInfo(params.value(0)).suffix(), Qt::CaseInsensitive));
 	}
 	QWidget *w = nullptr;
-	if(params.isEmpty())
+	if(!newWindow && params.isEmpty())
 	{
 		// If no files selected (e.g. restoring minimized window), select first
 		w = qobject_cast<MainWindow*>(qApp->mainWindow());
 	}
-	else
+	else if(!newWindow)
 	{
 		// else select first window with no open files
 		MainWindow *main = qobject_cast<MainWindow*>(qApp->uniqueRoot());
@@ -1029,31 +1031,26 @@ void Application::showClient(const QStringList &params, bool crypto, bool sign)
 	{
 		QSettings settings;
 		migrateSettings();
+
 #ifdef Q_OS_MAC
 		if(QSettings().value(QStringLiteral("plugins")).isNull())
 		{
-			QTimer *timer = new QTimer(this);
-			timer->setSingleShot(true);
-			connect(timer, &QTimer::timeout, this, [=]{
-				timer->deleteLater();
-				WarningDialog dlg(tr("In order to use digital signing in online services the browser token plugin must be enabled in Your web browser.<br/>Instructions on how to enable token plugin can be found <a href=\"http://id.ee/?lang=en&id=36639\">here</a>."), qApp->activeWindow());
-				dlg.setCancelText(tr("Ignore forever").toUpper());
-				dlg.addButton(tr("Remind later").toUpper(), QMessageBox::Yes);
-				dlg.exec();
-
-				if(dlg.result() != QMessageBox::Yes)
-					QSettings().setValue(QStringLiteral("plugins"), "ignore");
-			});
-			timer->start(1000);
+			WarningDialog dlg(tr(
+				"In order to use digital signing in online services the browser token plugin must be enabled in Your web browser.<br/>"
+				"Instructions on how to enable token plugin can be found <a href=\"https://www.id.ee/en/article/configuring-browsers-for-using-id-card/\">here</a>."));
+			dlg.setCancelText(tr("Ignore forever").toUpper());
+			dlg.addButton(tr("Remind later").toUpper(), QMessageBox::Yes);
+			if(dlg.exec() != QMessageBox::Yes)
+				QSettings().setValue(QStringLiteral("plugins"), "ignore");
 		}
 #endif
 
 		if(settings.value(QStringLiteral("showIntro"), true).toBool())
 		{
+			settings.setValue(QStringLiteral("showIntro"), false);
 			FirstRun dlg;
 			connect(&dlg, &FirstRun::langChanged, this, [this](const QString& lang) { loadTranslation( lang ); });
 			dlg.exec();
-			settings.setValue(QStringLiteral("showIntro"), false);
 		}
 
 		w = new MainWindow();
@@ -1076,7 +1073,7 @@ void Application::showTSLWarning(QEventLoop *e)
 		"The renewal of Trust Service status List, used for digital signature validation, has failed. "
 		"Please check your internet connection and make sure you have the latest ID-software version "
 		"installed. An expired Trust Service List (TSL) will be used for signature validation. "
-		"<a href=\"http://www.id.ee/?id=37012\">Additional information</a>") );
+		"<a href=\"https://www.id.ee/en/article/digidoc4-message-updating-the-list-of-trusted-certificates-was-unsuccessful/\">Additional information</a>") );
 	e->exit();
 }
 
@@ -1085,19 +1082,15 @@ void Application::showWarning( const QString &msg, const digidoc::Exception &e )
 	QStringList causes;
 	digidoc::Exception::ExceptionCode code = digidoc::Exception::General;
 	DigiDoc::parseException(e, causes, code);
-	WarningDialog d(msg, causes.join('\n'), qApp->mainWindow());
-	d.exec();
+	WarningDialog(msg, causes.join('\n'), qApp->mainWindow()).exec();
 }
 
 void Application::showWarning( const QString &msg, const QString &details )
 {
-	WarningDialog d(msg, details, qApp->mainWindow());
-	d.exec();
+	WarningDialog(msg, details, qApp->mainWindow()).exec();
 }
 
 QSigner* Application::signer() const { return d->signer; }
-
-QSmartCard* Application::smartcard() const { return d->signer->smartcard(); }
 
 QWidget* Application::uniqueRoot()
 {
@@ -1137,7 +1130,7 @@ void Application::waitForTSL( const QString &file )
 	p.setRange( 0, 100 );
 	p.open();
 	QTimer t;
-	connect(&t, &QTimer::timeout, &p, [&](){
+	connect(&t, &QTimer::timeout, &p, [&]{
 		if(p.value() + 1 == p.maximum())
 			p.setValue(0);
 		p.setValue( p.value() + 1 );
@@ -1149,25 +1142,4 @@ void Application::waitForTSL( const QString &file )
 	if( !d->ready )
 		e.exec();
 	t.stop();
-}
-
-DdCliApplication::DdCliApplication( int &argc, char **argv )
-	: CliApplication( argc, argv, QStringLiteral(APP))
-{
-}
-
-void DdCliApplication::diagnostics(QTextStream &s) const
-{
-	digidoc::Conf::init( new DigidocConf );
-
-#ifdef MOBILEID_URL
-	s << "<br />MOBILEID_URL: " << MOBILEID_URL;
-#endif
-#ifdef SMARTID_URL
-	s << "<br />SMARTID_URL: " << SMARTID_URL;
-#endif
-	s << "<br />TSL_URL: " << Application::confValue(Application::TSLUrl).toString();
-	s << "<br /><br /><b>" << "TSL signing certs:</b>";
-	for(const QSslCertificate &cert: Application::confValue(Application::TSLCerts).value<QList<QSslCertificate>>())
-		s << "<br />" << cert.subjectInfo("CN").value(0);
 }

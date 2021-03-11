@@ -19,13 +19,12 @@
 
 #include "CryptoDoc.h"
 
-#include "client/Application.h"
-#include "client/QSigner.h"
-#include "client/SslCertificate.h"
-#include "client/dialogs/FileDialog.h"
-#include "client/dialogs/WarningDialog.h"
-
-#include <common/TokenData.h>
+#include "TokenData.h"
+#include "Application.h"
+#include "QSigner.h"
+#include "SslCertificate.h"
+#include "dialogs/FileDialog.h"
+#include "dialogs/WarningDialog.h"
 
 #include <QDebug>
 #include <QtCore/QBuffer>
@@ -814,6 +813,11 @@ bool CDocumentModel::addFile(const QString &file, const QString &mime)
 		if(dlg.exec() != 1)
 			return false;
 	}
+	if(info.size() > 120*1024*1024)
+	{
+		WarningDialog(tr("Added file(s) exceeds the maximum size limit of the container(120MB)."), qApp->activeWindow()).exec();
+		return false;
+	}
 
 	QString fileName(info.fileName());
 	for(const auto &containerFile: d->files)
@@ -888,7 +892,7 @@ void CDocumentModel::open(int row)
 #if !defined(Q_OS_WIN)
 	QFile::setPermissions(f.absoluteFilePath(), QFile::Permissions(0x6000));
 #endif
-	emit openFile(f.absoluteFilePath());
+	QDesktopServices::openUrl(QUrl::fromLocalFile(f.absoluteFilePath()));
 }
 
 bool CDocumentModel::removeRows(int row, int count)
@@ -1128,7 +1132,7 @@ bool CryptoDoc::isEncrypted() const { return d->encrypted; }
 bool CryptoDoc::isNull() const { return d->fileName.isEmpty(); }
 bool CryptoDoc::isSigned() const { return d->hasSignature; }
 
-QList<CKey> CryptoDoc::keys()
+QList<CKey> CryptoDoc::keys() const
 {
 	return d->keys;
 }
@@ -1183,6 +1187,8 @@ void CryptoDoc::removeKey( int id )
 
 bool CryptoDoc::saveCopy(const QString &filename)
 {
+	if(QFileInfo(filename) == QFileInfo(d->fileName))
+		return true;
 	if(QFile::exists(filename))
 		QFile::remove(filename);
 	return QFile::copy(d->fileName, filename);

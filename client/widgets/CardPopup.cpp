@@ -19,11 +19,12 @@
 
 #include "CardPopup.h"
 
+#include "CardWidget.h"
+
 #include <QtWidgets/QVBoxLayout>
 
-CardPopup::CardPopup(const QSet<QString> &cards, const QString &selectedCard, 
-	const QMap<QString, QSharedPointer<QCardInfo>> &cache, QWidget *parent)
-: StyledWidget(parent)
+CardPopup::CardPopup(const QVector<TokenData> &cache, QWidget *parent)
+	: StyledWidget(parent)
 {
 	if(CardWidget *cardInfo = parent->findChild<CardWidget*>(QStringLiteral("cardInfo")))
 	{
@@ -37,21 +38,13 @@ CardPopup::CardPopup(const QSet<QString> &cards, const QString &selectedCard,
 	QVBoxLayout *layout = new QVBoxLayout(this);
 	layout->setContentsMargins(1, 0, 2, 2);
 
-	for(const QString &card: cards)
+	for(const TokenData &token: cache)
 	{
-		if( card == selectedCard )
-			continue;
-		auto cardWidget = new CardWidget(card, this);
-		auto cardData = cache[card];
-		if( cardData.isNull() )
-		{
-			cardData.reset(new QCardInfo);
-			cardData->id = card;
-		}
-		cardWidget->update(cardData, card);
+		auto cardWidget = new CardWidget(true, this);
+		cardWidget->setCursor(QCursor(Qt::PointingHandCursor));
+		cardWidget->update(token, true);
 		connect(cardWidget, &CardWidget::selected, this, &CardPopup::activated);
 		layout->addWidget(cardWidget);
-		cardWidgets << cardWidget;
 	}
 	adjustSize();
 }

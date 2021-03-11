@@ -23,7 +23,7 @@
 
 #include <QWidget>
 
-class MainAction : public QWidget
+class MainAction final : public QWidget
 {
 	Q_OBJECT
 
@@ -33,16 +33,17 @@ public:
 
 	void hideDropdown();
 	void setButtonEnabled(bool enabled);
-	void showDropdown();
-	void update(const QList<ria::qdigidoc4::Actions> &actions);
+	void showActions(const QList<ria::qdigidoc4::Actions> &actions);
 
 signals:
 	void action(ria::qdigidoc4::Actions action);
 
 private:
 	void changeEvent(QEvent* event) override;
-	bool eventFilter(QObject *o, QEvent *e) override;
+	bool eventFilter(QObject *watched, QEvent *event) override;
 	QString label(ria::qdigidoc4::Actions action) const;
+	void showDropdown();
+	void update();
 
 	class Private;
 	Private *ui;

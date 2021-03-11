@@ -19,21 +19,13 @@
 
 #pragma once
 
-#include "crypto/CryptoDoc.h"
-
 #include <QDialog>
 
-namespace Ui { class KeyDialog; }
-
-class KeyDialog: public QDialog
+class CKey;
+class KeyDialog final: public QDialog
 {
 	Q_OBJECT
 
 public:
 	KeyDialog(const CKey &key, QWidget *parent = nullptr);
-	~KeyDialog() final;
-
-private:
-	CKey k;
-	Ui::KeyDialog *d;
 };

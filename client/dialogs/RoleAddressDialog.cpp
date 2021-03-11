@@ -20,9 +20,9 @@
 #include "RoleAddressDialog.h"
 #include "ui_RoleAddressDialog.h"
 
-#include "effects/Overlay.h"
 #include "Styles.h"
-#include <common/Common.h>
+#include "dialogs/SettingsDialog.h"
+#include "effects/Overlay.h"
 
 #include <QtCore/QSettings>
 
@@ -40,18 +40,27 @@ RoleAddressDialog::RoleAddressDialog(QWidget *parent)
 	, d(new Private)
 {
 	const QFont regularFont = Styles::font(Styles::Regular, 14);
-	const QFont buttonFont = Styles::font(Styles::Condensed, 14);
+	const QFont condensed = Styles::font(Styles::Condensed, 14);
 
 	d->setupUi(this);
 	setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint);
 	setWindowModality(Qt::ApplicationModal);
-	d->buttonBox->addButton(tr("SIGN"), QDialogButtonBox::AcceptRole)->setFont(buttonFont);
-	QPushButton *cancel = d->buttonBox->button(QDialogButtonBox::Cancel);
-	cancel->setFont(buttonFont);
-	cancel->setText(cancel->text().toUpper());
+
+	connect( d->cancel, &QPushButton::clicked, this, &RoleAddressDialog::reject );
+	d->cancel->setFont(condensed);
+	d->cancel->setText(tr("CANCEL"));
+	d->cancel->setCursor(QCursor(Qt::PointingHandCursor));
+
+	connect( d->sign, &QPushButton::clicked, this, &RoleAddressDialog::accept );
+	d->sign->setFont(condensed);
+	d->sign->setText(tr("SIGN"));
+	d->sign->setCursor(QCursor(Qt::PointingHandCursor));
 
 	for(QLabel *label: findChildren<QLabel*>())
 		label->setFont(regularFont);
+
+	d->title->setFont(Styles::font(Styles::Regular, 16, QFont::DemiBold));
+
 	for(QLineEdit *line: findChildren<QLineEdit*>())
 	{
 		QCompleter *completer = new QCompleter(d->s.value(line->objectName()).toStringList(), line);
@@ -68,7 +77,7 @@ RoleAddressDialog::RoleAddressDialog(QWidget *parent)
 			if(list.size() > 10)
 				list.removeLast();
 			d->s.setValue(line->objectName(), QString()); // Uses on Windows MULTI_STRING registry
-			Common::setValueEx(line->objectName(), list, QStringList());
+			SettingsDialog::setValueEx(line->objectName(), list, QStringList());
 		});
 	}
 }
@@ -82,8 +91,7 @@ int RoleAddressDialog::get(QString &city, QString &country, QString &state, QStr
 {
 	if(!QSettings().value(QStringLiteral("RoleAddressInfo"), false).toBool())
 		return QDialog::Accepted;
-	Overlay overlay(parentWidget());
-	overlay.show();
+	new Overlay(this, parentWidget());
 	int result = QDialog::exec();
 	if(result == QDialog::Rejected)
 		return result;

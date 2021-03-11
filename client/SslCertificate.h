@@ -24,6 +24,7 @@
 #include <QtCore/QCoreApplication>
 
 template<class Key,class T> class QHash;
+template<class Key,class T> class QMultiHash;
 
 class SslCertificate: public QSslCertificate
 {
@@ -53,6 +54,11 @@ public:
 		EncipherOnly,
 		DecipherOnly
 	};
+	enum AuthorityInfoAccess
+	{
+		ad_OCSP,
+		ad_CAIssuers,
+	};
 	enum CertType
 	{
 		UnknownType = 0,
@@ -62,13 +68,8 @@ public:
 		OCSPType = 1 << 3,
 		TempelType = 1 << 4,
 		EidType = 1 << 5,
-
-		TestType = 1 << 7,
-		DigiIDTestType = DigiIDType|TestType,
-		EstEidTestType = EstEidType|TestType,
-		MobileIDTestType = MobileIDType|TestType,
-		OCSPTestType = OCSPType|TestType,
-		TempelTestType = TempelType|TestType
+		EResidentSubType = 1 << 6,
+		EResidentType = DigiIDType|EResidentSubType,
 	};
 
 	SslCertificate();
@@ -80,6 +81,7 @@ public:
 	QString		subjectInfo( const QByteArray &tag ) const;
 	QString		subjectInfo( QSslCertificate::SubjectInfo subject ) const;
 
+	QMultiHash<AuthorityInfoAccess,QString> authorityInfoAccess() const;
 	QByteArray	authorityKeyIdentifier() const;
 	QHash<EnhancedKeyUsage,QString> enhancedKeyUsage() const;
 	QString		friendlyName() const;
@@ -94,17 +96,13 @@ public:
 	QHash<KeyUsage,QString> keyUsage() const;
 	QString		personalCode() const;
 	QStringList policies() const;
-	QString		publicKeyHex() const;
 	bool		showCN() const;
-	QByteArray	serialNumber( bool hex = false ) const;
 	QString		signatureAlgorithm() const;
 	QByteArray	subjectKeyIdentifier() const;
 	static QByteArray	toHex( const QByteArray &in, QChar separator = ' ' );
 	QString		toString( const QString &format ) const;
 	CertType	type() const;
-
-	static QSslCertificate fromX509( Qt::HANDLE x509 );
-	static QSslKey keyFromEVP( Qt::HANDLE evp );
+	bool		validateOnline() const;
 
 private:
 	Qt::HANDLE extension( int nid ) const;
@@ -138,6 +136,8 @@ public:
 	static PKCS12Certificate fromPath( const QString &path, const QString &pin );
 
 private:
+	QSslKey fromEVP(Qt::HANDLE evp) const;
+
 	class Private;
 	QSharedDataPointer<Private> d;
 };

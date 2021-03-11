@@ -19,12 +19,24 @@
 
 #pragma once
 
-#include "SslCertificate.h"
+#include <QWidget>
 
-struct QCardInfo
+class DropdownButton;
+class TokenData;
+
+class IDSelector : public QWidget
 {
-	QString id;
-	int type;
-	bool loading;
-	SslCertificate c;
+	Q_OBJECT
+public:
+	enum Filter {
+		Signing,
+		Decrypting,
+		MyEID,
+	};
+	explicit IDSelector(QWidget *parent = nullptr);
+
+	void setList(const QString &selectedCard, const QList<TokenData> &cache, Filter filter);
+
+	DropdownButton *selector = nullptr;
+	QVector<TokenData> list;
 };

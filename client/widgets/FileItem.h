@@ -33,8 +33,7 @@ class FileItem : public Item
 	Q_OBJECT
 
 public:
-	explicit FileItem( ria::qdigidoc4::ContainerState state, QWidget *parent = nullptr );
-	explicit FileItem( const QString& file, ria::qdigidoc4::ContainerState state, QWidget *parent = nullptr );
+	explicit FileItem(const QString& file, ria::qdigidoc4::ContainerState state, QWidget *parent = nullptr);
 	~FileItem() final;
 
 	QString getFile();
@@ -46,12 +45,10 @@ signals:
 	void download(FileItem* item);
 	
 private:
-	bool event(QEvent *event) override;
-	void setFileName(bool force);
+	bool event(QEvent *event) final;
+	void setFileName();
+	void setUnderline(bool enable);
 
 	Ui::FileItem *ui;
-	bool elided = false;
 	QString fileName;
-	int width = 0;
-	bool isEnabled = true;
 };

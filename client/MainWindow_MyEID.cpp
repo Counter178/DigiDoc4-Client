@@ -20,17 +20,13 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "Application.h"
-#include "QCardLock.h"
 #include "QSigner.h"
+#include "SslCertificate.h"
 #include "effects/FadeInNotification.h"
+#include "widgets/WarningItem.h"
 #include "widgets/WarningList.h"
 
-#include <common/TokenData.h>
-
-#include <QtCore/QJsonObject>
 #include <QDateTime>
-#include <QMessageBox>
-#include <QtNetwork/QSslConfiguration>
 #include <QtNetwork/QSslKey>
 
 using namespace ria::qdigidoc4;
@@ -64,25 +60,24 @@ void MainWindow::pinUnblock( QSmartCardData::PinType type, bool isForgotPin )
 			.arg( QSmartCardData::typeString( type ) );
 
 	if(validateCardError(type, QSmartCardData::PukType,
-		qApp->smartcard()->pinUnblock(type, isForgotPin, this)))
+		qApp->signer()->smartcard()->pinUnblock(type, isForgotPin, this)))
 	{
 		if( isForgotPin )
 			text = tr("%1 changed!").arg( QSmartCardData::typeString( type ) );
 		showNotification( text, true );
-		ui->accordion->updateInfo( qApp->smartcard() );
-		updateCardWarnings();
-
-		QString card = qApp->smartcard()->data().card();
-
+		QSmartCardData data = qApp->signer()->smartcard()->data();
+		updateCardWarnings(data);
 		if (type == QSmartCardData::Pin1Type)
 		{
 			warnings->closeWarning(WarningType::UnblockPin1Warning);
-			emit ui->cryptoContainerPage->cardChanged(card);
+			ui->cryptoContainerPage->cardChanged(data.authCert(),
+				data.retryCount(QSmartCardData::Pin1Type) == 0);
 		}
 		if (type == QSmartCardData::Pin2Type)
 		{
 			warnings->closeWarning(WarningType::UnblockPin2Warning);
-			emit ui->signContainerPage->cardChanged(card);
+			ui->signContainerPage->cardChanged(data.signCert(),
+				data.retryCount(QSmartCardData::Pin2Type) == 0);
 		}
 	}
 }
@@ -90,11 +85,10 @@ void MainWindow::pinUnblock( QSmartCardData::PinType type, bool isForgotPin )
 void MainWindow::pinPukChange( QSmartCardData::PinType type )
 {
 	if(validateCardError(type, type,
-		qApp->smartcard()->pinChange(type, this)))
+		qApp->signer()->smartcard()->pinChange(type, this)))
 	{
 		showNotification( tr("%1 changed!")
 			.arg( QSmartCardData::typeString( type ) ), true );
-		ui->accordion->updateInfo( qApp->smartcard() );
 	}
 }
 
@@ -141,21 +135,22 @@ QByteArray MainWindow::sendRequest( SSLConnect::RequestType type, const QString 
 		case SSLConnect::EmailInfo: showNotification(tr("Failed loading email settings.")); break;
 		case SSLConnect::PictureInfo: showNotification(tr("Loading picture failed.")); break;
 		}
-		return QByteArray();
+		return {};
 	}
 	return buffer;
 }
 
 bool MainWindow::validateCardError(QSmartCardData::PinType type, QSmartCardData::PinType t, QSmartCard::ErrorType err)
 {
-	QSmartCardData td = qApp->smartcard()->data();
+	QSmartCardData data = qApp->signer()->smartcard()->data();
+	ui->accordion->updateInfo(data);
 	switch( err )
 	{
 	case QSmartCard::NoError: return true;
 	case QSmartCard::CancelError:
 #ifdef Q_OS_WIN
-		if( !td.isNull() && td.isPinpad() )
-		if(td.authCert().subjectInfo(QSslCertificate::CountryName) == QStringLiteral("EE"))	// only for Estonian ID card
+		if(!data.isNull() && data.isPinpad())
+		if(data.authCert().subjectInfo(QSslCertificate::CountryName) == QStringLiteral("EE")) // only for Estonian ID card
 		{
 			showNotification( tr("%1 timeout").arg( QSmartCardData::typeString( type ) ) );
 		}
@@ -163,13 +158,12 @@ bool MainWindow::validateCardError(QSmartCardData::PinType type, QSmartCardData:
 		break;
 	case QSmartCard::BlockedError:
 		showNotification( tr("%1 blocked").arg( QSmartCardData::typeString( t ) ) );
-		showPinBlockedWarning(td);
+		showPinBlockedWarning(data);
 		pageSelected( ui->myEid );
-		ui->accordion->updateInfo( qApp->smartcard() );
 		ui->myEid->warningIcon(
-				qApp->smartcard()->data().retryCount( QSmartCardData::Pin1Type ) == 0 || 
-				qApp->smartcard()->data().retryCount( QSmartCardData::Pin2Type ) == 0 || 
-				qApp->smartcard()->data().retryCount( QSmartCardData::PukType ) == 0 );
+			data.retryCount(QSmartCardData::Pin1Type) == 0 ||
+			data.retryCount(QSmartCardData::Pin2Type) == 0 ||
+			data.retryCount(QSmartCardData::PukType) == 0 );
 		break;
 	case QSmartCard::DifferentError:
 		showNotification( tr("New %1 codes doesn't match").arg( QSmartCardData::typeString( type ) ) );
@@ -182,7 +176,7 @@ bool MainWindow::validateCardError(QSmartCardData::PinType type, QSmartCardData:
 		break;
 	case QSmartCard::ValidateError:
 		showNotification( tr("Wrong %1 code. You can try %n more time(s).", nullptr,
-			qApp->smartcard()->data().retryCount( t ) ).arg( QSmartCardData::typeString( t ) ) );
+			data.retryCount(t)).arg( QSmartCardData::typeString(t)));
 		break;
 	default:
 		showNotification(tr("Changing %1 failed").arg(QSmartCardData::typeString(type)));
@@ -199,52 +193,95 @@ void MainWindow::showNotification( const QString &msg, bool isSuccess )
 	notification->start(msg, 750, 15000, 600);
 }
 
-void MainWindow::updateCardWarnings()
+void MainWindow::showPinBlockedWarning(const QSmartCardData& t)
 {
-	QSmartCardData t = qApp->smartcard()->data();
-	qint64 expiresIn = 106;
-	for(const QSslCertificate &cert: {qApp->signer()->tokenauth().cert(), qApp->signer()->tokensign().cert()})
+	bool isBlockedPuk = t.retryCount(QSmartCardData::PukType) == 0;
+	if(!isBlockedPuk && t.retryCount(QSmartCardData::Pin2Type) == 0)
+		warnings->showWarning(WarningText(WarningType::UnblockPin2Warning));
+	if(!isBlockedPuk && t.retryCount(QSmartCardData::Pin1Type) == 0)
+		warnings->showWarning(WarningText(WarningType::UnblockPin1Warning));
+	ui->signContainerPage->cardChanged(t.signCert(),
+		t.retryCount(QSmartCardData::Pin2Type) == 0);
+	ui->cryptoContainerPage->cardChanged(t.authCert(),
+		t.retryCount(QSmartCardData::Pin1Type) == 0);
+}
+
+void MainWindow::updateCardWarnings(const QSmartCardData &data)
+{
+	const qint64 DAY = 24 * 60 * 60;
+	qint64 expiresIn = 106 * DAY;
+	for(const QSslCertificate &cert: {data.authCert(), data.signCert()})
 	{
 		if(!cert.isNull())
 		{
 			expiresIn = std::min<qint64>(expiresIn,
-				QDateTime::currentDateTime().daysTo(cert.expiryDate().toLocalTime()));
+				QDateTime::currentDateTime().secsTo(cert.expiryDate().toLocalTime()));
 		}
 	}
 
-	if(!t.isNull())
+	if(!data.isNull())
 		ui->myEid->warningIcon(
-			t.retryCount( QSmartCardData::Pin1Type ) == 0 ||
-			t.retryCount( QSmartCardData::Pin2Type ) == 0 ||
-			t.retryCount( QSmartCardData::PukType ) == 0);
+			data.retryCount(QSmartCardData::Pin1Type) == 0 ||
+			data.retryCount(QSmartCardData::Pin2Type) == 0 ||
+			data.retryCount(QSmartCardData::PukType) == 0);
 	if(expiresIn <= 0)
 	{
 		ui->myEid->invalidIcon(true);
 		warnings->showWarning(WarningText(WarningType::CertExpiredWarning));
 	}
-	else if(t.version() >= QSmartCardData::VER_3_5 && t.version() < QSmartCardData::VER_IDEMIA &&
-		t.authCert().publicKey().algorithm() == QSsl::Rsa)
+	else if(data.version() >= QSmartCardData::VER_3_5 && data.version() < QSmartCardData::VER_IDEMIA &&
+		data.authCert().publicKey().algorithm() == QSsl::Rsa)
 	{
 		ui->myEid->invalidIcon(true);
 		warnings->showWarning(WarningText(WarningType::CertRevokedWarning));
 	}
-	else if(expiresIn <= 105)
+	else if(expiresIn <= 105 * DAY)
 	{
 		ui->myEid->warningIcon(true);
 		warnings->showWarning(WarningText(WarningType::CertExpiryWarning));
 	}
 }
 
-void MainWindow::updateMyEid()
+void MainWindow::updateMyEID(const TokenData &t)
 {
-	Application::restoreOverrideCursor();
-	QSmartCardData t = qApp->smartcard()->data();
+	warnings->clearMyEIDWarnings();
+	SslCertificate cert(t.cert());
+	int type = cert.type();
+	ui->infoStack->setHidden(t.isNull() || type == SslCertificate::UnknownType || type == SslCertificate::EidType);
+	ui->accordion->setHidden(t.isNull() || type == SslCertificate::UnknownType || type == SslCertificate::EidType);
+	ui->noReaderInfo->setVisible(t.isNull() || type == SslCertificate::UnknownType || type == SslCertificate::EidType);
 
+	if(!t.isNull())
+	{
+		ui->noReaderInfoText->setProperty("currenttext", "The card in the card reader is not an Estonian ID-card");
+		ui->noReaderInfoText->setText(tr("The card in the card reader is not an Estonian ID-card"));
+		if(ui->cardInfo->token().card() != t.card())
+			ui->accordion->clear();
+		if(type & SslCertificate::TempelType)
+		{
+			ui->infoStack->update(cert);
+			ui->accordion->updateInfo(cert);
+		}
+	}
+	else
+	{
+		ui->infoStack->setProperty("PICTURE", QVariant());
+		ui->infoStack->clearData();
+		ui->accordion->clear();
+		ui->myEid->invalidIcon(false);
+		ui->myEid->warningIcon(false);
+		ui->noReaderInfoText->setProperty("currenttext", "Connect the card reader to your computer and insert your ID card into the reader");
+		ui->noReaderInfoText->setText(tr("Connect the card reader to your computer and insert your ID card into the reader"));
+	}
+}
+
+void MainWindow::updateMyEid(const QSmartCardData &t)
+{
 	if(!t.card().isEmpty() && (!t.authCert().isNull() || !t.signCert().isNull()))
 	{
 		ui->infoStack->update(t);
-		ui->accordion->updateInfo(qApp->smartcard());
-		updateCardWarnings();
+		ui->accordion->updateInfo(t);
+		updateCardWarnings(t);
 		showPinBlockedWarning(t);
 	}
 }

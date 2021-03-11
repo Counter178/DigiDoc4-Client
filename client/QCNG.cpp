@@ -20,43 +20,34 @@
 #include "QCNG.h"
 
 #include "SslCertificate.h"
+#include "TokenData.h"
 
 #include <common/QPCSC.h>
-#include <common/TokenData.h>
 
 #include <QtCore/QDebug>
-#include <QtCore/QLibrary>
-#include <QtCore/QStringList>
-#include <QtNetwork/QSslKey>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QWidget>
 
 #include <wincrypt.h>
 
 #include <openssl/obj_mac.h>
 
+#include <thread>
+
 class QCNG::Private
 {
 public:
-	struct Cache
-	{
-		QString provider, key, guid, reader;
-		DWORD spec;
-	};
-
 	NCRYPT_KEY_HANDLE key() const
 	{
 		NCRYPT_PROV_HANDLE prov = 0;
-		NCryptOpenStorageProvider( &prov, LPCWSTR(selected.provider.utf16()), 0 );
+		NCryptOpenStorageProvider(&prov, LPCWSTR(token.data(QStringLiteral("provider")).toString().utf16()), 0);
 		NCRYPT_KEY_HANDLE key = 0;
-		NCryptOpenKey( prov, &key, LPWSTR(selected.key.utf16()), selected.spec, 0 );
+		NCryptOpenKey(prov, &key, LPWSTR(token.data(QStringLiteral("key")).toString().utf16()),
+			token.data(QStringLiteral("spec")).value<DWORD>(), 0);
 		NCryptFreeObject( prov );
 		return key;
 	}
 
-	Cache selected;
+	TokenData token;
 	QCNG::PinStatus err;
-	QHash<SslCertificate,Cache> cache;
 };
 
 
@@ -73,14 +64,20 @@ QCNG::~QCNG()
 	delete d;
 }
 
-QByteArray QCNG::decrypt( const QByteArray &data )
+QByteArray QCNG::decrypt(const QByteArray &data) const
 {
-	d->err = PinUnknown;
+	d->err = PinOK;
 	DWORD size = 256;
 	QByteArray res(int(size), 0);
 	NCRYPT_KEY_HANDLE k = d->key();
-	SECURITY_STATUS err = NCryptDecrypt(k, PBYTE(data.constData()), DWORD(data.size()), nullptr,
-		PBYTE(res.data()), DWORD(res.size()), &size, NCRYPT_PAD_PKCS1_FLAG);
+	SECURITY_STATUS err = 0;
+	QEventLoop e;
+	std::thread([&]{
+		err = NCryptDecrypt(k, PBYTE(data.constData()), DWORD(data.size()), nullptr,
+			PBYTE(res.data()), DWORD(res.size()), &size, NCRYPT_PAD_PKCS1_FLAG);
+		e.exit();
+	}).detach();
+	e.exec();
 	NCryptFreeObject( k );
 	switch( err )
 	{
@@ -98,13 +95,14 @@ QByteArray QCNG::decrypt( const QByteArray &data )
 QByteArray QCNG::deriveConcatKDF(const QByteArray &publicKey, const QString &digest, int keySize,
 	const QByteArray &algorithmID, const QByteArray &partyUInfo, const QByteArray &partyVInfo) const
 {
-	d->err = PinUnknown;
+	d->err = PinOK;
 	QByteArray derived;
 	NCRYPT_PROV_HANDLE prov = 0;
-	if(NCryptOpenStorageProvider(&prov, LPCWSTR(d->selected.provider.utf16()), 0))
+	if(NCryptOpenStorageProvider(&prov, LPCWSTR(d->token.data(QStringLiteral("provider")).toString().utf16()), 0))
 		return derived;
 	NCRYPT_KEY_HANDLE key = 0;
-	if(NCryptOpenKey(prov, &key, LPWSTR(d->selected.key.utf16()), d->selected.spec, 0))
+	if(NCryptOpenKey(prov, &key, LPWSTR(d->token.data(QStringLiteral("key")).toString().utf16()),
+			d->token.data(QStringLiteral("spec")).value<DWORD>(), 0))
 	{
 		NCryptFreeObject(prov);
 		return derived;
@@ -127,31 +125,35 @@ QCNG::PinStatus QCNG::lastError() const { return d->err; }
 
 QList<TokenData> QCNG::tokens() const
 {
-	qWarning() << "Start enumerationg providers";
-	QHash<SslCertificate,Private::Cache> cache;
-	auto enumKeys = [](QHash<SslCertificate,Private::Cache> &cache, LPCWSTR provider, const QString &reader = QString()) {
+	QList<TokenData> result;
+	auto enumKeys = [&result](const QString &provider, const QString &reader = {}) {
 		QString scope = QStringLiteral(R"(\\.\%1\)").arg(reader);
 		NCRYPT_PROV_HANDLE h = 0;
-		SECURITY_STATUS err = NCryptOpenStorageProvider(&h, provider, 0);
+		SECURITY_STATUS err = NCryptOpenStorageProvider(&h, LPCWSTR(provider.utf16()), 0);
 		NCryptKeyName *keyname = nullptr;
 		PVOID pos = nullptr;
-		while(NCryptEnumKeys(h, LPCWSTR(scope.utf16()), &keyname, &pos, NCRYPT_SILENT_FLAG) == ERROR_SUCCESS)
+		while(NCryptEnumKeys(h, reader.isEmpty() ? nullptr : LPCWSTR(scope.utf16()), &keyname, &pos, NCRYPT_SILENT_FLAG) == ERROR_SUCCESS)
 		{
 			NCRYPT_KEY_HANDLE key = 0;
 			err = NCryptOpenKey(h, &key, keyname->pszName, keyname->dwLegacyKeySpec, NCRYPT_SILENT_FLAG);
 			SslCertificate cert(QWin::prop(key, NCRYPT_CERTIFICATE_PROPERTY), QSsl::Der);
-			Private::Cache c = {
-				QString::fromWCharArray(provider),
-				QString::fromWCharArray(keyname->pszName),
-				QWin::prop(h, NCRYPT_SMARTCARD_GUID_PROPERTY).trimmed(),
-				reader,
-				keyname->dwLegacyKeySpec
-			};
-			qWarning() << "key" << c.key
-				<< "spec" << c.spec
-				<< "alg" << QString::fromWCharArray(keyname->pszAlgid)
-				<< "flags" << keyname->dwFlags;
-			cache[cert] = c;
+			if(!cert.isNull())
+			{
+				QString guid = QWin::prop(h, NCRYPT_SMARTCARD_GUID_PROPERTY).trimmed();
+				TokenData t;
+				t.setReader(reader);
+				t.setCard(cert.type() & SslCertificate::EstEidType || cert.type() & SslCertificate::DigiIDType ?
+					guid : cert.subjectInfo(QSslCertificate::CommonName) + "-" + cert.serialNumber());
+				t.setCert(cert);
+				t.setData(QStringLiteral("provider"), provider);
+				t.setData(QStringLiteral("key"), QString::fromWCharArray(keyname->pszName));
+				t.setData(QStringLiteral("spec"), QVariant::fromValue(keyname->dwLegacyKeySpec));
+				qWarning() << "key" << t.data(QStringLiteral("provider"))
+					<< "spec" << t.data(QStringLiteral("spec"))
+					<< "alg" << QString::fromWCharArray(keyname->pszAlgid)
+					<< "flags" << keyname->dwFlags;
+				result << t;
+			}
 			NCryptFreeObject(key);
 			NCryptFreeBuffer(keyname);
 			keyname = nullptr;
@@ -159,59 +161,40 @@ QList<TokenData> QCNG::tokens() const
 		NCryptFreeObject(h);
 	};
 
+	qWarning() << "Start enumerationg providers";
 	DWORD count = 0;
-	NCryptProviderName *names = nullptr;
-	NCryptEnumStorageProviders( &count, &names, NCRYPT_SILENT_FLAG );
+	NCryptProviderName *providers = nullptr;
+	NCryptEnumStorageProviders(&count, &providers, NCRYPT_SILENT_FLAG);
 	for( DWORD i = 0; i < count; ++i )
 	{
-		qWarning() << "Found provider" << QString::fromWCharArray(names[i].pszName);
-		if( wcscmp( names[i].pszName, MS_SMART_CARD_KEY_STORAGE_PROVIDER ) == 0 )
+		QString provider = QString::fromWCharArray(providers[i].pszName);
+		qWarning() << "Found provider" << provider;
+		if(provider == MS_SMART_CARD_KEY_STORAGE_PROVIDER)
 		{
 			for( const QString &reader: QPCSC::instance().readers() )
 			{
 				qWarning() << reader;
-				enumKeys(cache, names[i].pszName, reader);
+				enumKeys(provider, reader);
 			}
 		}
 		else
-			enumKeys(cache, names[i].pszName);
+			enumKeys(provider);
 	}
-	NCryptFreeBuffer( names );
-	d->cache = cache;
+	NCryptFreeBuffer(providers);
 	qWarning() << "End enumerationg providers";
 
-	QList<TokenData> result;
-	for(QHash<SslCertificate,Private::Cache>::const_iterator i = cache.constBegin(); i != cache.constEnd(); ++i)
-	{
-		TokenData t;
-		t.setReaders({i.value().reader});
-		t.setCard(i.key().type() & SslCertificate::EstEidType || i.key().type() & SslCertificate::DigiIDType ?
-			i.value().guid : i.key().subjectInfo(QSslCertificate::CommonName) + "-" + i.key().serialNumber());
-		t.setCert(i.key());
-		result << t;
-	}
 	return result;
 }
 
-TokenData QCNG::selectCert( const SslCertificate &cert )
+QCNG::PinStatus QCNG::login(const TokenData &token)
 {
-	qWarning() << "Select:" << cert.subjectInfo( "CN" );
-	TokenData t;
-	if( !d->cache.contains( cert ) )
-		return t;
-
-	d->selected = d->cache[cert];
-	qWarning() << "Found:" << d->selected.guid << d->selected.key;
-	t.setCard( cert.type() & SslCertificate::EstEidType || cert.type() & SslCertificate::DigiIDType ?
-		d->selected.guid : cert.subjectInfo( QSslCertificate::CommonName ) );
-	t.setCert( cert );
-
-	return t;
+	d->token = token;
+	return d->err = QCNG::PinOK;
 }
 
 QByteArray QCNG::sign( int method, const QByteArray &digest ) const
 {
-	d->err = PinUnknown;
+	d->err = PinOK;
 	BCRYPT_PKCS1_PADDING_INFO padInfo = { NCRYPT_SHA256_ALGORITHM };
 	switch( method )
 	{
@@ -230,13 +213,18 @@ QByteArray QCNG::sign( int method, const QByteArray &digest ) const
 	SECURITY_STATUS err = NCryptGetProperty(k, NCRYPT_ALGORITHM_GROUP_PROPERTY, PBYTE(algo.data()), DWORD((algo.size() + 1) * 2), &size, 0);
 	algo.resize(size/2 - 1);
 	bool isRSA = algo == QStringLiteral("RSA");
-	err = NCryptSignHash(k, isRSA ? &padInfo : nullptr, PBYTE(digest.constData()), DWORD(digest.size()),
-		nullptr, 0, &size, isRSA ? BCRYPT_PAD_PKCS1 : 0);
-	if(FAILED(err))
-		return res;
-	res.resize(int(size));
-	err = NCryptSignHash(k, isRSA ? &padInfo : nullptr, PBYTE(digest.constData()), DWORD(digest.size()),
-		PBYTE(res.data()), DWORD(res.size()), &size, isRSA ? BCRYPT_PAD_PKCS1 : 0);
+	QEventLoop e;
+	std::thread([&]{
+		err = NCryptSignHash(k, isRSA ? &padInfo : nullptr, PBYTE(digest.constData()), DWORD(digest.size()),
+			nullptr, 0, &size, isRSA ? BCRYPT_PAD_PKCS1 : 0);
+		if(FAILED(err))
+			return e.exit();
+		res.resize(int(size));
+		err = NCryptSignHash(k, isRSA ? &padInfo : nullptr, PBYTE(digest.constData()), DWORD(digest.size()),
+			PBYTE(res.data()), DWORD(res.size()), &size, isRSA ? BCRYPT_PAD_PKCS1 : 0);
+		e.exit();
+	}).detach();
+	e.exec();
 	NCryptFreeObject( k );
 	switch( err )
 	{

@@ -80,6 +80,7 @@ void WarningItem::lookupWarning()
 		break;
 	case ria::qdigidoc4::CertRevokedWarning:
 		warnText.text = tr("Certificates are revoked!");
+		warnText.details = QStringLiteral("<a href='%1'><span style='color:rgb(53, 55, 57)'>%2</span></a>").arg(tr("https://www.id.ee/en/article/the-majority-of-electronically-used-id-cards-were-renewed/"), tr("Additional information").toUpper());
 		break;
 	case ria::qdigidoc4::UnblockPin1Warning:
 		warnText.text = QStringLiteral("%1 %2").arg(VerifyCert::tr("PIN%1 has been blocked because PIN%1 code has been entered incorrectly 3 times.").arg(1), VerifyCert::tr("Unblock to reuse PIN%1.").arg(1));
@@ -95,29 +96,31 @@ void WarningItem::lookupWarning()
 	case ria::qdigidoc4::InvalidSignatureWarning:
 		warnText.text = tr("%n signatures are not valid", nullptr, warnText.counter);
 		warnText.details = QStringLiteral("<a href='%1' style='color: rgb(53, 55, 57)'>%2</a>")
-					.arg(tr("https://www.id.ee/index.php?id=30591"), tr("More information"));
+					.arg(tr("https://www.id.ee/en/article/digital-signing-and-electronic-signatures/"), tr("More information"));
 		warnText.page = ria::qdigidoc4::SignDetails;
 		break;
 	case ria::qdigidoc4::InvalidTimestampWarning:
 		warnText.text = tr("%n timestamps are not valid", nullptr, warnText.counter);
 		warnText.details = QStringLiteral("<a href='%1' style='color: rgb(53, 55, 57)'>%2</a>")
-					.arg(tr("https://www.id.ee/index.php?id=30591"), tr("More information"));
+					.arg(tr("https://www.id.ee/en/article/digital-signing-and-electronic-signatures/"), tr("More information"));
 		warnText.page = ria::qdigidoc4::SignDetails;
 		break;
 	case ria::qdigidoc4::UnknownSignatureWarning:
 		warnText.text = tr("%n signatures are unknown", nullptr, warnText.counter);
 		warnText.details = QStringLiteral("<a href='%1' style='color: rgb(53, 55, 57)'>%2</a>")
-					.arg(tr("http://id.ee/?lang=en&id=34317"), tr("More information"));
+					.arg(tr("https://www.id.ee/en/article/digital-signing-and-electronic-signatures/"), tr("More information"));
 		warnText.page = ria::qdigidoc4::SignDetails;
 		break;
 	case ria::qdigidoc4::UnknownTimestampWarning:
 		warnText.text = tr("%n timestamps are unknown", nullptr, warnText.counter);
 		warnText.details = QStringLiteral("<a href='%1' style='color: rgb(53, 55, 57)'>%2</a>")
-					.arg(tr("http://id.ee/?lang=en&id=34317"), tr("More information"));
+					.arg(tr("https://www.id.ee/en/article/digital-signing-and-electronic-signatures/"), tr("More information"));
 		warnText.page = ria::qdigidoc4::SignDetails;
 		break;
-	case ria::qdigidoc4::CheckConnectionWarning:
-		warnText.text = MainWindow::tr("Check internet connection");
+	case ria::qdigidoc4::UnsupportedDDocWarning:
+		warnText.text = tr("The current file is a DigiDoc container that is not supported officially any longer. You are not allowed to add or remove signatures to this container.");
+		warnText.details = QStringLiteral("<a href='%1' style='color: rgb(53, 55, 57)'>%2</a>")
+					.arg(tr("https://www.id.ee/en/article/digidoc-container-format-life-cycle-2/"), tr("More information"));
 		warnText.page = ria::qdigidoc4::SignDetails;
 		break;
 	default:

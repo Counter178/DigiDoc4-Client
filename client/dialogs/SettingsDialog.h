@@ -21,6 +21,7 @@
 
 #include <QDialog>
 
+#include <QVariant>
 
 namespace digidoc { class Conf; }
 
@@ -28,7 +29,9 @@ namespace Ui {
 class SettingsDialog;
 }
 
-class SettingsDialog : public QDialog
+class QAbstractButton;
+
+class SettingsDialog final: public QDialog
 {
 	Q_OBJECT
 
@@ -41,36 +44,33 @@ public:
 		LicenseSettings
 	};
 
-	explicit SettingsDialog(QWidget *parent = nullptr, QString appletVersion = QString());
-	explicit SettingsDialog(int page, QWidget *parent = nullptr, QString appletVersion = QString());
+	explicit SettingsDialog(QWidget *parent = nullptr);
+	explicit SettingsDialog(int page, QWidget *parent = nullptr);
 	~SettingsDialog() final;
 
+	void showPage(int page);
 	static void loadProxy( const digidoc::Conf *conf );
-
-private Q_SLOTS:
-	void save();
+	static void setValueEx(const QString &key, const QVariant &value, const QVariant &def = {});
 
 signals:
 	void langChanged(const QString& lang);
 	void togglePrinting(bool enable);
 
 private:
+	void changePage(QAbstractButton *button);
 	void checkConnection();
-	void retranslate(const QString& lang);
 	void initFunctionality();
-	void updateCert();
+	void installCert();
+	void retranslate(const QString& lang);
+	void saveFile(const QString &name, const QByteArray &content);
+	void saveProxy();
 	void selectLanguage();
 	void setProxyEnabled();
+	void updateCert();
 	void updateProxy();
-	void openDirectory();
+	void updateVersion();
 	void updateDiagnostics();
-	void saveDiagnostics();
-	void saveProxy();
-
-	void installCert();
 	void useDefaultSettings();
-	void changePage(QPushButton* button);
 
 	Ui::SettingsDialog *ui;
-	QString appletVersion;
 };

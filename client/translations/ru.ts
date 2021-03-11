@@ -22,12 +22,12 @@
         <translation>Срок действительности справки доступа истекает %1. Чтобы обновить справку доступа, обратитесь в ИТ-отдел Вашей организации. Дополнительная информация: &lt;a href=&quot;mailto:sales@sk.ee&quot;&gt;sales@sk.ee&lt;/a&gt; или (+372) 610 1885</translation>
     </message>
     <message>
-        <source>Your signing software needs an upgrade. Please update your ID software, which you can get from &lt;a href=&quot;http://www.id.ee&quot;&gt;www.id.ee&lt;/a&gt;. Additional information is available at ID-helpline (+372) 666 8888.</source>
-        <translation>Обновите программу подписывания. Для этого установите программное обеспечение ID-карты, скачав его с сайта &lt;a href=&quot;http://www.id.ee/?lang=ru&quot;&gt;www.id.ee&lt;/a&gt;. Дополнительная информация: телефон линии помощи ID-карты (+372) 666 8888.</translation>
+        <source>Server access certificate expired on %1. To renew the certificate please update your ID software, which you can get from &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;www.id.ee&lt;/a&gt;. Additional info is available ID-helpline (+372) 666 8888.</source>
+        <translation>Срок справки доступа истек %1. Для обновления справки доступа установите новое программное обеспечение для ID-карты со страницы &lt;a href=&quot;https://www.id.ee/ru/&quot;&gt;www.id.ee&lt;/a&gt;. Дополнительная информация по справочному телефону ID-карт (+372) 666 8888.</translation>
     </message>
     <message>
-        <source>FREE_CERT_EXCEEDED</source>
-        <translation>Вы использовали 10 бесплатных подписей. Согласно условиям использования услуги подтверждения действительности Вы можете поставить максимум 10 бесплатных подписей в течение месяца. Если Вам необходимо использовать услугу подтверждения действительности в большем объеме или в служебных целях, обратитесь в ИТ-отдел Вашей организации или заключите договор на использование &lt;a href=&quot;https://sk.ee/en/services/validity-confirmation-services&quot;&gt;услуги&lt;/a&gt;. Дополнительная информация: &lt;a href=&quot;mailto:sales@sk.ee&quot;&gt;sales@sk.ee&lt;/a&gt; или (+372) 610 1885</translation>
+        <source>The limit of free digital signatures per month is about to exceed. To create more digital signatures you need to conclude a contract with a service provider. Read more &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;here&lt;/a&gt;</source>
+        <translation>Вскоре будет исчерпан ежемесячный лимит бесплатных подписей. Для проставления подписей в больших объемах необходимо заключить договор с поставщиком услуги. Подробнее читайте &lt;a href=&quot;https://www.id.ee/ru/artikkel/dlya-uchrezhdenij-v-kotoryh-v-bolshom-obeme-podpisyvayutsya-dokumenty-s-pomoshhyu-digidoc4-klienta/&quot;&gt;здесь&lt;/a&gt;</translation>
     </message>
 </context>
 <context>
@@ -86,8 +86,8 @@
         <translation>Личный код недействителен!</translation>
     </message>
     <message>
-        <source>Person or company does not own a valid certificate.&lt;br /&gt;It is necessary to have a valid certificate for encryption.&lt;br /&gt;In case of questions please contact our support via &lt;a href=&quot;https://id.ee/?lang=en&quot;&gt;id.ee&lt;/a&gt;.</source>
-        <translation>У лица или учреждения отсутствует действующий сертификат.&lt;br /&gt;Для зашифровывания необходим действующий сертификат.&lt;br /&gt;Если у вас возникнут вопросы, пожалуйста, обратитесь на &lt;a href=&quot;https://id.ee/?lang=ru&quot;&gt;id.ee&lt;/a&gt;.</translation>
+        <source>Person or company does not own a valid certificate.&lt;br /&gt;It is necessary to have a valid certificate for encryption.&lt;br /&gt;In case of questions please contact our support via &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;id.ee&lt;/a&gt;.</source>
+        <translation>У лица или учреждения отсутствует действующий сертификат.&lt;br /&gt;Для зашифровывания необходим действующий сертификат.&lt;br /&gt;Если у вас возникнут вопросы, пожалуйста, обратитесь за помощью через &lt;a href=&quot;https://www.id.ee/ru/&quot;&gt;id.ee&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>Certificates (*.cer *.crt *.pem)</source>
@@ -134,6 +134,10 @@
         <extracomment>accessible</extracomment>
         <translation>Подтвердить</translation>
     </message>
+    <message>
+        <source>The name you were looking for gave a very large number of results, not all of the search results will be shown. If the desired recipient is not on the list, please enter a more specific name in the search box.</source>
+        <translation>Имя, которое вы искали, дало очень большое количество результатов, не все результаты поиска будут показаны. Если нужного получателя нет в списке, введите более  точное имя в поле поиска.</translation>
+    </message>
 </context>
 <context>
     <name>AddressItem</name>
@@ -150,16 +154,16 @@
         <translation> (Вы сами)</translation>
     </message>
     <message>
-        <source>Digi-ID</source>
-        <translation>Digi-ID</translation>
+        <source>digi-ID</source>
+        <translation>digi-ID</translation>
     </message>
     <message>
         <source>ID-card</source>
         <translation>ID-карта</translation>
     </message>
     <message>
-        <source>Mobile-ID</source>
-        <translation>Мobiil-ID</translation>
+        <source>mobile-ID</source>
+        <translation>mobiil-ID</translation>
     </message>
     <message>
         <source>Expires on</source>
@@ -183,6 +187,14 @@
         <source>Certificate for Encryption</source>
         <translation>Сертификат шифрования</translation>
     </message>
+    <message>
+        <source>e-Seal</source>
+        <translation>э-Печать</translation>
+    </message>
+    <message>
+        <source>Authentication certificate</source>
+        <translation>Сертификат идентификации</translation>
+    </message>
 </context>
 <context>
     <name>Application</name>
@@ -191,32 +203,20 @@
         <translation>Запуск не удался.</translation>
     </message>
     <message>
-        <source>Close window</source>
-        <translation>Закрыть окно</translation>
-    </message>
-    <message>
         <source>Caught exception!</source>
         <translation>Перехвачена системная ошибка!</translation>
-    </message>
-    <message>
-        <source>New Client window</source>
-        <translation>Новое окно Клиента</translation>
     </message>
     <message>
         <source>New Crypto window</source>
         <translation>Новое окно Crypto</translation>
     </message>
     <message>
-        <source>The renewal of Trust Service status List, used for digital signature validation, has failed. Please check your internet connection and make sure you have the latest ID-software version installed. An expired Trust Service List (TSL) will be used for signature validation. &lt;a href=&quot;http://www.id.ee/?id=37012&quot;&gt;Additional information&lt;/a&gt;</source>
-        <translation>Не удалось обновить список доверенных сертификатов, используемый для проверки действительности цифровых подписей. Пожалуйста, проверьте ваше интернет-соединение и убедитесь в том, что на компьютере установлена последняя версия программного обеспечения ID-карты. Для верификации подписей будет использован устаревший список доверенных сертификатов. &lt;a href=&quot;http://www.id.ee/?id=37013&quot;&gt;Дополнительная информация&lt;/a&gt;</translation>
+        <source>The renewal of Trust Service status List, used for digital signature validation, has failed. Please check your internet connection and make sure you have the latest ID-software version installed. An expired Trust Service List (TSL) will be used for signature validation. &lt;a href=&quot;https://www.id.ee/en/article/digidoc4-message-updating-the-list-of-trusted-certificates-was-unsuccessful/&quot;&gt;Additional information&lt;/a&gt;</source>
+        <translation>Не удалось обновить список доверенных сертификатов, используемый для проверки действительности цифровых подписей. Пожалуйста, проверьте ваше интернет-соединение и убедитесь в том, что на компьютере установлена последняя версия программного обеспечения ID-карты. Для верификации подписей будет использован устаревший список доверенных сертификатов. &lt;a href=&quot;https://www.id.ee/ru/artikkel/uvedomlenie-digidoc4-obnovlenie-spiska-doveriya-sertifikatov-ne-udalos/&quot;&gt;Дополнительная информация&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Loading TSL lists</source>
         <translation>Загружаем список TSL</translation>
-    </message>
-    <message>
-        <source>TSL signing certs</source>
-        <translation>Сертификаты подписывания TSL</translation>
     </message>
     <message>
         <source>Create %1</source>
@@ -235,8 +235,20 @@
         <translation>Напомнить позже</translation>
     </message>
     <message>
-        <source>In order to use digital signing in online services the browser token plugin must be enabled in Your web browser.&lt;br/&gt;Instructions on how to enable token plugin can be found &lt;a href=&quot;http://id.ee/?lang=en&amp;id=36639&quot;&gt;here&lt;/a&gt;.</source>
-        <translation>Чтобы использовать ID-кару для подписи в Э-услугах , вам также необходимо активировать подключаемый модуль для браузера.&lt;br/&gt;Руководство по активации можно найти &lt;a href=&quot;https://www.id.ee/?lang=ru&amp;id=36641&quot;&gt;здесь&lt;/a&gt;.</translation>
+        <source>In order to use digital signing in online services the browser token plugin must be enabled in Your web browser.&lt;br/&gt;Instructions on how to enable token plugin can be found &lt;a href=&quot;https://www.id.ee/en/article/configuring-browsers-for-using-id-card/&quot;&gt;here&lt;/a&gt;.</source>
+        <translation>Чтобы использовать ID-кару для подписи в Э-услугах , вам также необходимо активировать подключаемый модуль для браузера.&lt;br/&gt;Руководство по активации можно найти &lt;a href=&quot;https://www.id.ee/ru/artikkel/nastrojka-veb-brauzerov-dlya-ispolzovaniya-id-karty/&quot;&gt;здесь&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>DigiDoc4 Client Help</source>
+        <translation>DigiDoc4 клиент помощь</translation>
+    </message>
+    <message>
+        <source>Close Window</source>
+        <translation>Закрыть окно</translation>
+    </message>
+    <message>
+        <source>New Window</source>
+        <translation>Новое окно</translation>
     </message>
 </context>
 <context>
@@ -257,17 +269,13 @@
         <source>YES</source>
         <translation>ДА</translation>
     </message>
+    <message>
+        <source>Added file(s) exceeds the maximum size limit of the container(120MB).</source>
+        <translation>Вложенные файл(ы) превышают размер контейнера безопасности (~120 МБ).</translation>
+    </message>
 </context>
 <context>
     <name>CardWidget</name>
-    <message>
-        <source>ID card in reader</source>
-        <translation>В считывателе ID-карта</translation>
-    </message>
-    <message>
-        <source>%1 in reader</source>
-        <translation>В считывателе %1</translation>
-    </message>
     <message>
         <source>LOAD</source>
         <translation>ЗАГРУ
@@ -303,6 +311,14 @@
     <message>
         <source>Authentication certificate</source>
         <translation>Сертификат идентификации</translation>
+    </message>
+    <message>
+        <source>Selected is %1</source>
+        <translation>Выбранный %1</translation>
+    </message>
+    <message>
+        <source>%1 in reader</source>
+        <translation>В считывателе %1</translation>
     </message>
 </context>
 <context>
@@ -437,10 +453,6 @@
         <translation>ЗАКРЫТЬ</translation>
     </message>
     <message>
-        <source>SELECT</source>
-        <translation>ВЫБРАТЬ</translation>
-    </message>
-    <message>
         <source>REMOVE</source>
         <translation>УДАЛИТЬ</translation>
     </message>
@@ -494,6 +506,10 @@
     <message>
         <source>Certificate for Encryption</source>
         <translation>Сертификат шифрования</translation>
+    </message>
+    <message>
+        <source>ADD</source>
+        <translation>ДОБАВИТЬ</translation>
     </message>
 </context>
 <context>
@@ -738,6 +754,22 @@
         <source>Certificate Propagation service status: </source>
         <translation>Статус Certificate Propagation сервиса: </translation>
     </message>
+    <message>
+        <source>is set manually</source>
+        <translation>назначено вручную</translation>
+    </message>
+    <message>
+        <source>is set by default</source>
+        <translation>назначено по умолчанию</translation>
+    </message>
+    <message>
+        <source>TSL signing certs</source>
+        <translation>Сертификаты подписывания TSL</translation>
+    </message>
+    <message>
+        <source>TSL cache</source>
+        <translation>TSL-буфер</translation>
+    </message>
 </context>
 <context>
     <name>DigiDoc</name>
@@ -794,45 +826,51 @@
         <translation>Не удается сохранить контейнер</translation>
     </message>
     <message>
-        <source>Failed to sign container</source>
-        <translation>Не удается подписать контейнер</translation>
+        <source>Failed to sign container. Check your Time-Stamping service access settings.</source>
+        <translation>Не удалось подписать контейнер. Проверьте настройки доступа к меткам времени.</translation>
     </message>
     <message>
-        <source>You have not granted IP-based access. Check the settings of your server access certificate.</source>
-        <translation>Отсутствует IP-основанный доступ. Проверьте настройки справки доступа.</translation>
+        <source>You have not granted IP-based access. Check your validity confirmation service access settings.</source>
+        <translation>Отсутствует доступ по IP-адресу. Проверьте настройки доступа к услуге подтверждения действительности.</translation>
     </message>
     <message>
-        <source>The limit for digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/index.php?id=39023&quot;&gt;Additional information&lt;/a&gt;</source>
-        <translation>Предел для цифровых подписей в месяц был достигнут для этого IP-адреса. &lt;a href=&quot;https://www.id.ee/index.php?id=39025&quot;&gt;Дополнительная информация&lt;/a&gt;</translation>
-    </message>
-    <message>
-        <source>The verification of digital signatures in PDF format is performed through an external service. The file requiring verification will be forwarded to the service.
-The Information System Authority does not retain information regarding the files and users of the service.</source>
-        <translation>Контроль срока действия дигитальной подписи в формате PDF осуществляется через электронную услугу. Контролируемый файл передается э-услугe.
-Департамент государственной инфосистемы не сохраняет информацию о пользователях э-услуги и файлах.</translation>
+        <source>The limit for digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;Additional information&lt;/a&gt;</source>
+        <translation>Предел для цифровых подписей в месяц был достигнут для этого IP-адреса. &lt;a href=&quot;https://www.id.ee/ru/artikkel/dlya-uchrezhdenij-v-kotoryh-v-bolshom-obeme-podpisyvayutsya-dokumenty-s-pomoshhyu-digidoc4-klienta/&quot;&gt;Дополнительная информация&lt;/a&gt;</translation>
     </message>
     <message>
         <source>CANCEL</source>
         <translation>ОТМЕНА</translation>
     </message>
     <message>
-        <source>OK</source>
-        <translation>OK</translation>
+        <source>YES</source>
+        <translation>ДА</translation>
     </message>
     <message>
-        <source>Please check your computer time. &lt;a href=&apos;https://id.ee/index.php?id=39513&apos;&gt;Additional information&lt;/a&gt;</source>
-        <translation>Пожалуйста проверьте время Вашего компьютера. &lt;a href=&apos;https://id.ee/index.php?id=39514&apos;&gt;Дополнительная информация&lt;/a&gt;</translation>
+        <source>Please check your computer time. &lt;a href=&apos;https://www.id.ee/en/article/digidoc4-client-error-please-check-your-computer-time-2/&apos;&gt;Additional information&lt;/a&gt;</source>
+        <translation>Пожалуйста проверьте время Вашего компьютера. &lt;a href=&apos;https://www.id.ee/ru/artikkel/oshibka-klienta-digidoc4-pozhalujsta-proverte-chasy-na-vashem-kompyutere-2/&apos;&gt;Дополнительная информация&lt;/a&gt;</translation>
     </message>
     <message>
-        <source>The timestamp added to the signature must be taken before validity confirmation</source>
-        <translation>Добавленная к подписи метка времени должна быть более ранней по времени, чем подтверждение действительности</translation>
+        <source>The timestamp added to the signature must be taken before validity confirmation.</source>
+        <translation>Добавленная к подписи метка времени должна быть более ранней по времени, чем подтверждение действительности.</translation>
+    </message>
+    <message>
+        <source>Connecting to SiVa server failed! Please check your internet connection.</source>
+        <translation>Ошибка при подключении с SiVa сервером! Пожалуйста проверьте подключение к интернету.</translation>
+    </message>
+    <message>
+        <source>Failed to sign container</source>
+        <translation>Не удалось подписать контейнер.</translation>
+    </message>
+    <message>
+        <source>Signed document in PDF and DDOC format will be transmitted to the Digital Signature Validation Service SiVa to verify the validity of the digital signature. Read more information about transmitted data to Digital Signature Validation service from &lt;a href=&quot;https://www.id.ee/en/article/data-protection-conditions-for-the-id-software-of-the-national-information-system-authority/&quot;&gt;here&lt;/a&gt;.&lt;br /&gt;Do you want to continue?</source>
+        <translation>Для проверки действительности электронно-цифровых подписей в форматах PDF и DDOC файл пересылается в службу проверки цифровых подписей SiVa. Подробнее о данных, переданных для проверки действительности электронно-цифровых подписей, можно прочитать &lt;a href=&quot;https://www.id.ee/ru/artikkel/usloviya-zashhity-dannyh-programmnogo-obespecheniya-id-karty-departamenta-gosudarstvennoj-infosistemy/&quot;&gt;здесь&lt;/a&gt;.&lt;br /&gt;Желаете продолжить?</translation>
     </message>
 </context>
 <context>
     <name>DocumentModel</name>
     <message>
-        <source>This is an executable file! Executable files may contain viruses or other malicious code that could harm your computer. Are you sure you want to launch this file?</source>
-        <translation>Это выполняемый файл! Выполняемый файл может содержать вирусы или другой вредоносный код которые могут повредить ваш компьютер. Вы уверены что хотите запустить?</translation>
+        <source>A file with this extension cannot be opened in the DigiDoc4 Client. Download the file to view it.</source>
+        <translation>Файл с таким расширением не может быть открыт в клиенте DigiDoc4. Загрузите файл, чтобы просмотреть его.</translation>
     </message>
     <message>
         <source>Cannot add the file to the envelope. File &apos;%1&apos; is already in container.</source>
@@ -847,12 +885,8 @@ The Information System Authority does not retain information regarding the files
         <translation>Внутренняя ошибка</translation>
     </message>
     <message>
-        <source>NO</source>
-        <translation>НЕТ</translation>
-    </message>
-    <message>
-        <source>YES</source>
-        <translation>ДА</translation>
+        <source>OK</source>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -873,11 +907,6 @@ The Information System Authority does not retain information regarding the files
         <source>Download file</source>
         <extracomment>accessible</extracomment>
         <translation>Скачать файл</translation>
-    </message>
-    <message>
-        <source>To open file press space or enter</source>
-        <extracomment>accessible</extracomment>
-        <translation>Для открытия файла нажмите пробел или enter</translation>
     </message>
 </context>
 <context>
@@ -966,16 +995,16 @@ The Information System Authority does not retain information regarding the files
         <translation>Управлять своими eID</translation>
     </message>
     <message>
-        <source>DigiDoc Client can be used to sign digitally with ID-card and Mobile-ID, check the validity of digital signatures and open and save documents inside the signature container.</source>
-        <translation>DigiDoc приложение используется для цифро­вой подписи с помощью ID-карты и Мobiil-ID, проверки подлинности подписей, открытия и сохранения документов.</translation>
+        <source>DigiDoc Client can be used to sign digitally with ID-card, mobile-ID and Smart-ID, check the validity of digital signatures and open and save documents inside the signature container.</source>
+        <translation>DigiDoc приложение используется для цифро­вой подписи с помощью ID-карты, mobiil-ID и Smart-ID, проверки подлинности подписей, открытия и сохранения документов.</translation>
     </message>
     <message>
         <source>DigiDoc Client can also be used to encrypt data and decrypt the previously encrypted data. For encryption the program uses the authentication certificate of the ID-card.</source>
         <translation>DigiDoc приложение может использоваться для шифрования и расшифровки данных. Для шифрования программа использует сертификат идентификации ID-карты.</translation>
     </message>
     <message>
-        <source>Manage your ID-card’s PIN/PUK codes and handle certificate renewals.</source>
-        <translation>Управлять PIN/PUK кодами Вашей ID-карты и обновлением сертификатов.</translation>
+        <source>Manage your ID-card’s PIN/PUK codes and check personal data.</source>
+        <translation>Управлять PIN/PUK-кодами Вашей ID-карты и проверяйте личные данные.</translation>
     </message>
     <message>
         <source>How to sign document digitally?</source>
@@ -998,12 +1027,12 @@ The Information System Authority does not retain information regarding the files
         <translation>Чтобы подписать файл, перетащите его из компьютера в прило­жение DigiDoc или нажмите кнопку «... или загрузите файл с диска». Вы можете одновременно пере­таскивать или выбирать несколько файлов.</translation>
     </message>
     <message>
-        <source>Once the files have been selected, check them and choose whether you want to sign with ID-card or Mobile-ID. You can also save the container without signing.</source>
-        <translation>После того, как файлы были выбраны, проверьте их и решите, хотите ли вы подписывать их ID-картой или Mobiil-ID. Вы также можете сохранить файлы в контейнере не подписывая его.</translation>
+        <source>Once the files have been selected, check them and choose whether you want to sign with ID-card, mobile-ID or Smart-ID. You can also save the container without signing.</source>
+        <translation>После того, как файлы были выбраны, проверьте их и решите, хотите ли вы подписывать их ID-картой, mobiil-ID или Smart-ID. Вы также можете сохранить файлы в контейнере не подписывая его.</translation>
     </message>
     <message>
-        <source>By entering the PIN2 code, you will have signed the document with digital signature that by law is equal to the signature signed by hand. You will find the PIN2 code in the envelope that came with your ID-card or Mobile-ID.</source>
-        <translation>Введя PIN2 код, вы подписываете документ цифровой подписью, которая по закону равносильна подписи «от руки». PIN2 код Вы найдете в конверте, который прилагается к Вашей ID-карте или Mobiil-ID.</translation>
+        <source>By entering the PIN2 code, you will have signed the document with digital signature that by law is equal to the signature signed by hand.</source>
+        <translation>Введя PIN2-код, вы подписываете документ цифровой подписью, которая по закону равносильна подписи «от руки».</translation>
     </message>
     <message>
         <source>How to encrypt documents?</source>
@@ -1035,7 +1064,7 @@ The Information System Authority does not retain information regarding the files
     </message>
     <message>
         <source>Manage PIN and PUK codes</source>
-        <translation>Управление PIN и PUK кодами</translation>
+        <translation>Управление PIN- и PUK-кодами</translation>
     </message>
     <message>
         <source>Check personal data</source>
@@ -1195,7 +1224,7 @@ The Information System Authority does not retain information regarding the files
     </message>
     <message>
         <source>Container is not signed</source>
-        <translation>Файлы контейнера</translation>
+        <translation>Подписи контейнера отсутствуют</translation>
     </message>
     <message>
         <source>Content of the envelope</source>
@@ -1271,10 +1300,6 @@ The Information System Authority does not retain information regarding the files
         <translation>ПОКАЗАТЬ СЕРТИФИКАТ</translation>
     </message>
     <message>
-        <source>Key</source>
-        <translation>Ключ</translation>
-    </message>
-    <message>
         <source>Crypto method</source>
         <translation>Метод шифровки</translation>
     </message>
@@ -1291,10 +1316,6 @@ The Information System Authority does not retain information regarding the files
         <translation>Метод подсчета ConcatKDF</translation>
     </message>
     <message>
-        <source>Expires</source>
-        <translation>Истекает</translation>
-    </message>
-    <message>
         <source>Issuer</source>
         <translation>Выдавший</translation>
     </message>
@@ -1307,6 +1328,14 @@ The Information System Authority does not retain information regarding the files
         <source>Show certificate</source>
         <extracomment>accessible</extracomment>
         <translation>Показать сертификат</translation>
+    </message>
+    <message>
+        <source>Recipient</source>
+        <translation>Получател</translation>
+    </message>
+    <message>
+        <source>Expiry date</source>
+        <translation>Дата окончания</translation>
     </message>
 </context>
 <context>
@@ -1340,6 +1369,29 @@ LDAP сервер недоступен.</translation>
     <message>
         <source>Failed to start ssl</source>
         <translation>Не удалось запустить SSL</translation>
+    </message>
+</context>
+<context>
+    <name>MacMenuBar</name>
+    <message>
+        <source>&amp;File</source>
+        <translation>&amp;Файл</translation>
+    </message>
+    <message>
+        <source>Info</source>
+        <translation>Информация</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Настройки</translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
+        <translation>&amp;Помощь</translation>
     </message>
 </context>
 <context>
@@ -1385,6 +1437,10 @@ ID-КАРТОЙ</translation>
 </context>
 <context>
     <name>MainWindow</name>
+    <message>
+        <source>YES</source>
+        <translation>ДА</translation>
+    </message>
     <message>
         <source>Help</source>
         <translation>Помощь</translation>
@@ -1528,16 +1584,12 @@ ID-КАРТОЙ</translation>
         <translation>Для отображения листа подтверждения действительности цифровой подписи на компьютере должен быть установлен как минимум один принтер!</translation>
     </message>
     <message>
-        <source>Documents (%1%2)</source>
-        <translation>Документы (%1%2)</translation>
-    </message>
-    <message>
         <source>%1 has been changed and the certificate has been unblocked!</source>
-        <translation>%1 код изменён и сертификат разблокирован!</translation>
+        <translation>%1-код изменён и сертификат разблокирован!</translation>
     </message>
     <message>
         <source>%1 changed!</source>
-        <translation>%1 код изменён!</translation>
+        <translation>%1-код изменён!</translation>
     </message>
     <message>
         <source>E-mail address missing or invalid!</source>
@@ -1561,7 +1613,7 @@ ID-КАРТОЙ</translation>
     </message>
     <message>
         <source>Changing %1 failed</source>
-        <translation>Смена %1 кода прошла неудачно</translation>
+        <translation>Смена %1-кода прошла неудачно</translation>
     </message>
     <message>
         <source>%1 length has to be between %2 and 12</source>
@@ -1570,9 +1622,9 @@ ID-КАРТОЙ</translation>
     <message numerus="yes">
         <source>Wrong %1 code. You can try %n more time(s).</source>
         <translation>
-            <numerusform>Неверный %1 код. Попыток ещё: %n.</numerusform>
-            <numerusform>Неверный %1 код. Попыток ещё: %n.</numerusform>
-            <numerusform>Неверный %1 код. Попыток ещё: %n.</numerusform>
+            <numerusform>Неверный %1-код. Попыток ещё: %n.</numerusform>
+            <numerusform>Неверный %1-код. Попыток ещё: %n.</numerusform>
+            <numerusform>Неверный %1-код. Попыток ещё: %n.</numerusform>
         </translation>
     </message>
     <message>
@@ -1585,11 +1637,11 @@ ID-КАРТОЙ</translation>
     </message>
     <message>
         <source>New %1 codes doesn&apos;t match</source>
-        <translation>Новые %1 коды не сходятся</translation>
+        <translation>Новые %1-коды не сходятся</translation>
     </message>
     <message>
         <source>%1 timeout</source>
-        <translation>Время запроса %1 кода истекло</translation>
+        <translation>Время запроса %1-кода истекло</translation>
     </message>
     <message>
         <source>Success</source>
@@ -1601,7 +1653,7 @@ ID-КАРТОЙ</translation>
     </message>
     <message>
         <source>Wrong PIN was entered or cancelled, there was a problem with certificates or browser does not support ID-card.</source>
-        <translation>Ввели неверный PIN код, прервали введение PIN кода, возникли проблемы с сертификатами или отсутствует поддержка ID-карты в браузере.</translation>
+        <translation>Ввели неверный PIN-код, прервали введение PIN-кода, возникли проблемы с сертификатами или отсутствует поддержка ID-карты в браузере.</translation>
     </message>
     <message>
         <source>ID-card certificate is not valid.</source>
@@ -1624,8 +1676,8 @@ ID-КАРТОЙ</translation>
         <translation>Не было найдено ни одной официальной пересылки эл. почты</translation>
     </message>
     <message>
-        <source>Your email account has been blocked. To open it, please send an email to toimetaja@eesti.ee or call 663 0215.</source>
-        <translation>Ваша учётная запись эл. почты закрыта. Для открытия пошлите письмо на toimetaja@eesti.ee или позвоните по телефону 663 0215.</translation>
+        <source>Your email account has been blocked. To open it, please send an email to help@ria.ee.</source>
+        <translation>Ваша учётная запись эл. почты закрыта. Для открытия пошлите письмо на help@ria.ee.</translation>
     </message>
     <message>
         <source>Invalid email address</source>
@@ -1634,10 +1686,6 @@ ID-КАРТОЙ</translation>
     <message>
         <source>Forwarding is activated and you have been sent an email with activation key. Forwarding will be activated only after confirming the key.</source>
         <translation>Переадресация сохранена и Вам послано письмо с ключом активации. Переадресация активна только после введения ключа.</translation>
-    </message>
-    <message>
-        <source>Opening</source>
-        <translation>Открывается</translation>
     </message>
     <message>
         <source>Signing</source>
@@ -1688,12 +1736,16 @@ ID-КАРТОЙ</translation>
         <source>The card in the card reader is not an Estonian ID-card</source>
         <translation>Карта в считывателе не является эстонской ID-картой</translation>
     </message>
+    <message>
+        <source>Decrypting</source>
+        <translation>Расшифровка</translation>
+    </message>
 </context>
 <context>
     <name>MobileDialog</name>
     <message>
-        <source>Enter your phone number to sign with Mobile ID</source>
-        <translation>&lt;b&gt;Введите свой номер телефона для&lt;br/&gt;подписи с Mobiil-ID &lt;/b&gt;</translation>
+        <source>Enter your phone number to sign with mobile-ID</source>
+        <translation>&lt;b&gt;Введите свой номер телефона для&lt;br/&gt;подписи с mobiil-ID &lt;/b&gt;</translation>
     </message>
     <message>
         <source>Remember me</source>
@@ -1733,6 +1785,10 @@ ID-КАРТОЙ</translation>
         <source>Personal code</source>
         <translation>Личный код</translation>
     </message>
+    <message>
+        <source>Invalid country code</source>
+        <translation>Неверный код страны</translation>
+    </message>
 </context>
 <context>
     <name>MobileProgress</name>
@@ -1745,8 +1801,8 @@ ID-КАРТОЙ</translation>
         <translation>Подписывание</translation>
     </message>
     <message>
-        <source>Phone absent</source>
-        <translation>Нет телефона</translation>
+        <source>Phone is not in coverage area</source>
+        <translation>Телефон вне сети интернет</translation>
     </message>
     <message>
         <source>Request sending error</source>
@@ -1761,16 +1817,18 @@ ID-КАРТОЙ</translation>
         <translation>Ошибка при подключении с SK сервером&lt;br/&gt;Пожалуйста проверьте подключение к интернету.</translation>
     </message>
     <message>
-        <source>User is not a Mobile-ID client</source>
-        <translation>Пользователь не является клиентом Mobiil-ID</translation>
+        <source>User is not a mobile-ID client</source>
+        <translation>Пользователь не является клиентом mobiil-ID</translation>
     </message>
     <message>
         <source>Make sure control code matches with one in phone screen
-and enter Mobile-ID PIN2-code.
-Control code: %1</source>
+and enter mobile-ID PIN2-code.</source>
         <translation>Убедитесь в правильности контрольного кодa
-и введите PIN2-код для Mobiil-ID.
-Kонтрольный код: %1</translation>
+и введите PIN2-код для mobiil-ID.</translation>
+    </message>
+    <message>
+        <source>Control code:</source>
+        <translation>Kонтрольный код:</translation>
     </message>
     <message>
         <source>SSL handshake failed. Check the proxy settings of your computer or software upgrades.</source>
@@ -1790,10 +1848,6 @@ Kонтрольный код: %1</translation>
         <translation>Технический сбой услуги %1. Пожалуйста, попробуйте позже.</translation>
     </message>
     <message>
-        <source>Failed to send request. </source>
-        <translation>Не удалось отправить запрос. </translation>
-    </message>
-    <message>
         <source>Invalid content type header </source>
         <translation>Неправильный заголовок типа содержимого </translation>
     </message>
@@ -1811,15 +1865,15 @@ Kонтрольный код: %1</translation>
     </message>
     <message>
         <source>Account not found</source>
-        <translation>Счет не найден</translation>
+        <translation>Учетная запись не найдена</translation>
     </message>
     <message>
         <source>Session not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Сессия не найден</translation>
     </message>
     <message>
-        <source>Mobile-ID</source>
-        <translation>Mobiil-ID</translation>
+        <source>mobile-ID</source>
+        <translation>mobiil-ID</translation>
     </message>
     <message>
         <source>Smart-ID</source>
@@ -1831,31 +1885,29 @@ Kонтрольный код: %1</translation>
     </message>
     <message>
         <source>Make sure control code matches with one in phone screen
-and enter Smart-ID PIN2-code.
-Control code: %1</source>
+and enter Smart-ID PIN2-code.</source>
         <translation>Убедитесь в правильности контрольного кодa
-и введите PIN2-код для Smart-ID.
-Kонтрольный код: %1</translation>
+и введите PIN2-код для Smart-ID.</translation>
     </message>
     <message>
-        <source>Failed to sign container. Check your %1 service access settings. &lt;a href=&quot;https://www.id.ee/index.php?id=39023&quot;&gt;Additional information&lt;/a&gt;</source>
-        <translation>Не удалось подписать контейнер. Проверьте настройки доступа услуги %1 &lt;a href=&quot;https://www.id.ee/index.php?id=39025&quot;&gt;Дополнительная информация&lt;/a&gt;</translation>
+        <source>Failed to sign container. Check your %1 service access settings. &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;Additional information&lt;/a&gt;</source>
+        <translation>Не удалось подписать контейнер. Проверьте настройки доступа услуги %1 &lt;a href=&quot;https://www.id.ee/ru/artikkel/dlya-uchrezhdenij-v-kotoryh-v-bolshom-obeme-podpisyvayutsya-dokumenty-s-pomoshhyu-digidoc4-klienta/&quot;&gt;Дополнительная информация&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Your Smart-ID certificate level must be qualified to sign documents in DigiDoc4 Client.</source>
         <translation>Для подписания в DigiDoc4 клиенте Ваш Smart-ID должен соответствовать более высокому уровню.</translation>
     </message>
     <message>
-        <source>Your signing software needs an upgrade. Please update your ID software, which you can get from &lt;a href=&quot;http://www.id.ee/?lang=en&quot;&gt;www.id.ee&lt;/a&gt;. Additional info is available ID-helpline (+372) 666 8888.</source>
-        <translation>Обновите программу подписывания. Для этого установите программное обеспечение ID-карты, скачав его с сайта &lt;a href=&quot;http://www.id.ee/?lang=ru&quot;&gt;www.id.ee&lt;/a&gt;. Дополнительная информация: телефон линии помощи ID-карты (+372) 666 8888.</translation>
+        <source>Your signing software needs an upgrade. Please update your ID software, which you can get from &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;www.id.ee&lt;/a&gt;. Additional info is available ID-helpline (+372) 666 8888.</source>
+        <translation>Обновите программу подписывания. Для этого установите программное обеспечение ID-карты, скачав его с сайта &lt;a href=&quot;https://www.id.ee/ru/&quot;&gt;www.id.ee&lt;/a&gt;. Дополнительная информация: телефон линии помощи ID-карты (+372) 666 8888.</translation>
     </message>
     <message>
         <source>Open the Smart-ID application on your smart device and confirm device for signing.</source>
         <translation>Откройте приложение Smart-ID на смарт-устройстве и подтвердите это устройство для подписывания.</translation>
     </message>
     <message>
-        <source>The limit for digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/index.php?id=39023&quot;&gt;Additional information&lt;/a&gt;</source>
-        <translation>Предел для цифровых подписей в месяц был достигнут для этого IP-адреса. &lt;a href=&quot;https://www.id.ee/index.php?id=39025&quot;&gt;Дополнительная информация&lt;/a&gt;</translation>
+        <source>The limit for %1 digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;Additional information&lt;/a&gt;</source>
+        <translation>С этого IP-адреса превышен месячный лимит бесплатных подписей %1. &lt;a href=&quot;https://www.id.ee/ru/artikkel/dlya-uchrezhdenij-v-kotoryh-v-bolshom-obeme-podpisyvayutsya-dokumenty-s-pomoshhyu-digidoc4-klienta/&quot;&gt;Подробнее читайте здесь&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Please include correct country code.</source>
@@ -1865,6 +1917,47 @@ Kонтрольный код: %1</translation>
         <source>Error: an incorrect control code was chosen</source>
         <translation>Ошибка: выбран неправильный контрольный код</translation>
     </message>
+    <message>
+        <source>Sign document</source>
+        <comment>Do not translate to RUS (IB-6416)</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your mobile-ID transaction has failed. Please contact your mobile network operator.</source>
+        <translation>Не удалось выполнить операцию mobiil-ID. Пожалуйста, свяжитесь со своим мобильным оператором.</translation>
+    </message>
+    <message>
+        <source>User denied or cancelled</source>
+        <translation>Пользователю отказано</translation>
+    </message>
+    <message>
+        <source>Your mobile-ID transaction has expired. Please try again.</source>
+        <translation>Срок действия вашей транзакции mobiil-ID истек. Пожалуйста, попробуйте еще раз.</translation>
+    </message>
+    <message>
+        <source>Your Smart-ID transaction has expired. Please try again.</source>
+        <translation>Срок действия вашей транзакции Smart-ID истек. Пожалуйста, попробуйте еще раз.</translation>
+    </message>
+    <message>
+        <source>Failed to connect with service server. Please check your network settings or try again later.</source>
+        <translation>Не удалось связаться с сервером услуги. Пожалуйста, проверьте настройки сети или повторите попытку позже.</translation>
+    </message>
+    <message>
+        <source>Failed to send request. Check your %1 service access settings.</source>
+        <translation>Не удалось отправить запрос. Проверьте настройки доступа услуги %1.</translation>
+    </message>
+    <message>
+        <source>Your Smart-ID transaction has failed. Please check your Smart-ID application or contact Smart-ID customer support.</source>
+        <translation>Не удалось выполнить операцию Smart-ID. Пожалуйста, проверьте приложение Smart-ID или свяжитесь со службой поддержки Smart-ID.</translation>
+    </message>
+    <message>
+        <source>Mobile-ID</source>
+        <translation>mobiil-ID</translation>
+    </message>
+    <message>
+        <source>Failed to send request. %1 service has encountered technical errors. Please try again later.</source>
+        <translation>Не удалось отправить запрос. Технический сбой услуги %1. Пожалуйста, попробуйте позже.</translation>
+    </message>
 </context>
 <context>
     <name>NoCardInfo</name>
@@ -1873,16 +1966,16 @@ Kонтрольный код: %1</translation>
         <translation>В считывателе нет карты; проверьте, введена ли карточка правильно</translation>
     </message>
     <message>
-        <source>PCSC service is not running</source>
-        <translation>Служба PCSC не работает</translation>
-    </message>
-    <message>
         <source>No readers found</source>
         <translation>Считывающее устройство не обнаружено</translation>
     </message>
     <message>
         <source>Loading data</source>
         <translation>Данные считываются</translation>
+    </message>
+    <message>
+        <source>The PCSC service, required for using the ID-card, is not working. Check your computer settings.</source>
+        <translation>Необходимая для использования ID-карты услуга PCSC не работает. Проверьте настройки компьютера.</translation>
     </message>
 </context>
 <context>
@@ -1896,16 +1989,8 @@ Kонтрольный код: %1</translation>
         <translation>ПРОВЕРИТЬ СОСТОЯНИЕ @EESTI.EE E-ПОЧТЫ</translation>
     </message>
     <message>
-        <source>No official email redirects found. To send email to @eesti.ee, please enter your email address:</source>
-        <translation>Не найдено официальных переадресаций электронной почты. Чтобы отправить электронное письмо на адрес @eesti.ee, введите ваш адрес электронной почты:</translation>
-    </message>
-    <message>
         <source>ACTIVATE REDIRECTION</source>
         <translation>АКТИВИРОВАТЬ ПЕРЕАДРЕСАЦИЮ</translation>
-    </message>
-    <message>
-        <source>For more detailed official email address forwarding, please visit &lt;a href=&apos;http://www.eesti.ee/en/&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;eesti.ee&lt;/span&gt;&lt;/a&gt;</source>
-        <translation>Более подробную информацию по настройке пересылки электронной почты найдёте на портале &lt;a href=&apos;http://www.eesti.ee/ru/&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;eesti.ee&lt;/span&gt;&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Your @eesti.ee e-mail has been forwarded to </source>
@@ -1928,6 +2013,14 @@ Kонтрольный код: %1</translation>
         <source>Activate redirection</source>
         <extracomment>accessible</extracomment>
         <translation>Активировать переадресацию</translation>
+    </message>
+    <message>
+        <source>For more detailed official email address forwarding, please visit &lt;a href=&apos;http://www.eesti.ee/en/&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;eesti.ee&lt;/span&gt;&lt;/a&gt;. &lt;a href=&apos;https://www.eesti.ee/en/using-the-state-portal#terms-of-the-official-email-service-of-eestiee&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;Terms&lt;/span&gt;&lt;/a&gt; of the official email service of eesti.ee.</source>
+        <translation>Более подробную информацию по настройке пересылки электронной почты найдёте на портале &lt;a href=&apos;http://www.eesti.ee/ru/&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;eesti.ee&lt;/span&gt;&lt;/a&gt;. &lt;a href=&apos;https://www.eesti.ee/ru/v-pomos-polzovatelu#uslovia-ispolzovania-uslugi-oficialnogo-poctovogo-asika-eestiee&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;Условия использования&lt;/span&gt;&lt;/a&gt; услуги официального почтового ящика eesti.ee.</translation>
+    </message>
+    <message>
+        <source>To send email to @eesti.ee, please enter your email address:</source>
+        <translation>Чтобы отправить электронное письмо на адрес @eesti.ee, введите ваш адрес электронной почты:</translation>
     </message>
 </context>
 <context>
@@ -1969,7 +2062,7 @@ Kонтрольный код: %1</translation>
     </message>
     <message>
         <source>For using sign certificate enter PIN2 at the reader</source>
-        <translation>Для использования сертификата цифровой подписи введите PIN2&lt;br/&gt;с клавиатуры считывателя.</translation>
+        <translation>Для использования сертификата цифровой подписи введите PIN2&lt;br/&gt;с клавиатуры считывателя</translation>
     </message>
     <message>
         <source>For using sign certificate enter PIN2</source>
@@ -1977,11 +2070,11 @@ Kонтрольный код: %1</translation>
     </message>
     <message>
         <source>Selected action requires sign certificate.</source>
-        <translation>Данная операция требует наличия сертификата цифровой подписи</translation>
+        <translation>Данная операция требует наличия сертификата цифровой подписи.</translation>
     </message>
     <message>
         <source>For using authentication certificate enter PIN1 at the reader</source>
-        <translation>Для использования сертификата идентификации введите PIN1&lt;br/&gt;с клавиатуры считывателя.</translation>
+        <translation>Для использования сертификата идентификации введите PIN1&lt;br/&gt;с клавиатуры считывателя</translation>
     </message>
     <message>
         <source>For using authentication certificate enter PIN1</source>
@@ -2001,7 +2094,7 @@ Kонтрольный код: %1</translation>
     <name>PinUnblock</name>
     <message>
         <source>VALID PUK CODE</source>
-        <translation>ДЕЙСТВУЮЩИЙ PUK КОД</translation>
+        <translation>ДЕЙСТВУЮЩИЙ PUK-КОД</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -2013,11 +2106,11 @@ Kонтрольный код: %1</translation>
     </message>
     <message>
         <source>PIN2 code is used to digitally sign documents.</source>
-        <translation>PIN2 код используется для дигитальной подписи.</translation>
+        <translation>PIN2-код используется для дигитальной подписи.</translation>
     </message>
     <message>
         <source>PIN1 code is used for confirming the identity of a person.</source>
-        <translation>PIN1 код используется для идентификации личности.</translation>
+        <translation>PIN1-код используется для идентификации личности.</translation>
     </message>
     <message>
         <source>%1 unblocking</source>
@@ -2025,11 +2118,11 @@ Kонтрольный код: %1</translation>
     </message>
     <message>
         <source>%1 code change</source>
-        <translation>Замена %1 кода</translation>
+        <translation>Замена %1-кода</translation>
     </message>
     <message>
         <source>VALID %1 CODE</source>
-        <translation>ДЕЙСТВУЮЩИЙ %1 КОД</translation>
+        <translation>ДЕЙСТВУЮЩИЙ %1-КОД</translation>
     </message>
     <message>
         <source>CHANGE</source>
@@ -2037,11 +2130,11 @@ Kонтрольный код: %1</translation>
     </message>
     <message>
         <source>NEW %1 CODE</source>
-        <translation>НОВЫЙ %1 КОД</translation>
+        <translation>НОВЫЙ %1-КОД</translation>
     </message>
     <message>
         <source>NEW %1 CODE AGAIN</source>
-        <translation>НОВЫЙ %1 КОД ЗАНОВО</translation>
+        <translation>НОВЫЙ %1-КОД ЗАНОВО</translation>
     </message>
     <message>
         <source>PUK remaining attempts: %1</source>
@@ -2092,31 +2185,31 @@ Kонтрольный код: %1</translation>
     </message>
     <message>
         <source>PUK code is used for unblocking the certificates, when PIN1 or PIN2 has been entered 3 times incorrectly.</source>
-        <translation>PUK код - это код, разблокирующий заблокированные сертификаты, если код PIN1 или PIN2 был введён неверно 3 раза подряд.</translation>
+        <translation>PUK-код - это код, разблокирующий заблокированные сертификаты, если код PIN1 или PIN2 был введён неверно 3 раза подряд.</translation>
     </message>
     <message>
         <source>If you forget the PUK code or the certificates remain blocked, you have to visit the &lt;a href=&quot;https://www.politsei.ee/en/&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;service center&lt;/span&gt;&lt;/a&gt; to obtain new codes.</source>
-        <translation>Если PUK код забыт и сетрификат блокируется из-за неверно введённых PIN1 или PIN2, то единственной возможностью восстановить работоспособность ID-карты, это обратиться в &lt;a href=&quot;https://www.politsei.ee/ru/&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;бюро обслуживания&lt;/span&gt;&lt;/a&gt;.</translation>
+        <translation>Если PUK-код забыт и сетрификат блокируется из-за неверно введённых PIN1 или PIN2, то единственной возможностью восстановить работоспособность ID-карты, это обратиться в &lt;a href=&quot;https://www.politsei.ee/ru/&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;бюро обслуживания&lt;/span&gt;&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>To unblock the certificate you have to enter the PUK code.</source>
-        <translation>Для разблокировки сертификата введите PUK код.</translation>
+        <translation>Для разблокировки сертификата введите PUK-код.</translation>
     </message>
     <message>
         <source>You can find your PUK code inside the ID-card codes envelope.</source>
-        <translation>PUK код находится в конверте с кодами, который выдаётся при получении ID-карты или смене сертификатов.</translation>
+        <translation>PUK-код находится в конверте с кодами, который выдаётся при получении ID-карты или смене сертификатов.</translation>
     </message>
     <message>
         <source>If you have forgotten the PUK code for your ID card, please visit &lt;a href=&quot;https://www.politsei.ee/en/&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;the Police and Border Guard Board service center&lt;/span&gt;&lt;/a&gt; to obtain new PIN codes.</source>
-        <translation>Если вы забыли PUK код своей ID-карты, посетите &lt;a href=&quot;https://www.politsei.ee/ru/&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;бюро&lt;/span&gt;&lt;/a&gt; &lt;a href=&quot;https://www.politsei.ee/ru/&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;обслуживания Департамента полиции и пограничной&lt;/span&gt;&lt;/a&gt; &lt;a href=&quot;https://www.politsei.ee/ru/&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;охраны&lt;/span&gt;&lt;/a&gt;, где вы сможете получить конверт с кодами.</translation>
+        <translation>Если вы забыли PUK-код своей ID-карты, посетите &lt;a href=&quot;https://www.politsei.ee/ru/&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;бюро&lt;/span&gt;&lt;/a&gt; &lt;a href=&quot;https://www.politsei.ee/ru/&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;обслуживания Департамента полиции и пограничной&lt;/span&gt;&lt;/a&gt; &lt;a href=&quot;https://www.politsei.ee/ru/&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;охраны&lt;/span&gt;&lt;/a&gt;, где вы сможете получить конверт с кодами.</translation>
     </message>
     <message>
         <source>PUK code is written in the envelope, that is given with the ID-card.</source>
-        <translation>Ваш PUK код находится в конверте с кодами.</translation>
+        <translation>Ваш PUK-код находится в конверте с кодами.</translation>
     </message>
     <message>
         <source>If PIN%1 is inserted incorrectly 3 times the %2 certificate will be blocked and it will be impossible to use ID-card to %3, until it is unblocked via the PUK code.</source>
-        <translation>Если PIN%1 введён 3 раза неверно, тогда блокируется %2 и использовать ID-карту для %3 невозможно, пока блокировка не снята PUK кодом.</translation>
+        <translation>Если PIN%1 введён 3 раза неверно, тогда блокируется %2 и использовать ID-карту для %3 невозможно, пока блокировка не снята PUK-кодом.</translation>
     </message>
     <message>
         <source>signing</source>
@@ -2136,7 +2229,7 @@ Kонтрольный код: %1</translation>
     </message>
     <message>
         <source>If you have forgotten PIN%1, but know PUK, then here you can enter new PIN%1.</source>
-        <translation>Если вы забыли PIN%1 код, но знаете PUK код, тогда здесь вы можете ввести новый PIN%1 код.</translation>
+        <translation>Если вы забыли PIN%1-код, но знаете PUK-код, тогда здесь вы можете ввести новый PIN%1-код.</translation>
     </message>
 </context>
 <context>
@@ -2251,14 +2344,7 @@ Kонтрольный код: %1</translation>
     </message>
 </context>
 <context>
-    <name>QFileDialog</name>
-    <message>
-        <source>All Files (*)</source>
-        <translation>Все файлы (*)</translation>
-    </message>
-</context>
-<context>
-    <name>QPKCS11</name>
+    <name>QCryptoBackend</name>
     <message>
         <source>PIN Canceled</source>
         <translation>PIN-код отменен</translation>
@@ -2280,8 +2366,15 @@ Kонтрольный код: %1</translation>
         <translation>Ошибка PKCS11 устройства</translation>
     </message>
     <message>
-        <source>PKCS11 unknown error</source>
-        <translation>Неизвестная ошибка PKCS11</translation>
+        <source>Unknown error</source>
+        <translation>Неизвестная ошибка</translation>
+    </message>
+</context>
+<context>
+    <name>QFileDialog</name>
+    <message>
+        <source>All Files (*)</source>
+        <translation>Все файлы (*)</translation>
     </message>
 </context>
 <context>
@@ -2296,7 +2389,7 @@ Kонтрольный код: %1</translation>
     </message>
     <message>
         <source>Failed to login token</source>
-        <translation>PIN код не подтвежден</translation>
+        <translation>PIN-код не подтвежден</translation>
     </message>
     <message>
         <source>Failed to sign document</source>
@@ -2323,26 +2416,26 @@ Kонтрольный код: %1</translation>
     <name>QSmartCard</name>
     <message>
         <source>To change %1 on a PinPad reader the old %1 code has to be entered first and then the new %1 code twice.</source>
-        <translation>Для замены %1 кода Вам необходимо ввести один раз&lt;br&gt;действующий %1 код и два раза новый %1 код с помощью PinPad.</translation>
+        <translation>Для замены %1-кода Вам необходимо ввести один раз&lt;br&gt;действующий %1-код и два раза новый %1-код с помощью PinPad.</translation>
     </message>
     <message>
         <source>To change %1 code with the PUK code on a PinPad reader the PUK code has to be entered first and then the %1 code twice.</source>
-        <translation>Для изменения %1 кода с помощью PUK кода Вам необходимо&lt;br&gt;ввести один раз PUK код и два раза новый %1 код с помощью PinPad.</translation>
+        <translation>Для изменения %1-кода с помощью PUK-кода Вам необходимо&lt;br&gt;ввести один раз PUK-код и два раза новый %1-код с помощью PinPad.</translation>
     </message>
     <message>
         <source>To unblock the %1 code on a PinPad reader the PUK code has to be entered first and then the %1 code twice.</source>
-        <translation>Для разблокировки %1 кода Вам необходимо ввести один раз&lt;br&gt;PUK код и два раза новый %1 код с помощью PinPad.</translation>
+        <translation>Для разблокировки %1-кода Вам необходимо ввести один раз&lt;br&gt;PUK-код и два раза новый %1-код с помощью PinPad.</translation>
     </message>
 </context>
 <context>
     <name>RoleAddressDialog</name>
     <message>
-        <source>Role / resolution</source>
-        <translation>Роль / pезолюция</translation>
+        <source>Enter your role and address info</source>
+        <translation>Введите свою роль и адрес</translation>
     </message>
     <message>
-        <source>Address</source>
-        <translation>Адрес</translation>
+        <source>Role / resolution</source>
+        <translation>Роль / pезолюция</translation>
     </message>
     <message>
         <source>City</source>
@@ -2363,6 +2456,18 @@ Kонтрольный код: %1</translation>
     <message>
         <source>SIGN</source>
         <translation>ПОДПИСАТЬ</translation>
+    </message>
+    <message>
+        <source>Sign</source>
+        <translation>Подписать</translation>
+    </message>
+    <message>
+        <source>CANCEL</source>
+        <translation>ОТМЕНА</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
     </message>
 </context>
 <context>
@@ -2486,10 +2591,6 @@ Kонтрольный код: %1</translation>
         <translation>Желаю подписывать ИД-картами Латвии и Литвы</translation>
     </message>
     <message>
-        <source>Restart now</source>
-        <translation>Начать заново</translation>
-    </message>
-    <message>
         <source>Show print summary</source>
         <translation>Показать подтверждающий лист</translation>
     </message>
@@ -2502,8 +2603,8 @@ Kонтрольный код: %1</translation>
         <translation>Доступ к услуге подтверждения действительности</translation>
     </message>
     <message>
-        <source>https://www.id.ee/index.php?id=39245</source>
-        <translation>https://www.id.ee/index.php?id=39246</translation>
+        <source>https://www.id.ee/en/article/access-certificate-what-is-it/</source>
+        <translation>https://www.id.ee/ru/artikkel/chto-takoe-sertifikat-dostupa/</translation>
     </message>
     <message>
         <source>Server access certificate</source>
@@ -2530,8 +2631,8 @@ Kонтрольный код: %1</translation>
         <translation>Доступ к услугам отметки времени</translation>
     </message>
     <message>
-        <source>https://www.id.ee/index.php?id=39076</source>
-        <translation>https://www.id.ee/index.php?id=39077</translation>
+        <source>https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/</source>
+        <translation>https://www.id.ee/ru/artikkel/dlya-uchrezhdenij-v-kotoryh-v-bolshom-obeme-podpisyvayutsya-dokumenty-s-pomoshhyu-digidoc4-klienta/</translation>
     </message>
     <message>
         <source>No proxy</source>
@@ -2570,16 +2671,8 @@ Kонтрольный код: %1</translation>
         <translation>Настройки Интернета верны, услуга подтверждения действительности доступна!</translation>
     </message>
     <message>
-        <source>Base version:</source>
-        <translation>Базовая версия:</translation>
-    </message>
-    <message>
         <source>DigiDoc4 client</source>
         <translation>DigiDoc4 клиент</translation>
-    </message>
-    <message>
-        <source>%1 version %2, released %3%4</source>
-        <translation>%1 версия %2, выпущенный %3%4</translation>
     </message>
     <message>
         <source>Checking updates has failed.</source>
@@ -2607,10 +2700,10 @@ Kонтрольный код: %1</translation>
     </message>
     <message>
         <source>&lt;p&gt;Estonian ID-software is released by Information Systems&apos;s Authority&lt;br /&gt;
-In case of questions please contact our support via &lt;a href=&quot;https://id.ee/?lang=en&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;id.ee&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
+In case of questions please contact our support via &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;id.ee&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
 Additional licenses and components</source>
         <translation>&lt;p&gt;Разработчиком программного обеспечения ID-карты является Riigi Infosüsteemi Amet.&lt;br /&gt;
-Если у вас возникнут вопросы, пожалуйста, обратитесь на &lt;a href=&quot;https://id.ee/?lang=ru&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;id.ee&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
+Если у вас возникнут вопросы, пожалуйста, обратитесь на &lt;a href=&quot;https://www.id.ee/ru/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;id.ee&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
 Дополнительные лицензии и компоненты</translation>
     </message>
     <message>
@@ -2632,10 +2725,6 @@ Additional licenses and components</source>
     <message>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
-    </message>
-    <message>
-        <source>Error occurred</source>
-        <translation>Возникла ошибка</translation>
     </message>
     <message>
         <source>Failed write to file!</source>
@@ -2710,16 +2799,57 @@ Additional licenses and components</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <source>Access to Mobile-ID and Smart-ID service</source>
-        <translation>Доступ к услуге Mobiil-ID и Smart-ID</translation>
+        <source>Access to mobile-ID and Smart-ID service</source>
+        <translation>Доступ к услуге mobiil-ID и Smart-ID</translation>
     </message>
     <message>
-        <source>https://www.id.ee/index.php?id=39023</source>
-        <translation>https://www.id.ee/index.php?id=39025</translation>
-    </message>
-    <message>
-        <source>Digidoc4 client configuration update was successful.</source>
+        <source>DigiDoc4 client configuration update was successful.</source>
         <translation>Обновление конфигурации программы DigiDoc4 удачно завершено.</translation>
+    </message>
+    <message>
+        <source>%1 version %2, released %3</source>
+        <translation>%1 версия %2, выпущенный %3</translation>
+    </message>
+    <message>
+        <source>Applying this setting requires application restart. Restart now?</source>
+        <translation>Применение этого параметра требует перезапуска приложения. Перезапустить приложение?</translation>
+    </message>
+    <message>
+        <source>YES</source>
+        <translation>ДА</translation>
+    </message>
+    <message>
+        <source>NO</source>
+        <translation>НЕТ</translation>
+    </message>
+    <message>
+        <source>Use default access</source>
+        <translation>Использовать доступ, назначенный по умолчанию</translation>
+    </message>
+    <message>
+        <source>Use manually configured access</source>
+        <translation>Использовать доступ, назначенный вручную</translation>
+    </message>
+    <message>
+        <source>Enable one-time log generation</source>
+        <translation>Активировать одноразовое создание лог-файла</translation>
+    </message>
+    <message>
+        <source>Save log</source>
+        <extracomment>accessible</extracomment>
+        <translation>Сохранить лог-файл</translation>
+    </message>
+    <message>
+        <source>SAVE LOG</source>
+        <translation>СОХРАНИТЬ ЛОГ-ФАЙЛ</translation>
+    </message>
+    <message>
+        <source>Restart DigiDoc4 Client to activate logging. Read more &lt;a href=&quot;https://www.id.ee/en/article/log-file-generation-in-digidoc4-client/&quot;&gt;here&lt;/a&gt;. Restart now?</source>
+        <translation>Перезапустите клиент DigiDoc4, чтобы активировать ведение журнала. Подробнее читайте &lt;a href=&quot;https://www.id.ee/ru/artikkel/generirovanie-log-fajla-v-kliente-digidoc4/&quot;&gt;здесь&lt;/a&gt;. Перезапустить приложение?</translation>
+    </message>
+    <message>
+        <source>Restart DigiDoc4 Client to activate logging. Read more &lt;a href=&quot;https://www.id.ee/en/article/log-file-generation-in-digidoc4-client/&quot;&gt;here&lt;/a&gt;.</source>
+        <translation>Перезапустите клиент DigiDoc4, чтобы активировать ведение журнала. Подробнее читайте &lt;a href=&quot;https://www.id.ee/ru/artikkel/generirovanie-log-fajla-v-kliente-digidoc4/&quot;&gt;здесь&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -2831,16 +2961,16 @@ Additional licenses and components</source>
         <translation>недействителен</translation>
     </message>
     <message>
-        <source>Test signature is signed with test certificates that are similar to the certificates of real tokens, but digital signatures with legal force cannot be given with them as there is no actual owner of the card. &lt;a href=&apos;http://www.id.ee/index.php?id=30494&apos;&gt;Additional information&lt;/a&gt;.</source>
-        <translation>Пробная подпись создается пробным сертификатом, который отличается от настоящего тем, что с пробным сертификатом нельзя поставить юридически действительную подись, потому что владелец карты на самом деле не существует. &lt;a href=&apos;http://www.id.ee/index.php?id=30494&apos;&gt;Дополнительная информация&lt;/a&gt;.</translation>
+        <source>Test signature is signed with test certificates that are similar to the certificates of real tokens, but digital signatures with legal force cannot be given with them as there is no actual owner of the card. &lt;a href=&apos;https://www.id.ee/en/article/verifying-signatures-given-with-test-certificates-in-the-digidoc4-client/&apos;&gt;Additional information&lt;/a&gt;.</source>
+        <translation>Пробная подпись создается пробным сертификатом, который отличается от настоящего тем, что с пробным сертификатом нельзя поставить юридически действительную подись, потому что владелец карты на самом деле не существует. &lt;a href=&apos;https://www.id.ee/en/article/verifying-signatures-given-with-test-certificates-in-the-digidoc4-client/&apos;&gt;Дополнительная информация&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>This is an invalid signature or malformed digitally signed file. The signature is not valid.</source>
         <translation>Повреждена подпись или подписанный файл. Данная подпись недействительна.</translation>
     </message>
     <message>
-        <source>Signature status is displayed &quot;unknown&quot; if you don&apos;t have all validity confirmation service certificates and/or certificate authority certificates installed into your computer (&lt;a href=&apos;http://id.ee/?lang=en&amp;id=34317&apos;&gt;additional information&lt;/a&gt;).</source>
-        <translation>Статус подписи отображается как &quot;неизвестный&quot;, если на компьютере не установлены необходимые для проверки подписи сертификаты сертифицирующей организации и/или услуги подтверждения действительности (&lt;a href=&apos;http://id.ee/?lang=ru&amp;id=34529&apos;&gt;дополнительная информация&lt;/a&gt;).</translation>
+        <source>Signature status is displayed &quot;unknown&quot; if you don&apos;t have all validity confirmation service certificates and/or certificate authority certificates installed into your computer (&lt;a href=&apos;https://www.id.ee/en/article/digidoc4-klient-viga-36-failed-to-validate-signature-libdigidoc-code-36-message-signers-cert-not-trusted-missing-ca-cert/&apos;&gt;additional information&lt;/a&gt;).</source>
+        <translation>Статус подписи отображается как &quot;неизвестный&quot;, если на компьютере не установлены необходимые для проверки подписи сертификаты сертифицирующей организации и/или услуги подтверждения действительности (&lt;a href=&apos;https://www.id.ee/ru/artikkel/digidoc4-klient-oshibka-36-failed-to-validate-signature-libdigidoc-code-36-message-signers-cert-not-trusted-missing-ca-cert/&apos;&gt;дополнительная информация&lt;/a&gt;).</translation>
     </message>
     <message>
         <source>Signer&apos;s Certificate issuer</source>
@@ -2911,22 +3041,25 @@ Additional licenses and components</source>
         <translation>Время подтверждения подлинности подписи</translation>
     </message>
     <message>
-        <source>Signer&apos;s computer time (UTC)</source>
-        <translation>Время на компьютере подписывающего (UTC)</translation>
+        <source>Claimed signing time (UTC)</source>
+        <translation>Заявленное время подписания (UTC)</translation>
     </message>
     <message>
         <source>SIGNATURE_WARNING</source>
-        <translation>Подпись действительна, но у контейнера имеется какая-то особенность. Чаще всего, такая особенность возникает при изготовлении контейнеров случайно. Однако поскольку контейнер невозможно изменить без потери действительности подписи, то отображается &lt;a href=&apos;https://www.id.ee/?lang=en&amp;id=38500&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: underline; font-weight: 900;&apos;&gt;предупреждение&lt;/span&gt;&lt;/a&gt;.</translation>
-    </message>
-    <message>
-        <source>Technical information</source>
-        <comment>accessible</comment>
-        <translation>Техническая информация</translation>
+        <translation>Подпись действительна, но у контейнера имеется какая-то особенность. Чаще всего, такая особенность возникает при изготовлении контейнеров случайно. Однако поскольку контейнер невозможно изменить без потери действительности подписи, то отображается &lt;a href=&apos;https://www.id.ee/ru/artikkel/czifrovoe-podpisanie-i-elektronnye-podpisi/&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: underline; font-weight: 900;&apos;&gt;предупреждение&lt;/span&gt;&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>Close</source>
         <extracomment>accessible</extracomment>
         <translation>Закрыть</translation>
+    </message>
+    <message>
+        <source>Signing time (UTC)</source>
+        <translation>Время подписания (UTC)</translation>
+    </message>
+    <message>
+        <source>ROLE AND ADDRESS</source>
+        <translation>РОЛЬ И АДРЕС</translation>
     </message>
 </context>
 <context>
@@ -3129,6 +3262,10 @@ Additional licenses and components</source>
         <source>Digi-ID</source>
         <translation>Digi-ID</translation>
     </message>
+    <message>
+        <source>Digi-ID E-RESIDENT</source>
+        <translation>Digi-ID E-RESIDENT</translation>
+    </message>
 </context>
 <context>
     <name>VerifyCert</name>
@@ -3178,11 +3315,11 @@ Additional licenses and components</source>
     </message>
     <message>
         <source>PUK code</source>
-        <translation>PUK код</translation>
+        <translation>PUK-код</translation>
     </message>
     <message>
         <source>The PUK code is located in your envelope</source>
-        <translation>PUK код находится в конверте</translation>
+        <translation>PUK-код находится в конверте</translation>
     </message>
     <message>
         <source>CHANGE PUK</source>
@@ -3190,7 +3327,7 @@ Additional licenses and components</source>
     </message>
     <message>
         <source>PUK code is blocked because the PUK code has been entered 3 times incorrectly. You can not unblock the PUK code yourself. As long as the PUK code is blocked, all eID options can be used, except PUK code. Please visit the service center to obtain new codes. &lt;a href=&quot;https://www.politsei.ee/en/instructions/applying-for-an-id-card-for-an-adult/reminders-for-id-card-holders/&quot;&gt;Additional information&lt;/a&gt;.</source>
-        <translation>PUK заблокирован, потому что PUK введен неверно 3 раза. PUK невозможно разблокировать самому. &lt;br&gt;&lt;br&gt;Пока PUK код заблокирован, можно использовать все возможности eID, кроме тех которые требуют PUK. &lt;br&gt;&lt;br&gt;Для получения нового PUK кода для своей ID-карты, посетите центр обслуживания, где вы сможете получить конверт с кодами. &lt;a href=&quot;https://www.politsei.ee/ru/instruktsii/hodataystvo-o-vydache-id-karty-vzroslomu/pamyatka-dlya-polzovatelya-id-karti/&quot;&gt;Дополнительная информация&lt;/a&gt;.</translation>
+        <translation>PUK заблокирован, потому что PUK введен неверно 3 раза. PUK невозможно разблокировать самому. &lt;br&gt;&lt;br&gt;Пока PUK-код заблокирован, можно использовать все возможности eID, кроме тех которые требуют PUK. &lt;br&gt;&lt;br&gt;Для получения нового PUK-кода для своей ID-карты, посетите центр обслуживания, где вы сможете получить конверт с кодами. &lt;a href=&quot;https://www.politsei.ee/ru/instruktsii/hodataystvo-o-vydache-id-karty-vzroslomu/pamyatka-dlya-polzovatelya-id-karti/&quot;&gt;Дополнительная информация&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>PIN can be changed only using eToken utility</source>
@@ -3212,18 +3349,35 @@ Additional licenses and components</source>
     </message>
     <message>
         <source>PIN%1 has been blocked because PIN%1 code has been entered incorrectly 3 times.</source>
-        <translation>PIN%1 заблокирован, потому что PIN%1 код был введен неверно 3 раза.</translation>
+        <translation>PIN%1 заблокирован, потому что PIN%1-код был введен неверно 3 раза.</translation>
     </message>
     <message>
         <source>Unblock to reuse PIN%1.</source>
         <translation>Разблокируйте его для повторного использования PIN%1.</translation>
     </message>
-</context>
-<context>
-    <name>WaitDialog</name>
     <message>
-        <source>Decrypting</source>
-        <translation>Расшифровка</translation>
+        <source>Check certificate status</source>
+        <translation>Проверить статус сертификата</translation>
+    </message>
+    <message>
+        <source>Your ID-card authentication certificate is valid. </source>
+        <translation>Сертификат идентификации личности в вашей ID-карте действителен. </translation>
+    </message>
+    <message>
+        <source>Your ID-card signing certificate is valid. </source>
+        <translation>Сертификат подписи в вашей ID-карте действителен. </translation>
+    </message>
+    <message>
+        <source>Your ID-card signing certificate is not valid. You need valid certificates to use your ID-card electronically. </source>
+        <translation>Сертификат подписи вашей ID-карты недействителен. Для электронного использования ID-карты требуются действующие сертификаты. </translation>
+    </message>
+    <message>
+        <source>Your ID-card authentication certificate is not valid. You need valid certificates to use your ID-card electronically. </source>
+        <translation>Сертификат идентификации личности в вашей ID-карте недействителен. Для электронного использования ID-карты требуются действующие сертификаты. </translation>
+    </message>
+    <message>
+        <source>Read more &lt;a href=&quot;https://www.id.ee/en/article/validity-of-id-card-certificates/&quot;&gt;here&lt;/a&gt;.</source>
+        <translation>Подробнее читайте &lt;a href=&quot;https://www.id.ee/ru/artikkel/dejstvitelnost-sertifikatov-id-karty/&quot;&gt;здесь&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -3255,6 +3409,14 @@ Additional licenses and components</source>
     <message>
         <source>Certificates are revoked!</source>
         <translation>Сертификаты отозваны!</translation>
+    </message>
+    <message>
+        <source>Additional information</source>
+        <translation>Дополнительная информация</translation>
+    </message>
+    <message>
+        <source>https://www.id.ee/en/article/the-majority-of-electronically-used-id-cards-were-renewed/</source>
+        <translation>https://www.id.ee/ru/artikkel/obnovleno-bolshinstvo-zatronutyh-riskom-id-kart-kotorye-ispolzovalis-elektronno/</translation>
     </message>
     <message numerus="yes">
         <source>%n signatures are not valid</source>
@@ -3289,16 +3451,20 @@ Additional licenses and components</source>
         </translation>
     </message>
     <message>
-        <source>http://id.ee/?lang=en&amp;id=34317</source>
-        <translation>https://www.id.ee/index.php?id=38500</translation>
-    </message>
-    <message>
-        <source>https://www.id.ee/index.php?id=30591</source>
-        <translation>https://www.id.ee/index.php?id=38500</translation>
+        <source>https://www.id.ee/en/article/digital-signing-and-electronic-signatures/</source>
+        <translation>https://www.id.ee/ru/artikkel/czifrovoe-podpisanie-i-elektronnye-podpisi/</translation>
     </message>
     <message>
         <source>More information</source>
         <translation>Дополнительная информация</translation>
+    </message>
+    <message>
+        <source>https://www.id.ee/en/article/digidoc-container-format-life-cycle-2/</source>
+        <translation>https://www.id.ee/en/article/digidoc-container-format-life-cycle-2/</translation>
+    </message>
+    <message>
+        <source>The current file is a DigiDoc container that is not supported officially any longer. You are not allowed to add or remove signatures to this container.</source>
+        <translation>DigiDoc контейнер имеет старый формат. К данному контейнеру нельзя добавить или удалить из него подпись.</translation>
     </message>
 </context>
 <context>

@@ -4,9 +4,10 @@
 		<file>accordion_arrow_right.svg</file>
 		<file>arrow_down.svg</file>
 		<file>arrow_down_selected.svg</file>
+		<file>arrow_up.svg</file>
 		<file>arrow_up_white.svg</file>
 		<file>bg_lovid.svg</file>
-		<file>digidoc_icon_128x128.png</file>
+		<file>digidoc_128.png</file>
 		<file>icon_Abi.svg</file>
 		<file>icon_Abi_hover.svg</file>
 		<file>icon_ajatempel.svg</file>
@@ -22,8 +23,6 @@
 		<file>icon_checkbox.png</file>
 		<file>icon_checkbox_check.png</file>
 		<file>icon_digitempel.svg</file>
-		<file>icon_dot.png</file>
-		<file>icon_dot_active.png</file>
 		<file>icon_download_hover.svg</file>
 		<file>icon_download.svg</file>
 		<file>icon_download_pressed.svg</file>
@@ -62,7 +61,6 @@
 		<file>intro_eid-manage_en.png</file>
 		<file>intro_eid-manage_et.png</file>
 		<file>intro_eid-manage_ru.png</file>
-		<file>intro_eid-other.png</file>
 		<file>intro_eid-info_en.png</file>
 		<file>intro_eid-info_et.png</file>
 		<file>intro_eid-info_ru.png</file>
@@ -82,6 +80,6 @@
 		<file>Logo_Suur.svg</file>
 		<file>Struktuurifondid.svg</file>
 		<file>vapilehed.svg</file>
-		<file>wait.gif</file>
+		<file>wait.svg</file>
 	</qresource>
 </RCC>

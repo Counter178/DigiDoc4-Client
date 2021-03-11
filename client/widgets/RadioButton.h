@@ -1,5 +1,5 @@
 /*
- * QEstEidCommon
+ * QDigiDoc4
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,31 +19,14 @@
 
 #pragma once
 
-#include <QString>
-#include <QTextStream>
+#include <QRadioButton>
 
-class CliApplication: public QObject
+class RadioButton : public QRadioButton
 {
 	Q_OBJECT
 public:
-	CliApplication( int &argc, char **argv, const QString &appName );
-	CliApplication( int &argc, char **argv, const QString &appName, const QString &outFile );
-
-	bool isDiagnosticRun();
-	int run() const;
-
-public slots:
-	void exit() const;
-
-
-protected:
-	// Override method to add an application-specific message
-	// to the diagnostics after the "URLs" block
-	virtual void diagnostics( QTextStream &s ) const;
+	explicit RadioButton(QWidget *parent = nullptr);
 
 private:
-	int &argc;
-	char **argv;
-	QString appName;
-	QString outFile;
+	void paintEvent(QPaintEvent *event) override;
 };

@@ -24,8 +24,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: #FFFFFF;
-border: solid #DFE5E9;
-border-width: 1px 0px 0px 0px;</string>
+border: none;</string>
   </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
@@ -61,20 +60,14 @@ border-width: 1px 0px 0px 0px;</string>
     <string notr="true">border: none;
 color: #353739;</string>
    </property>
-   <property name="text">
-    <string notr="true">TextLabel</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-   </property>
   </widget>
   <widget class="QSvgWidget" name="icon" native="true">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
+     <x>15</x>
+     <y>17</y>
      <width>12</width>
-     <height>16</height>
+     <height>6</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -86,7 +79,7 @@ color: #353739;</string>
   <customwidget>
    <class>QSvgWidget</class>
    <extends>QWidget</extends>
-   <header location="global">QtSvg/QSvgWidget.h</header>
+   <header location="global">QtSvg/QSvgWidget</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -25,31 +25,21 @@ namespace Ui {
 class WaitDialog;
 }
 
-class Overlay;
-
 class WaitDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
-	explicit WaitDialog(QWidget *parent = nullptr, Overlay *o = nullptr);
+	explicit WaitDialog(QWidget *parent = nullptr);
 	~WaitDialog();
 
-	int exec() override;
-	void open() override;
-	QString text();
-
-	static WaitDialog* create(QWidget *parent, Overlay *o = nullptr);
+	static WaitDialog* create(QWidget *parent);
 	static void destroy();
 
-	void closeOverlay();
-	Overlay* detachOverlay();
 	static WaitDialog* instance();
-	void showOverlay();
 	void setText(const QString &text);
 
 private:
 	Ui::WaitDialog *ui;
-	Overlay *overlay = nullptr;
 	static WaitDialog *waitDialog;
 };

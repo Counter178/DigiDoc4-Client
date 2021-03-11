@@ -26,7 +26,6 @@
 #include <QDialog>
 #include <QHash>
 
-
 namespace Ui {
 class AddRecipients;
 }
@@ -34,7 +33,7 @@ class AddRecipients;
 class LdapSearch;
 class QSslCertificate;
 
-class AddRecipients : public QDialog
+class AddRecipients final : public QDialog
 {
 	Q_OBJECT
 
@@ -42,7 +41,6 @@ public:
 	explicit AddRecipients(ItemList* itemList, QWidget *parent = nullptr);
 	~AddRecipients() final;
 
-	int exec() override;
 	QList<CKey> keys();
 	bool isUpdated();
 
@@ -52,12 +50,12 @@ private:
 	void addRecipientFromFile();
 	void addRecipientFromHistory();
 	AddressItem * addRecipientToLeftPane(const QSslCertificate& cert);
-	void addRecipientToRightPane(Item* toAdd, bool update = true);
+	bool addRecipientToRightPane(const CKey &key, bool update = true);
+	void addRecipientToRightPane(AddressItem *leftItem, bool update = true);
 
 	void addSelectedCerts(const QList<HistoryCertData>& selectedCertData);
 
 	void enableRecipientFromCard();
-	void initAddressItems(const std::vector<Item*>& items);
 
 	QString path() const;
 	void rememberCerts(const QList<HistoryCertData>& selectedCertData);
@@ -65,17 +63,18 @@ private:
 	void removeSelectedCerts(const QList<HistoryCertData>& removeCertData);
 
 	void saveHistory();
-	void search(const QString &term);
-	void showError(const QString &msg, const QString &details = QString());
-	void showResult(const QList<QSslCertificate> &result);
+	void search(const QString &term, bool select = false, const QString &type = {});
+	void showError(const QString &msg, const QString &details = {});
+	void showResult(const QList<QSslCertificate> &result, int resultCount, const QVariantMap &userData);
 	HistoryCertData toHistory(const QSslCertificate& cert) const;
+	QString toType(const SslCertificate &cert) const;
+
+	static QString defaultUrl(const QString &key, const QString &defaultValue);
 
 	Ui::AddRecipients *ui;
 	QHash<QSslCertificate, AddressItem *> leftList;
 	QList<QSslCertificate> rightList;
 	LdapSearch *ldap_person, *ldap_corp;
-	bool personSearch = false;
-	bool select = false;
 	bool updated = false;
 
 	QList<HistoryCertData> historyCertData;

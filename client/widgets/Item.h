@@ -21,19 +21,21 @@
 
 #include "widgets/StyledWidget.h"
 
+class SslCertificate;
+
 class Item : public StyledWidget
 {
 	Q_OBJECT
 
 public:
-	explicit Item(QWidget *parent = nullptr);
+	using StyledWidget::StyledWidget;
 
 	virtual QString id() const;
 	virtual QWidget* initTabOrder(QWidget *item);
 
 public slots:
 	virtual void details();
-	virtual void idChanged(const QString& cardCode, const QString& mobileCode, const QByteArray& serialNumber);
+	virtual void idChanged(const SslCertificate &cert);
 
 signals:
 	void add(Item* item);

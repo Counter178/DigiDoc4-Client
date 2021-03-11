@@ -21,8 +21,10 @@
 
 #include <QDialog>
 
+namespace Ui { class CertificateDetails; }
 class SslCertificate;
-class CertificateDetails : public QDialog
+
+class CertificateDetails final : public QDialog
 {
 	Q_OBJECT
 
@@ -31,11 +33,8 @@ public:
 	~CertificateDetails() final;
 
 	static QString decodeCN(const QString &cn);
-	static void showCertificate(const SslCertificate &cert, QWidget *parent, const QString &suffix = QString());
+	static void showCertificate(const SslCertificate &cert, QWidget *parent, const QString &suffix = {});
 
 private:
-	void saveCert();
-
-	class Private;
-	Private *ui;
+	Ui::CertificateDetails *ui;
 };

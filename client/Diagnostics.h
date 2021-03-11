@@ -29,7 +29,6 @@ class Diagnostics: public QObject, public QRunnable
 	Q_OBJECT
 public:
 	Diagnostics();
-	explicit Diagnostics(QString appInfo);
 
 	void run() override;
 
@@ -37,9 +36,13 @@ signals:
 	void update( const QString &data );
 
 private:
-	QString appInfoMsg;
-	bool hasAppInfo = true;
-
 	void generalInfo(QTextStream &s) const;
-	void appInfo(QTextStream &s) const;
+	QStringList packages(const QStringList &names, bool withName = true);
+
+#if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
+	QString packageName(const QString &name, const QString &ver, bool withName)
+	{
+		return withName ? name + " (" + ver + ")" : ver;
+	}
+#endif
 };

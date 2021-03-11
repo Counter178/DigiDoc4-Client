@@ -20,16 +20,9 @@
 #pragma once
 
 #include "common_enums.h"
-#include "widgets/ItemList.h"
 #include "widgets/MainAction.h"
-#include "widgets/WarningItem.h"
 
-#include <QPushButton>
-#include <QResizeEvent>
-#include <QWidget>
-#include <vector>
 #include <memory>
-
 
 namespace Ui {
 class ContainerPage;
@@ -38,11 +31,11 @@ class ContainerPage;
 class CKey;
 class CryptoDoc;
 class DigiDoc;
-class QFont;
-class QFontMetrics;
 class SignatureItem;
+class SslCertificate;
+class WarningText;
 
-class ContainerPage : public QWidget
+class ContainerPage final : public QWidget
 {
 	Q_OBJECT
 
@@ -50,6 +43,8 @@ public:
 	explicit ContainerPage( QWidget *parent = nullptr );
 	~ContainerPage() final;
 
+	void cardChanged(const SslCertificate &cert, bool isBlocked = false);
+	void cardChanged(const QString &idCode);
 	void clear();
 	void setHeader(const QString &file);
 	void transition(CryptoDoc *container, bool canDecrypt);
@@ -57,9 +52,8 @@ public:
 	void update(bool canDecrypt, CryptoDoc *container = nullptr);
 
 signals:
-	void action(int code, const QString &info1 = QString(), const QString &info2 = QString());
+	void action(int code, const QString &info1 = {}, const QString &info2 = {});
 	void addFiles(const QStringList &files);
-	void cardChanged(const QString& idCode = QString(), bool seal = false, bool isExpired = false, const QByteArray &serialNumber = QByteArray());
 	void details(const QString &id);
 	void fileRemoved(int row);
 	void keysSelected(const QList<CKey> &keys);
@@ -77,7 +71,6 @@ protected:
 private:
 	void addError(const SignatureItem* item, QMap<ria::qdigidoc4::WarningType, int> &errors);
 	void addressSearch();
-	void changeCard(const QString& idCode, bool isSeal, bool isExpired);
 	bool checkAction(int code, const QString& selectedCard, const QString& selectedMobile);
 	void elideFileName(bool force = false);
 	bool eventFilter(QObject *o, QEvent *e) override;
@@ -85,7 +78,6 @@ private:
 	void hideMainAction();
 	void hideRightPane();
 	void initContainer( const QString &file, const QString &suffix );
-	void showDropdown();
 	void showMainAction(const QList<ria::qdigidoc4::Actions> &actions);
 	void showRightPane(ria::qdigidoc4::ItemType itemType, const QString &header);
 	void showSigningButton();
@@ -97,13 +89,13 @@ private:
 	std::unique_ptr<MainAction> mainAction;
 	QString cardInReader;
 	int containerFileWidth;
-	bool elided;
 	QString fileName;
 	QString mobileCode;
 
-	const char *cancelText;
-	const char *convertText;
-	bool canDecrypt = false;
-	bool seal = false;
+	const char *cancelText = "CANCEL";
+	const char *convertText = "ENCRYPT";
+	bool isSupported = false;
+	bool isSeal = false;
 	bool isExpired = false;
+	bool isBlocked = false;
 };

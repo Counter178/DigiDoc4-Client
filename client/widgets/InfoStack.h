@@ -19,17 +19,17 @@
 
 #pragma once
 
-#include "Styles.h"
 #include "widgets/StyledWidget.h"
+
+#include "QSmartCard.h"
 
 namespace Ui {
 class InfoStack;
 }
 
-struct QCardInfo;
-class QSmartCardData;
+class SslCertificate;
 
-class InfoStack : public StyledWidget, public PictureInterface
+class InfoStack final: public StyledWidget
 {
 	Q_OBJECT
 
@@ -38,10 +38,9 @@ public:
 	~InfoStack() final;
 
 	void clearData();
-	void clearPicture() final;
-	void update(const QCardInfo &cardInfo);
+	void update(const SslCertificate &cert);
 	void update(const QSmartCardData &t);
-	void showPicture(const QPixmap &pixmap) final;
+	void showPicture(const QPixmap &pixmap);
 
 signals:
 	void photoClicked(const QPixmap &pixmap);
@@ -52,17 +51,16 @@ protected:
 
 private:
 	void update();
+	void clearPicture();
 
 	Ui::InfoStack *ui;
 
+	QSmartCardData data;
 	int certType = 0;
-	bool certIsValid = false;
-	bool certIsResident = false;
 	QString citizenshipText;
-	QString expireDate;
 	QString givenNamesText;
 	QString personalCodeText;
 	QString serialNumberText;
 	QString surnameText;
-	const char *pictureText;
+	const char *pictureText = "DOWNLOAD";
 };

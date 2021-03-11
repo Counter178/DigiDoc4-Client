@@ -26,17 +26,19 @@
 #include "FileDialog.h"
 #include "QSigner.h"
 #include "Styles.h"
+#include "TokenData.h"
 #include "crypto/LdapSearch.h"
 #include "dialogs/WarningDialog.h"
 #include "effects/Overlay.h"
 
-#include <common/TokenData.h>
+#include <common/Configuration.h>
 #include <common/IKValidator.h>
 
 #include <QDebug>
 #include <QDateTime>
 #include <QSslKey>
 #include <QStandardPaths>
+#include <QtCore/QJsonObject>
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QXmlStreamWriter>
 #include <QtCore/QSettings>
@@ -46,12 +48,12 @@
 AddRecipients::AddRecipients(ItemList* itemList, QWidget *parent)
 	: QDialog(parent)
 	, ui(new Ui::AddRecipients)
-	, ldap_person(new LdapSearch(qApp->confValue(Application::LDAP_PERSON_URL).toByteArray(), this))
-	, ldap_corp(new LdapSearch(qApp->confValue(Application::LDAP_CORP_URL).toByteArray(), this))
+	, ldap_person(new LdapSearch(defaultUrl(QStringLiteral("LDAP-PERSON-URL"), QStringLiteral("ldaps://esteid.ldap.sk.ee")).toUtf8(), this))
+	, ldap_corp(new LdapSearch(defaultUrl(QStringLiteral("LDAP-CORP-URL"), QStringLiteral("ldaps://k3.ldap.sk.ee")).toUtf8(), this))
 {
 	ui->setupUi(this);
 	setWindowFlags( Qt::Dialog | Qt::CustomizeWindowHint );
-	setWindowModality( Qt::ApplicationModal );
+	new Overlay(this, parent->topLevelWidget());
 
 	ui->leftPane->init(ria::qdigidoc4::ToAddAdresses, QStringLiteral("Add recipients"));
 	ui->leftPane->setFont(Styles::font(Styles::Regular, 20));
@@ -68,7 +70,11 @@ AddRecipients::AddRecipients(ItemList* itemList, QWidget *parent)
 	ui->confirm->setDisabled(rightList.isEmpty());
 	connect(ui->confirm, &QPushButton::clicked, this, &AddRecipients::accept);
 	connect(ui->cancel, &QPushButton::clicked, this, &AddRecipients::reject);
-	connect(ui->leftPane, &ItemList::search, this, &AddRecipients::search);
+	connect(ui->leftPane, &ItemList::search, this, [&](const QString &term) {
+		leftList.clear();
+		ui->leftPane->clear();
+		search(term);
+	});
 	connect(ldap_person, &LdapSearch::searchResult, this, &AddRecipients::showResult);
 	connect(ldap_corp, &LdapSearch::searchResult, this, &AddRecipients::showResult);
 	connect(ldap_person, &LdapSearch::error, this, &AddRecipients::showError);
@@ -97,18 +103,18 @@ AddRecipients::AddRecipients(ItemList* itemList, QWidget *parent)
 	{
 		if( xml.name() == "item" )
 		{
-			historyCertData.append(
-				{
-					xml.attributes().value( "CN" ).toString(),
-					xml.attributes().value( "type" ).toString(),
-					xml.attributes().value( "issuer" ).toString(),
-					xml.attributes().value( "expireDate" ).toString()
-				});
+			historyCertData.append({
+				xml.attributes().value( "CN" ).toString(),
+				xml.attributes().value( "type" ).toString(),
+				xml.attributes().value( "issuer" ).toString(),
+				xml.attributes().value( "expireDate" ).toString()
+			});
 		}
 		xml.skipCurrentElement();
 	}
 
-	initAddressItems(itemList->items);
+	for(Item *item: itemList->items)
+		addRecipientToRightPane((qobject_cast<AddressItem *>(item))->getKey(), false);
 }
 
 AddRecipients::~AddRecipients()
@@ -121,12 +127,12 @@ void AddRecipients::addAllRecipientToRightPane()
 {
 	QList<HistoryCertData> history;
 
-	for(auto it = leftList.begin(); it != leftList.end(); ++it)
+	for(AddressItem *value: leftList)
 	{
-		if(!rightList.contains(it.value()->getKey().cert))
+		if(!rightList.contains(value->getKey().cert))
 		{
-			addRecipientToRightPane(it.value());
-			history << toHistory(it.value()->getKey().cert);
+			addRecipientToRightPane(value);
+			history << toHistory(value->getKey().cert);
 		}
 	}
 	ui->confirm->setDisabled(rightList.isEmpty());
@@ -135,7 +141,7 @@ void AddRecipients::addAllRecipientToRightPane()
 
 void AddRecipients::addRecipientFromCard()
 {
-	if(Item *item = addRecipientToLeftPane(qApp->signer()->tokenauth().cert()))
+	if(AddressItem *item = addRecipientToLeftPane(qApp->signer()->tokenauth().cert()))
 		addRecipientToRightPane(item, true);
 }
 
@@ -168,11 +174,9 @@ void AddRecipients::addRecipientFromFile()
 	{
 		WarningDialog::warning( this, tr("This certificate cannot be used for encryption"));
 	}
-	else
+	else if(AddressItem *item = addRecipientToLeftPane(cert))
 	{
-		Item *item = addRecipientToLeftPane( cert );
-		if( item )
-			addRecipientToRightPane( item, true );
+		addRecipientToRightPane(item, true);
 	}
 	f.close();
 }
@@ -187,10 +191,11 @@ void AddRecipients::addRecipientFromHistory()
 
 AddressItem * AddRecipients::addRecipientToLeftPane(const QSslCertificate& cert)
 {
-	if(leftList.contains(cert))
-		return nullptr;
+	AddressItem *leftItem = leftList.value(cert);
+	if(leftItem)
+		return leftItem;
 
-	AddressItem *leftItem = new AddressItem(CKey(cert), ui->leftPane);
+	leftItem = new AddressItem(CKey(cert), ui->leftPane);
 	leftList.insert(cert, leftItem);
 	ui->leftPane->addWidget(leftItem);
 	bool contains = rightList.contains(cert);
@@ -198,7 +203,7 @@ AddressItem * AddRecipients::addRecipientToLeftPane(const QSslCertificate& cert)
 	leftItem->showButton(contains ? AddressItem::Added : AddressItem::Add);
 
 	connect(leftItem, &AddressItem::add, this, [this](Item *item) {
-		addRecipientToRightPane(item, true);
+		addRecipientToRightPane(static_cast<AddressItem*>(item), true);
 	});
 
 	if(QWidget *add = ui->leftPane->findChild<QWidget*>(QStringLiteral("add")))
@@ -207,52 +212,55 @@ AddressItem * AddRecipients::addRecipientToLeftPane(const QSslCertificate& cert)
 	return leftItem;
 }
 
-void AddRecipients::addRecipientToRightPane(Item *toAdd, bool update)
+bool AddRecipients::addRecipientToRightPane(const CKey &key, bool update)
 {
-	AddressItem *leftItem = qobject_cast<AddressItem *>(toAdd);
-
-	if (rightList.contains(leftItem->getKey().cert))
-		return;
+	if (rightList.contains(key.cert))
+		return false;
 
 	if(update)
 	{
-		auto expiryDate = leftItem->getKey().cert.expiryDate();
+		auto expiryDate = key.cert.expiryDate();
 		if(expiryDate <= QDateTime::currentDateTime())
 		{
 			WarningDialog dlg(tr("Are you sure that you want use certificate for encrypting, which expired on %1?<br />"
-					"When decrypter has updated certificates then decrypting is impossible.")
-					.arg(expiryDate.toString(QStringLiteral("dd.MM.yyyy hh:mm:ss"))), this);
+								 "When decrypter has updated certificates then decrypting is impossible.")
+								  .arg(expiryDate.toString(QStringLiteral("dd.MM.yyyy hh:mm:ss"))), this);
 			dlg.setCancelText(tr("NO"));
 			dlg.addButton(tr("YES"), QMessageBox::Yes);
-			dlg.exec();
-			if(dlg.result() != QMessageBox::Yes)
-				return;
+			if(dlg.exec() != QMessageBox::Yes)
+				return false;
 		}
-		QList<QSslError> errors = QSslCertificate::verify({ leftItem->getKey().cert });
-		errors.removeAll(QSslError(QSslError::CertificateExpired, leftItem->getKey().cert));
+		QList<QSslError> errors = QSslCertificate::verify({ key.cert });
+		errors.removeAll(QSslError(QSslError::CertificateExpired, key.cert));
 		if(!errors.isEmpty())
 		{
 			WarningDialog dlg(tr("Recipient’s certification chain contains certificates that are not trusted. Continue with encryption?"), this);
 			dlg.setCancelText(tr("NO"));
 			dlg.addButton(tr("YES"), QMessageBox::Yes);
-			dlg.exec();
-			if(dlg.result() != QMessageBox::Yes)
-				return;
+			if(dlg.exec() != QMessageBox::Yes)
+				return false;
 		}
 	}
 	updated = update;
 
-	rightList.append(leftItem->getKey().cert);
+	rightList.append(key.cert);
 
-	AddressItem *rightItem = new AddressItem(leftItem->getKey(), ui->leftPane);
+	AddressItem *rightItem = new AddressItem(key, ui->rightPane);
 	ui->rightPane->addWidget(rightItem);
 	rightItem->showButton(AddressItem::Remove);
 
 	connect(rightItem, &AddressItem::remove, this, &AddRecipients::removeRecipientFromRightPane );
-	leftItem->disable(true);
-	leftItem->showButton(AddressItem::Added);
 	ui->confirm->setDisabled(rightList.isEmpty());
-	rememberCerts({toHistory(leftItem->getKey().cert)});
+	rememberCerts({toHistory(key.cert)});
+	return true;
+}
+
+void AddRecipients::addRecipientToRightPane(AddressItem *leftItem, bool update)
+{
+	if(addRecipientToRightPane(leftItem->getKey(), update)) {
+		leftItem->disable(true);
+		leftItem->showButton(AddressItem::Added);
+	}
 }
 
 void AddRecipients::addSelectedCerts(const QList<HistoryCertData>& selectedCertData)
@@ -260,45 +268,27 @@ void AddRecipients::addSelectedCerts(const QList<HistoryCertData>& selectedCertD
 	if(selectedCertData.isEmpty())
 		return;
 
-	HistoryCertData certData = selectedCertData.first();
-	QString term = (certData.type == QStringLiteral("1") || certData.type == QStringLiteral("3")) ? certData.CN : certData.CN.split(',').value(2);
-	ui->leftPane->setTerm(term);
-	search(term);
-	select = true;
+	leftList.clear();
+	ui->leftPane->clear();
+	for(const HistoryCertData &certData: selectedCertData) {
+		QString term = (certData.type == QStringLiteral("1") || certData.type == QStringLiteral("3")) ? certData.CN : certData.CN.split(',').value(2);
+		search(term, true, certData.type);
+	}
+}
+
+QString AddRecipients::defaultUrl(const QString &key, const QString &defaultValue)
+{
+#ifdef CONFIG_URL
+	return Configuration::instance().object().value(key).toString(defaultValue);
+#else
+	Q_UNUSED(key)
+	return defaultValue;
+#endif
 }
 
 void AddRecipients::enableRecipientFromCard()
 {
 	ui->fromCard->setDisabled( qApp->signer()->tokenauth().cert().isNull() );
-}
-
-int AddRecipients::exec()
-{
-	Overlay overlay(parentWidget());
-	overlay.show();
-	auto rc = QDialog::exec();
-	overlay.close();
-
-	return rc;
-}
-
-void AddRecipients::initAddressItems(const std::vector<Item *> &items)
-{
-	for(Item *item: items)
-	{
-		AddressItem *leftItem = new AddressItem((qobject_cast<AddressItem *>(item))->getKey(), ui->leftPane);
-
-		// Add to left pane
-		leftList.insert(leftItem->getKey().cert, leftItem);
-		ui->leftPane->addWidget(leftItem);
-
-		leftItem->disable(true);
-		leftItem->showButton(AddressItem::Added);
-		connect(leftItem, &AddressItem::add, this, [this](Item *item){ addRecipientToRightPane(item, true); });
-
-		// Add to right pane
-		addRecipientToRightPane(leftItem, false);
-	}
 }
 
 bool AddRecipients::isUpdated()
@@ -396,45 +386,47 @@ void AddRecipients::saveHistory()
 	xml.writeEndDocument();
 }
 
-void AddRecipients::search(const QString &term)
+void AddRecipients::search(const QString &term, bool select, const QString &type)
 {
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 	ui->confirm->setDefault(false);
 	ui->confirm->setAutoDefault(false);
 	QRegExp isDigit( "\\d*" );
 
-	select = false;
-	personSearch = false;
-	if( isDigit.exactMatch(term) && (term.size() == 11 || term.size() == 8))
+	QVariantMap userData {
+		{"type", type},
+		{"select", select}
+	};
+	QString cleanTerm = term.simplified();
+	if(isDigit.exactMatch(cleanTerm) && (cleanTerm.size() == 11 || cleanTerm.size() == 8))
 	{
-		if(term.size() == 11)
+		if(cleanTerm.size() == 11)
 		{
-			if(!IKValidator::isValid(term))
+			if(!IKValidator::isValid(cleanTerm))
 			{
 				QApplication::restoreOverrideCursor();
 				WarningDialog::warning(this, tr("Personal code is not valid!"));
 				return;
 			}
-			personSearch = true;
-			ldap_person->search(QStringLiteral("(serialNumber=%1%2)" ).arg(ldap_person->isSSL() ? QStringLiteral("PNOEE-") : QString(), term));
+			userData["personSearch"] = true;
+			ldap_person->search(QStringLiteral("(serialNumber=%1%2)" ).arg(ldap_person->isSSL() ? QStringLiteral("PNOEE-") : QString(), cleanTerm), userData);
 		}
 		else
-			ldap_corp->search(QStringLiteral("(serialNumber=%1)" ).arg(term));
+			ldap_corp->search(QStringLiteral("(serialNumber=%1)" ).arg(cleanTerm), userData);
 	}
 	else
 	{
-		ldap_corp->search(QStringLiteral("(cn=*%1*)").arg(term));
+		ldap_corp->search(QStringLiteral("(cn=*%1*)").arg(cleanTerm), userData);
 	}
 }
 
 void AddRecipients::showError( const QString &msg, const QString &details )
 {
 	QApplication::restoreOverrideCursor();
-	WarningDialog b(msg, details, this);
-	b.exec();
+	WarningDialog(msg, details, this).exec();
 }
 
-void AddRecipients::showResult(const QList<QSslCertificate> &result)
+void AddRecipients::showResult(const QList<QSslCertificate> &result, int resultCount, const QVariantMap &userData)
 {
 	QList<QSslCertificate> filter;
 	for(const QSslCertificate &k: result)
@@ -443,7 +435,7 @@ void AddRecipients::showResult(const QList<QSslCertificate> &result)
 		if((c.keyUsage().contains(SslCertificate::KeyEncipherment) ||
 			c.keyUsage().contains(SslCertificate::KeyAgreement)) &&
 			!c.enhancedKeyUsage().contains(SslCertificate::ServerAuth) &&
-			(personSearch || !c.enhancedKeyUsage().contains(SslCertificate::ClientAuth)) &&
+			(userData.value("personSearch", false).toBool() || !c.enhancedKeyUsage().contains(SslCertificate::ClientAuth)) &&
 			c.type() != SslCertificate::MobileIDType)
 			filter << c;
 	}
@@ -451,23 +443,23 @@ void AddRecipients::showResult(const QList<QSslCertificate> &result)
 	{
 		showError(tr("Person or company does not own a valid certificate.<br />"
 			"It is necessary to have a valid certificate for encryption.<br />"
-			"In case of questions please contact our support via <a href=\"https://id.ee/?lang=en\">id.ee</a>."));
+			"In case of questions please contact our support via <a href=\"https://www.id.ee/en/\">id.ee</a>."));
 	}
 	else
 	{
-		leftList.clear();
-		ui->leftPane->clear();
-		Item *item = nullptr;
-
 		for(const QSslCertificate &k: filter)
 		{
-			auto address = addRecipientToLeftPane(k);
-			if(!item)
-				item = address;
+			AddressItem *item = addRecipientToLeftPane(k);
+			if(userData.value(QStringLiteral("select"), false).toBool() &&
+				(userData.value(QStringLiteral("type")).isNull() || toType(SslCertificate(k)) == userData[QStringLiteral("type")]))
+				addRecipientToRightPane(item, true);
 		}
+	}
 
-		if(select && item)
-			addRecipientToRightPane(item, true);
+	if(resultCount >= 50)
+	{
+		showError(tr("The name you were looking for gave a very large number of results, not all of the search results will be shown. "
+			"If the desired recipient is not on the list, please enter a more specific name in the search box."));
 	}
 
 	QApplication::restoreOverrideCursor();
@@ -476,21 +468,19 @@ void AddRecipients::showResult(const QList<QSslCertificate> &result)
 HistoryCertData AddRecipients::toHistory(const QSslCertificate& c) const
 {
 	HistoryCertData hcd;
-	int type = 3;
 	SslCertificate cert(c);
-	auto certType = cert.type();
-
-	if(certType & SslCertificate::DigiIDType)
-		type = 2;
-	else if(certType & SslCertificate::TempelType)
-		type = 1;
-	else if(certType & SslCertificate::EstEidType)
-		type = 0;
-
 	hcd.CN = cert.subjectInfo("CN");
-	hcd.type = QString::number(type);
+	hcd.type = toType(cert);
 	hcd.issuer = cert.issuerInfo("CN");
 	hcd.expireDate = cert.expiryDate().toLocalTime().toString(QStringLiteral("dd.MM.yyyy"));
-
 	return hcd;
+}
+
+QString AddRecipients::toType(const SslCertificate &cert) const
+{
+	auto certType = cert.type();
+	if(certType & SslCertificate::DigiIDType) return QString::number(2);
+	if(certType & SslCertificate::TempelType) return QString::number(1);
+	if(certType & SslCertificate::EstEidType) return QString::number(0);
+	return QString::number(3);
 }

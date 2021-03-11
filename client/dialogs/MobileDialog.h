@@ -18,6 +18,7 @@
  */
 
 #pragma once
+
 #include <QDialog>
 
 namespace Ui {
@@ -32,7 +33,6 @@ public:
 	explicit MobileDialog(QWidget *parent = nullptr);
 	~MobileDialog();
 
-	int exec() override;
 	QString idCode();
 	QString phoneNo();
 

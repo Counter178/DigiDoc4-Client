@@ -23,17 +23,11 @@
    </size>
   </property>
   <property name="styleSheet">
-   <string notr="true">QLabel {
-	color: #000000
-}
-QCheckBox {
-	color: #000000
-}
-QRadioButton {
+   <string notr="true">QLabel, QCheckBox, QRadioButton {
 	color: #000000
 }</string>
   </property>
-   <layout class="QGridLayout" name="SettingsDialogLayout">
+  <layout class="QGridLayout" name="SettingsDialogLayout">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -66,21 +60,22 @@ QRadioButton {
      <property name="styleSheet">
       <string notr="true">#leftPane {
 	background-color: #ffffff;
-}
-QWidget {
 	border-right: 1px solid #DEE4E9;
 }
 QPushButton {
+	background-color: #ffffff;
 	border: none;
-	background-color: #F4F5F6;
-	color: #006EB5;
 	text-align:left;
 	padding-left: 21;
+	min-height: 35px;
 }
-
-QPushButton:!checked{
-	background-color: #ffffff;
-	color: #000000;
+QPushButton:checked {
+	background-color: #F4F5F6;
+	color: #006EB5;
+}
+QPushButton:hover {
+	background-color: #FAFAFB;
+	color: #006EB5;
 }</string>
      </property>
      <layout class="QVBoxLayout" name="leftPaneLayout">
@@ -107,14 +102,11 @@ QPushButton:!checked{
           <height>55</height>
          </size>
         </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>55</height>
-         </size>
-        </property>
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #041E42;</string>
         </property>
         <property name="text">
          <string>Settings</string>
@@ -126,12 +118,6 @@ QPushButton:!checked{
       </item>
       <item>
        <widget class="QPushButton" name="btnMenuGeneral">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>35</height>
-         </size>
-        </property>
         <property name="accessibleName">
          <string extracomment="accessible">General</string>
         </property>
@@ -144,16 +130,13 @@ QPushButton:!checked{
         <property name="checked">
          <bool>true</bool>
         </property>
+        <attribute name="buttonGroup">
+         <string notr="true">pageGroup</string>
+        </attribute>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnMenuCertificate">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>35</height>
-         </size>
-        </property>
         <property name="accessibleName">
          <string extracomment="accessible">Services</string>
         </property>
@@ -163,16 +146,13 @@ QPushButton:!checked{
         <property name="checkable">
          <bool>true</bool>
         </property>
+        <attribute name="buttonGroup">
+         <string notr="true">pageGroup</string>
+        </attribute>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnMenuProxy">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>35</height>
-         </size>
-        </property>
         <property name="accessibleName">
          <string extracomment="accessible">Proxy</string>
         </property>
@@ -182,16 +162,13 @@ QPushButton:!checked{
         <property name="checkable">
          <bool>true</bool>
         </property>
+        <attribute name="buttonGroup">
+         <string notr="true">pageGroup</string>
+        </attribute>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnMenuDiagnostics">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>35</height>
-         </size>
-        </property>
         <property name="accessibleName">
          <string extracomment="accessible">Diagnostics</string>
         </property>
@@ -201,16 +178,13 @@ QPushButton:!checked{
         <property name="checkable">
          <bool>true</bool>
         </property>
+        <attribute name="buttonGroup">
+         <string notr="true">pageGroup</string>
+        </attribute>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnMenuInfo">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>35</height>
-         </size>
-        </property>
         <property name="accessibleName">
          <string extracomment="accessible">Info</string>
         </property>
@@ -220,6 +194,9 @@ QPushButton:!checked{
         <property name="checkable">
          <bool>true</bool>
         </property>
+        <attribute name="buttonGroup">
+         <string notr="true">pageGroup</string>
+        </attribute>
        </widget>
       </item>
       <item>
@@ -254,6 +231,13 @@ QLineEdit {
     border: 1px solid #DEE4E9;
     border-radius: 2px;
     background-color: #FFFFFF;
+    min-height: 31px;
+}
+QCheckBox, QRadioButton {
+    min-height: 31px;
+}
+QCheckBox:disabled {
+    color: #75787B;
 }
 QCheckBox::indicator, QRadioButton::indicator {
     width: 14px;
@@ -297,6 +281,9 @@ QRadioButton::indicator::checked {
          <property name="focusPolicy">
           <enum>Qt::TabFocus</enum>
          </property>
+         <property name="styleSheet">
+          <string notr="true">color: #041E42;</string>
+         </property>
          <property name="text">
           <string>Language</string>
          </property>
@@ -305,7 +292,7 @@ QRadioButton::indicator::checked {
        <item>
         <layout class="QHBoxLayout" name="languageBoxLayout">
          <item>
-          <widget class="QRadioButton" name="rdGeneralEstonian">
+          <widget class="RadioButton" name="rdGeneralEstonian">
            <property name="text">
             <string notr="true">Eesti</string>
            </property>
@@ -318,7 +305,7 @@ QRadioButton::indicator::checked {
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="rdGeneralRussian">
+          <widget class="RadioButton" name="rdGeneralRussian">
            <property name="text">
             <string notr="true">Русский</string>
            </property>
@@ -328,7 +315,7 @@ QRadioButton::indicator::checked {
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="rdGeneralEnglish">
+          <widget class="RadioButton" name="rdGeneralEnglish">
            <property name="text">
             <string notr="true">English</string>
            </property>
@@ -353,7 +340,7 @@ QRadioButton::indicator::checked {
         </layout>
        </item>
        <item>
-        <widget class="QCheckBox" name="chkGeneralTslRefresh">
+        <widget class="CheckBox" name="chkGeneralTslRefresh">
          <property name="text">
           <string>Online TSL digest check</string>
          </property>
@@ -363,14 +350,14 @@ QRadioButton::indicator::checked {
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="chkShowPrintSummary">
+        <widget class="CheckBox" name="chkShowPrintSummary">
          <property name="text">
           <string>Show print summary</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="chkRoleAddressInfo">
+        <widget class="CheckBox" name="chkRoleAddressInfo">
          <property name="text">
           <string>Ask role and address info on signing</string>
          </property>
@@ -392,15 +379,12 @@ QRadioButton::indicator::checked {
           <number>2</number>
          </property>
          <property name="verticalSpacing">
-          <number>4</number>
+          <number>0</number>
          </property>
          <item row="0" column="0">
-          <widget class="QRadioButton" name="rdGeneralSameDirectory">
+          <widget class="RadioButton" name="rdGeneralSameDirectory">
            <property name="text">
             <string>Same folder</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
            </property>
            <attribute name="buttonGroup">
             <string notr="true">pathGroup</string>
@@ -408,9 +392,12 @@ QRadioButton::indicator::checked {
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QRadioButton" name="rdGeneralSpecifyDirectory">
+          <widget class="RadioButton" name="rdGeneralSpecifyDirectory">
            <property name="text">
             <string>Select the default directory</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
            <attribute name="buttonGroup">
             <string notr="true">pathGroup</string>
@@ -431,46 +418,25 @@ QRadioButton::indicator::checked {
              <height>31</height>
             </size>
            </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
            <property name="text">
             <string notr="true">...</string>
            </property>
           </widget>
          </item>
          <item row="1" column="2">
-          <widget class="QLineEdit" name="txtGeneralDirectory">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>31</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>31</height>
-            </size>
-           </property>
-          </widget>
+          <widget class="QLineEdit" name="txtGeneralDirectory"/>
          </item>
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="tokenBackendLayout" stretch="1,0">
-         <item>
-          <widget class="QCheckBox" name="tokenBackend">
-           <property name="text">
-            <string>I would like to sign with Lithuanian, Latvian ID-card</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="tokenRestart">
-           <property name="text">
-            <string>Restart now</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <widget class="CheckBox" name="tokenBackend">
+         <property name="text">
+          <string>I would like to sign with Lithuanian, Latvian ID-card</string>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="pageGeneralSpacer">
@@ -489,9 +455,17 @@ QRadioButton::indicator::checked {
      </widget>
      <widget class="QWidget" name="pageServices">
       <property name="styleSheet">
-       <string notr="true">QToolButton { border: none; }</string>
+       <string notr="true">QToolButton { border: none; }
+QPushButton {
+	padding-bottom:1px; 
+	text-align: middle;
+	min-height: 30px;
+}</string>
       </property>
       <layout class="QVBoxLayout" name="pageServicesLayout">
+       <property name="spacing">
+        <number>5</number>
+       </property>
        <property name="leftMargin">
         <number>20</number>
        </property>
@@ -510,6 +484,9 @@ QRadioButton::indicator::checked {
           <widget class="QLabel" name="lblRevocation">
            <property name="focusPolicy">
             <enum>Qt::TabFocus</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: #041E42;</string>
            </property>
            <property name="text">
             <string>Access to validity confirmation service</string>
@@ -585,12 +562,15 @@ QRadioButton::indicator::checked {
        <item>
         <layout class="QHBoxLayout" name="accessCertButtonsLayout">
          <item>
-          <widget class="QPushButton" name="btnNavInstallManually">
+          <widget class="QPushButton" name="btInstallManually">
            <property name="minimumSize">
             <size>
              <width>150</width>
              <height>31</height>
             </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="text">
             <string>INSTALL MANUALLY</string>
@@ -601,12 +581,15 @@ QRadioButton::indicator::checked {
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="btnNavShowCertificate">
+          <widget class="QPushButton" name="btShowCertificate">
            <property name="minimumSize">
             <size>
              <width>150</width>
              <height>31</height>
             </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="text">
             <string>SHOW CERTIFICATE</string>
@@ -632,13 +615,7 @@ QRadioButton::indicator::checked {
         </layout>
        </item>
        <item>
-        <widget class="QCheckBox" name="chkIgnoreAccessCert">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>31</height>
-          </size>
-         </property>
+        <widget class="CheckBox" name="chkIgnoreAccessCert">
          <property name="text">
           <string>Ignore server access certificate (IP based access)</string>
          </property>
@@ -667,11 +644,14 @@ QRadioButton::indicator::checked {
            <property name="focusPolicy">
             <enum>Qt::TabFocus</enum>
            </property>
+           <property name="styleSheet">
+            <string notr="true">color: #041E42;</string>
+           </property>
            <property name="text">
             <string>Access to Time-Stamping service</string>
            </property>
            <property name="buddy">
-            <cstring>rdTimeStamp</cstring>
+            <cstring>txtTimeStamp</cstring>
            </property>
           </widget>
          </item>
@@ -713,12 +693,32 @@ QRadioButton::indicator::checked {
         </layout>
        </item>
        <item>
-        <widget class="QLineEdit" name="rdTimeStamp">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>31</height>
-          </size>
+        <widget class="RadioButton" name="rdTimeStampDefault">
+         <property name="text">
+          <string>Use default access</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">rdTimeStamp</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="RadioButton" name="rdTimeStampCustom">
+         <property name="text">
+          <string>Use manually configured access</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">rdTimeStamp</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="txtTimeStamp">
+         <property name="enabled">
+          <bool>false</bool>
          </property>
          <property name="clearButtonEnabled">
           <bool>true</bool>
@@ -732,8 +732,11 @@ QRadioButton::indicator::checked {
            <property name="focusPolicy">
             <enum>Qt::TabFocus</enum>
            </property>
+           <property name="styleSheet">
+            <string notr="true">color: #041E42;</string>
+           </property>
            <property name="text">
-            <string>Access to Mobile-ID and Smart-ID service</string>
+            <string>Access to mobile-ID and Smart-ID service</string>
            </property>
           </widget>
          </item>
@@ -775,12 +778,35 @@ QRadioButton::indicator::checked {
         </layout>
        </item>
        <item>
-        <widget class="QLineEdit" name="rdMIDUUID">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>31</height>
-          </size>
+        <widget class="RadioButton" name="rdMIDUUIDDefault">
+         <property name="text">
+          <string>Use default access</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">rdMIDUUID</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="RadioButton" name="rdMIDUUIDCustom">
+         <property name="text">
+          <string>Use manually configured access</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">rdMIDUUID</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="txtMIDUUID">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
          </property>
          <property name="placeholderText">
           <string notr="true">00000000-0000-0000-0000-000000000000</string>
@@ -798,7 +824,7 @@ QRadioButton::indicator::checked {
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>40</height>
+           <height>20</height>
           </size>
          </property>
         </spacer>
@@ -826,13 +852,7 @@ QRadioButton::indicator::checked {
         <number>20</number>
        </property>
        <item row="0" column="0" colspan="2">
-        <widget class="QRadioButton" name="rdProxyNone">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>31</height>
-          </size>
-         </property>
+        <widget class="RadioButton" name="rdProxyNone">
          <property name="text">
           <string>No proxy</string>
          </property>
@@ -842,26 +862,14 @@ QRadioButton::indicator::checked {
         </widget>
        </item>
        <item row="1" column="0" colspan="2">
-        <widget class="QRadioButton" name="rdProxySystem">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>31</height>
-          </size>
-         </property>
+        <widget class="RadioButton" name="rdProxySystem">
          <property name="text">
           <string>Use system proxy settings</string>
          </property>
         </widget>
        </item>
        <item row="2" column="0" colspan="2">
-        <widget class="QRadioButton" name="rdProxyManual">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>31</height>
-          </size>
-         </property>
+        <widget class="RadioButton" name="rdProxyManual">
          <property name="text">
           <string>Manual proxy configuration</string>
          </property>
@@ -884,14 +892,7 @@ QRadioButton::indicator::checked {
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QLineEdit" name="txtProxyHost">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>31</height>
-          </size>
-         </property>
-        </widget>
+        <widget class="QLineEdit" name="txtProxyHost"/>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="lblProxyPort">
@@ -904,14 +905,7 @@ QRadioButton::indicator::checked {
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QLineEdit" name="txtProxyPort">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>31</height>
-          </size>
-         </property>
-        </widget>
+        <widget class="QLineEdit" name="txtProxyPort"/>
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="lblProxyUsername">
@@ -924,14 +918,7 @@ QRadioButton::indicator::checked {
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="QLineEdit" name="txtProxyUsername">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>31</height>
-          </size>
-         </property>
-        </widget>
+        <widget class="QLineEdit" name="txtProxyUsername"/>
        </item>
        <item row="6" column="0">
         <widget class="QLabel" name="lblProxyPassword">
@@ -945,25 +932,13 @@ QRadioButton::indicator::checked {
        </item>
        <item row="6" column="1">
         <widget class="QLineEdit" name="txtProxyPassword">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>31</height>
-          </size>
-         </property>
          <property name="echoMode">
           <enum>QLineEdit::Password</enum>
          </property>
         </widget>
        </item>
        <item row="7" column="0" colspan="2">
-        <widget class="QCheckBox" name="chkProxyEnableForSSL">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>31</height>
-          </size>
-         </property>
+        <widget class="CheckBox" name="chkProxyEnableForSSL">
          <property name="text">
           <string>Enable proxy for SSL connections</string>
          </property>
@@ -991,6 +966,7 @@ QRadioButton::indicator::checked {
           <string notr="true">QTextEdit {
 	color: #363739;
 	background: #FFFFFF;
+	border-bottom: 1px solid #DEE4E9;
 }
 QScrollBar {
 	width: 10px;
@@ -999,7 +975,7 @@ QScrollBar {
 	border: none;
 	background: #FFFFFF;
 }
-QScrollBar::handle:vertical{
+QScrollBar::handle:vertical {
 	background-color: #DEE4E9;
 	margin: 0 0 0 0;
 	border-radius: 2px;
@@ -1012,11 +988,20 @@ QScrollBar::add-line:vertical {
 QScrollBar::sub-line:vertical {
       border: none;
       background: none;
-}
-</string>
+}</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="readOnly">
           <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="CheckBox" name="chkLibdigidocppDebug">
+         <property name="text">
+          <string>Enable one-time log generation</string>
          </property>
         </widget>
        </item>
@@ -1059,7 +1044,7 @@ QScrollBar::sub-line:vertical {
          </property>
          <property name="text">
           <string>&lt;p&gt;Estonian ID-software is released by Information Systems's Authority&lt;br /&gt;
-In case of questions please contact our support via &lt;a href=&quot;https://id.ee/?lang=en&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;id.ee&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
+In case of questions please contact our support via &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;id.ee&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
 Additional licenses and components</string>
          </property>
          <property name="alignment">
@@ -1086,27 +1071,27 @@ Additional licenses and components</string>
 	color: #363739;
 	background: #FFFFFF;
 }
-QScrollBar{
+QScrollBar {
 	width: 10px;
 	padding: 5px 5px 5px 0;
 	margin: 2px 0px 2px 0;
 	border: none;
 	background: #FFFFFF;
 }
-QScrollBar::handle:vertical{
+QScrollBar::handle:vertical {
 	background-color: #DEE4E9;
 	margin: 0 0 0 0;
 	border-radius: 2px;
 	height: 145px;
 }
-QScrollBar::add-line:vertical {
-      border: none;
-      background: none;
-}
+QScrollBar::add-line:vertical,
 QScrollBar::sub-line:vertical {
       border: none;
       background: none;
 }</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="readOnly">
           <bool>true</bool>
@@ -1127,6 +1112,7 @@ p, li { white-space: pre-wrap; margin-top:12px; margin-bottom:12px; margin-left:
 &lt;p align=&quot;center&quot;&gt;&lt;b&gt;Xerces-C++ is a validating XML parser written in a portable subset of C++&lt;/b&gt;&lt;br /&gt;Apache Software License, Version 2.0&lt;br /&gt;&lt;a href=&quot;http://www.apache.org/licenses/LICENSE-2.0.html&quot; style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;http://www.apache.org/licenses/LICENSE-2.0.html&lt;/a&gt; &lt;/p&gt;
 &lt;p align=&quot;center&quot;&gt;&lt;b&gt;Apache XML Security for C++&lt;/b&gt;&lt;br /&gt;Apache Software License, Version 2.0&lt;br /&gt;&lt;a href=&quot;http://www.apache.org/licenses/LICENSE-2.0.html&quot; style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;http://www.apache.org/licenses/LICENSE-2.0.html&lt;/a&gt; &lt;/p&gt;
 &lt;p align=&quot;center&quot;&gt;&lt;b&gt;XSD: XML Data Binding for C++&lt;/b&gt;&lt;br /&gt;GNU General Public License (GPL), version 2&lt;br /&gt;Free/Libre and Open Source Software (FLOSS) exception&lt;br /&gt;&lt;a href=&quot;http://www.codesynthesis.com/products/xsd/license.xhtml&quot; style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;http://www.codesynthesis.com/products/xsd/license.xhtml&lt;/a&gt;&lt;br /&gt;&lt;a href=&quot;http://www.codesynthesis.com/projects/xsd/FLOSSE&quot; style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;http://www.codesynthesis.com/projects/xsd/FLOSSE&lt;/a&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot;&gt;&lt;b&gt;JSON for Modern C++&lt;/b&gt;&lt;br /&gt;MIT License&lt;br /&gt;&lt;a href=&quot;https://github.com/nlohmann/json/blob/develop/LICENSE.MIT&quot; style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;https://github.com/nlohmann/json/blob/develop/LICENSE.MIT&lt;/a&gt; &lt;/p&gt;
 &lt;p align=&quot;center&quot;&gt;&lt;b&gt;Roboto: Google’s signature family of fonts&lt;/b&gt;&lt;br /&gt;Apache Software License, Version 2.0&lt;br /&gt;&lt;a href=&quot;https://github.com/google/roboto/blob/master/LICENSE&quot; style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;https://github.com/google/roboto/blob/master/LICENSE&lt;/a&gt; &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="textInteractionFlags">
@@ -1166,6 +1152,9 @@ QPushButton {
 	color: #006EB5;
 	padding-left: 6px;
 	padding-right: 6px;
+	min-width: 120px;
+	min-height: 25px;
+	max-height: 25px;
 }
 QPushButton:pressed {
 	color: #FFFFFF;
@@ -1219,17 +1208,8 @@ QPushButton:disabled {
       </item>
       <item>
        <widget class="QPushButton" name="btnFirstRun">
-        <property name="minimumSize">
-         <size>
-          <width>120</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>25</height>
-         </size>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="accessibleName">
          <string extracomment="accessible">First run</string>
@@ -1241,17 +1221,8 @@ QPushButton:disabled {
       </item>
       <item>
        <widget class="QPushButton" name="btnRefreshConfig">
-        <property name="minimumSize">
-         <size>
-          <width>120</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>25</height>
-         </size>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="accessibleName">
          <string extracomment="accessible">Refresh configuration</string>
@@ -1263,17 +1234,14 @@ QPushButton:disabled {
       </item>
       <item>
        <widget class="QPushButton" name="btnCheckConnection">
-        <property name="minimumSize">
-         <size>
-          <width>120</width>
-          <height>25</height>
-         </size>
-        </property>
         <property name="maximumSize">
          <size>
           <width>210</width>
           <height>25</height>
          </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="accessibleName">
          <string extracomment="accessible">Check connection</string>
@@ -1285,17 +1253,8 @@ QPushButton:disabled {
       </item>
       <item>
        <widget class="QPushButton" name="btnNavSaveReport">
-        <property name="minimumSize">
-         <size>
-          <width>120</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>25</height>
-         </size>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="accessibleName">
          <string extracomment="accessible">Save diagnostics report</string>
@@ -1306,18 +1265,22 @@ QPushButton:disabled {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnNavFromHistory">
-        <property name="minimumSize">
-         <size>
-          <width>120</width>
-          <height>25</height>
-         </size>
+       <widget class="QPushButton" name="btnNavSaveLibdigidocpp">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>25</height>
-         </size>
+        <property name="accessibleName">
+         <string extracomment="accessible">Save log</string>
+        </property>
+        <property name="text">
+         <string>SAVE LOG</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnNavFromHistory">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="accessibleName">
          <string extracomment="accessible">Remove old certificates</string>
@@ -1329,17 +1292,8 @@ QPushButton:disabled {
       </item>
       <item>
        <widget class="QPushButton" name="btnNavUseByDefault">
-        <property name="minimumSize">
-         <size>
-          <width>120</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>25</height>
-         </size>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="accessibleName">
          <string extracomment="accessible">Use default settings</string>
@@ -1353,13 +1307,13 @@ QPushButton:disabled {
        <widget class="QPushButton" name="btNavClose">
         <property name="minimumSize">
          <size>
-          <width>120</width>
+          <width>0</width>
           <height>30</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>120</width>
+          <width>16777215</width>
           <height>30</height>
          </size>
         </property>
@@ -1367,6 +1321,9 @@ QPushButton:disabled {
          <font>
           <pointsize>14</pointsize>
          </font>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="accessibleName">
          <string extracomment="accessible">Close</string>
@@ -1407,11 +1364,24 @@ QPushButton:disabled {
    <header location="global">QtSvg/QSvgWidget</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>CheckBox</class>
+   <extends>QCheckBox</extends>
+   <header>widgets/CheckBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>RadioButton</class>
+   <extends>QRadioButton</extends>
+   <header>widgets/RadioButton.h</header>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="langGroup"/>
+  <buttongroup name="pageGroup"/>
   <buttongroup name="pathGroup"/>
+  <buttongroup name="langGroup"/>
+  <buttongroup name="rdMIDUUID"/>
+  <buttongroup name="rdTimeStamp"/>
  </buttongroups>
 </ui>

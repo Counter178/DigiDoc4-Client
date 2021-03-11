@@ -18,47 +18,56 @@
  */
 #include "Diagnostics.h"
 
+#include "Application.h"
 #include "QPCSC.h"
-#include "Common.h"
 
 #ifdef CONFIG_URL
 #include "Configuration.h"
 #include <QtCore/QJsonObject>
+#include <QtCore/QSettings>
 #endif
 
-#include <QtCore/QStringList>
+#include <QtCore/QDir>
 #include <QtCore/QTextStream>
+#include <QtNetwork/QSslCertificate>
 
 Diagnostics::Diagnostics() = default;
 
-Diagnostics::Diagnostics(QString appInfo)
-	: appInfoMsg(std::move(appInfo))
-	, hasAppInfo(false)
-{
-}
-
-void Diagnostics::appInfo(QTextStream &s) const
-{
-	if( hasAppInfo )
-	{
-		qApp->diagnostics(s);
-	}
-	else if ( !appInfoMsg.isEmpty() )
-	{
-		s << appInfoMsg;
-	}
-}
-
 void Diagnostics::generalInfo(QTextStream &s) const
 {
-	auto app = QCoreApplication::instance();
-	s << "<b>" << tr("Arguments:") << "</b> " << app->arguments().join(' ') << "<br />";
-	s << "<b>" << tr("Library paths:") << "</b> " << QCoreApplication::libraryPaths().join(';') << "<br />";
-	s << "<b>" << "URLs:" << "</b>";
+	s << "<b>" << tr("Arguments:") << "</b> " << qApp->arguments().join(' ') << "<br />"
+		<< "<b>" << tr("Library paths:") << "</b> " << QCoreApplication::libraryPaths().join(';') << "<br />"
+		<< "<b>" << "URLs:" << "</b>"
 #ifdef CONFIG_URL
-	s << "<br />CONFIG_URL: " << CONFIG_URL;
+		<< "<br />CONFIG_URL: " << CONFIG_URL
+		<< "<br />SID-PROXY-URL: " << Configuration::instance().object().value(QStringLiteral("SID-PROXY-URL")).toString(QStringLiteral(SMARTID_URL))
+		<< "<br />SID-SK-URL: " << Configuration::instance().object().value(QStringLiteral("SID-SK-URL")).toString(QStringLiteral(SMARTID_URL))
+		<< "<br />MID-PROXY-URL: " << Configuration::instance().object().value(QStringLiteral("MID-PROXY-URL")).toString(QStringLiteral(MOBILEID_URL))
+		<< "<br />MID-SK-URL: " << Configuration::instance().object().value(QStringLiteral("MID-SK-URL")).toString(QStringLiteral(MOBILEID_URL))
+		<< "<br />RPUUID: " << (QSettings().value(QStringLiteral("MIDUUID-CUSTOM"), QSettings().contains(QStringLiteral("MIDUUID"))).toBool() ? tr("is set manually") : tr("is set by default"))
+#else
+#ifdef MOBILEID_URL
+		<< "<br />MOBILEID_URL: " << MOBILEID_URL
 #endif
-	appInfo(s);
+#ifdef SMARTID_URL
+		<< "<br />SMARTID_URL: " << SMARTID_URL
+#endif
+#endif
+		<< "<br />TSL_URL: " << qApp->confValue(Application::TSLUrl).toString()
+		<< "<br />TSA_URL: " << qApp->confValue(Application::TSAUrl).toString()
+		<< "<br />SIVA_URL: " << qApp->confValue(Application::SiVaUrl).toString()
+		<< "<br /><br /><b>" << tr("TSL signing certs") << ":</b>";
+	for(const QSslCertificate &cert: qApp->confValue(Application::TSLCerts).value<QList<QSslCertificate>>())
+		s << "<br />" << cert.subjectInfo("CN").value(0);
+	s << "<br /><br /><b>" << tr("TSL cache") << ":</b>";
+	QString cache = qApp->confValue(Application::TSLCache).toString();
+	const QStringList tsllist = QDir(cache).entryList({QStringLiteral("*.xml")});
+	for(const QString &file: tsllist)
+	{
+		uint ver = Application::readTSLVersion(cache + "/" + file);
+		if(ver > 0)
+			s << "<br />" << file << " (" << ver << ")";
+	}
 	s << "<br /><br />";
 
 #ifdef CONFIG_URL
@@ -119,8 +128,8 @@ void Diagnostics::generalInfo(QTextStream &s) const
 		  << "ATR warm - " << warm << "<br />";
 
 		reader.beginTransaction();
-		#define APDU QByteArray::fromHex
-		auto printAID = [&s, &reader](const QString &label, const QByteArray &apdu)
+		constexpr auto APDU = &QByteArray::fromHex;
+		auto printAID = [&](const QString &label, const QByteArray &apdu)
 		{
 			QPCSCReader::Result r = reader.transfer(apdu);
 			s << label << ": " << r.SW.toHex();
@@ -130,8 +139,7 @@ void Diagnostics::generalInfo(QTextStream &s) const
 			s << "<br />";
 			return r.resultOk();
 		};
-		if(printAID(QStringLiteral("AID34"), APDU("00A40400 0E F04573744549442076657220312E")) ||
-			printAID(QStringLiteral("AID35"), APDU("00A40400 0F D23300000045737445494420763335")) ||
+		if(printAID(QStringLiteral("AID35"), APDU("00A40400 0F D23300000045737445494420763335")) ||
 			printAID(QStringLiteral("UPDATER_AID"), APDU("00A40400 0A D2330000005550443101")))
 		{
 			reader.transfer(APDU("00A4000C"));

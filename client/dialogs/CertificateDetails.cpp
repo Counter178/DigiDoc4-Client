@@ -25,6 +25,7 @@
 #include "Styles.h"
 #include "SslCertificate.h"
 #include "effects/Overlay.h"
+#include "dialogs/WarningDialog.h"
 
 #include <common/DateTime.h>
 
@@ -32,21 +33,15 @@
 #include <QtCore/QStandardPaths>
 #include <QtCore/QTextStream>
 #include <QtGui/QDesktopServices>
+#include <QtNetwork/QSslKey>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
 
-class CertificateDetails::Private: public Ui::CertificateDetails
-{
-public:
-	SslCertificate cert;
-};
-
 CertificateDetails::CertificateDetails(const SslCertificate &cert, QWidget *parent)
 	: QDialog(parent)
-	, ui(new Private)
+	, ui(new Ui::CertificateDetails)
 {
 	ui->setupUi(this);
-	ui->cert = cert;
 #ifdef Q_OS_MAC
 	setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::Sheet);
 	setWindowModality(Qt::WindowModal);
@@ -93,24 +88,35 @@ CertificateDetails::CertificateDetails(const SslCertificate &cert, QWidget *pare
 	ui->lblCertInfo->setHtml( i );
 
 
-	connect( ui->save, &QPushButton::clicked, this, &CertificateDetails::saveCert );
+	connect(ui->save, &QPushButton::clicked, this, [this, cert] {
+		QString file = QFileDialog::getSaveFileName(this, tr("Save certificate"), QStringLiteral("%1%2%3.cer")
+				.arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation))
+				.arg(QDir::separator())
+				.arg(cert.subjectInfo("serialNumber")),
+			tr("Certificates (*.cer *.crt *.pem)"));
+		if( file.isEmpty() )
+			return;
+
+		QFile f( file );
+		if( f.open( QIODevice::WriteOnly ) )
+			f.write(cert.toPem());
+		else
+			WarningDialog(tr("Failed to save file"), this).exec();
+	});
 	connect( ui->close, &QPushButton::clicked, this, &CertificateDetails::accept );
 	connect( this, &CertificateDetails::finished, this, &CertificateDetails::close );
 	connect(ui->tblDetails, &QTableWidget::itemSelectionChanged, this, [this] {
 		const QList<QTableWidgetItem*> &list = ui->tblDetails->selectedItems();
-		if( !list.isEmpty() )
-		{
-			auto contentItem = list.last();
-			auto userData = contentItem->data(Qt::UserRole);
-			ui->detailedValue->setPlainText(userData.isNull() ?
-				contentItem->data(Qt::DisplayRole).toString() : decodeCN(userData.toString()));
-		}
+		if(list.isEmpty())
+			return;
+		auto contentItem = list.last();
+		auto userData = contentItem->data(Qt::UserRole);
+		ui->detailedValue->setPlainText(userData.isNull() ?
+			contentItem->data(Qt::DisplayRole).toString() : decodeCN(userData.toString()));
 	});
 
-	QStringList horzHeaders { tr("Field"), tr("Value") };
-	ui->tblDetails->setHorizontalHeaderLabels(horzHeaders);
-
-	auto addItem = [this](const QString &variable, const QString &value, const QVariant &valueext = QVariant()) {
+	ui->tblDetails->setHorizontalHeaderLabels({ tr("Field"), tr("Value") });
+	auto addItem = [this](const QString &variable, const QString &value, const QVariant &valueext = {}) {
 		int row = ui->tblDetails->model()->rowCount();
 		ui->tblDetails->setRowCount(row + 1);
 		QTableWidgetItem *item = new QTableWidgetItem(value);
@@ -120,8 +126,7 @@ CertificateDetails::CertificateDetails(const SslCertificate &cert, QWidget *pare
 	};
 
 	addItem(tr("Version"), QString("V" + cert.version()));
-	addItem(tr("Serial number"), QStringLiteral("%1 (0x%2)")
-		.arg(cert.serialNumber().constData(), cert.serialNumber( true ).constData()));
+	addItem(tr("Serial number"), cert.serialNumber());
 	addItem(tr("Signature algorithm"), cert.signatureAlgorithm());
 
 	QStringList text, textExt;
@@ -151,7 +156,7 @@ CertificateDetails::CertificateDetails(const SslCertificate &cert, QWidget *pare
 		textExt << QStringLiteral("%1 = %2").arg(obj.constData(), data);
 	}
 	addItem(tr("Subject"), text.join(QStringLiteral(", ")), textExt.join('\n'));
-	addItem(tr("Public key"), cert.keyName(), cert.publicKeyHex());
+	addItem(tr("Public key"), cert.keyName(), cert.toHex(cert.publicKey().toDer()));
 	QStringList enhancedKeyUsage = cert.enhancedKeyUsage().values();
 	if( !enhancedKeyUsage.isEmpty() )
 		addItem(tr("Enhanced key usage"), enhancedKeyUsage.join(QStringLiteral(", ")), enhancedKeyUsage.join('\n'));
@@ -171,23 +176,6 @@ CertificateDetails::CertificateDetails(const SslCertificate &cert, QWidget *pare
 CertificateDetails::~CertificateDetails()
 {
 	delete ui;
-}
-
-void CertificateDetails::saveCert()
-{
-	QString file = QFileDialog::getSaveFileName(this, tr("Save certificate"), QStringLiteral("%1%2%3.cer")
-			.arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation))
-			.arg(QDir::separator())
-			.arg(ui->cert.subjectInfo("serialNumber")),
-		tr("Certificates (*.cer *.crt *.pem)"));
-	if( file.isEmpty() )
-		return;
-
-	QFile f( file );
-	if( f.open( QIODevice::WriteOnly ) )
-		f.write(ui->cert.toPem());
-	else
-		QMessageBox::warning( this, tr("Save certificate"), tr("Failed to save file") );
 }
 
 QString CertificateDetails::decodeCN(const QString &cn)
@@ -227,8 +215,8 @@ void CertificateDetails::showCertificate(const SslCertificate &cert, QWidget *pa
 #else
 	Q_UNUSED(parent);
 	QString name = cert.subjectInfo("serialNumber");
-	if(name.isNull() || name.isEmpty())
-		name = QStringLiteral("%1").arg(cert.serialNumber().constData());
+	if(name.isEmpty())
+		name = cert.serialNumber().replace(':', "");
 	QString path = QStringLiteral("%1/%2%3.cer").arg(QDir::tempPath(), name, suffix);
 	QFile f(path);
 	if(f.open(QIODevice::WriteOnly))

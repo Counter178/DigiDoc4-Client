@@ -22,6 +22,7 @@
 
 #include "DigiDoc.h"
 #include "Styles.h"
+#include "SslCertificate.h"
 #include "crypto/CryptoDoc.h"
 #include "dialogs/AddRecipients.h"
 #include "dialogs/MobileDialog.h"
@@ -29,6 +30,7 @@
 #include "dialogs/WarningDialog.h"
 #include "widgets/AddressItem.h"
 #include "widgets/SignatureItem.h"
+#include "widgets/WarningItem.h"
 
 #include <QDir>
 #include <QFileInfo>
@@ -42,8 +44,6 @@ using namespace ria::qdigidoc4;
 ContainerPage::ContainerPage(QWidget *parent)
 : QWidget(parent)
 , ui(new Ui::ContainerPage)
-, cancelText("CANCEL")
-, convertText("ENCRYPT")
 {
 	ui->setupUi( this );
 	ui->leftPane->init(fileName);
@@ -64,9 +64,6 @@ ContainerPage::ContainerPage(QWidget *parent)
 
 	mobileCode = QSettings().value(QStringLiteral("MobileCode")).toString();
 
-	connect(this, &ContainerPage::cardChanged, this, &ContainerPage::changeCard);
-	connect(this, &ContainerPage::cardChanged, [this](const QString& idCode, bool /*seal*/, bool /*isExpired*/, const QByteArray& serialNumber)
-		{ emit ui->rightPane->idChanged(idCode, mobileCode, serialNumber); });
 	connect(this, &ContainerPage::moved,this, &ContainerPage::setHeader);
 	connect(this, &ContainerPage::details, ui->rightPane, &ItemList::details);
 	connect(ui->changeLocation, &LabelButton::clicked, this, &ContainerPage::forward);
@@ -102,20 +99,24 @@ void ContainerPage::addError(const SignatureItem* item, QMap<ria::qdigidoc4::War
 
 void ContainerPage::addressSearch()
 {
-	AddRecipients dlg(ui->rightPane, qApp->activeWindow());
+	AddRecipients dlg(ui->rightPane, topLevelWidget());
 	if(dlg.exec() && dlg.isUpdated())
 		emit keysSelected(dlg.keys());
 }
 
-void ContainerPage::changeCard(const QString& idCode, bool isSeal, bool isExpired)
+void ContainerPage::cardChanged(const SslCertificate &cert, bool isBlocked)
 {
-	if(cardInReader == idCode)
-		return;
+	emit ui->rightPane->idChanged(cert);
+	isSeal = cert.type() & SslCertificate::TempelType;
+	isExpired = !cert.isValid();
+	this->isBlocked = isBlocked;
+	cardChanged(cert.personalCode());
+}
 
+void ContainerPage::cardChanged(const QString &idCode)
+{
 	cardInReader = idCode;
-	this->seal = isSeal;
-	this->isExpired = isExpired;
-	if(mainAction && (ui->leftPane->getState() & SignatureContainers))
+	if(ui->leftPane->getState() & SignatureContainers)
 		showSigningButton();
 	else if(ui->leftPane->getState() & EncryptedContainer)
 		updateDecryptionButton();
@@ -151,7 +152,7 @@ void ContainerPage::clear()
 {
 	ui->leftPane->clear();
 	ui->rightPane->clear();
-	canDecrypt = false;
+	isSupported = false;
 }
 
 void ContainerPage::clearPopups()
@@ -163,13 +164,11 @@ void ContainerPage::elideFileName(bool force)
 {
 	if(ui->containerFile->width() < containerFileWidth)
 	{
-		elided = true;
 		ui->containerFile->setText("<a href='#browse-Container'><span style='color:rgb(53, 55, 57)'>" +
 			ui->containerFile->fontMetrics().elidedText(fileName.toHtmlEscaped(), Qt::ElideMiddle, ui->containerFile->width()) + "</span></a>");
 	}
-	else if(elided || force)
+	else if(force)
 	{
-		elided = false;
 		ui->containerFile->setText("<a href='#browse-Container'><span style='color:rgb(53, 55, 57)'>" + fileName.toHtmlEscaped() + "</span></a>");
 	}
 }
@@ -194,7 +193,7 @@ void ContainerPage::forward(int code)
 	{
 	case SignatureMobile:
 	{
-		MobileDialog dlg(qApp->activeWindow());
+		MobileDialog dlg(topLevelWidget());
 		QString newCode = QSettings().value(QStringLiteral("MobileCode")).toString();
 		if(dlg.exec() == QDialog::Accepted)
 		{
@@ -205,7 +204,24 @@ void ContainerPage::forward(int code)
 		if (newCode != mobileCode)
 		{
 			mobileCode = newCode;
-			emit cardChanged(cardInReader, seal, isExpired);
+			cardChanged(cardInReader);
+		}
+		break;
+	}
+	case SignatureSmartID:
+	{
+		SmartIDDialog dlg(topLevelWidget());
+		QString newCode = QSettings().value(QStringLiteral("SmartID")).toString();
+		if(dlg.exec() == QDialog::Accepted)
+		{
+			if(checkAction(SignatureMobile, dlg.idCode(), QString()))
+				emit action(SignatureSmartID, dlg.country(), dlg.idCode());
+		}
+
+		if (newCode != mobileCode)
+		{
+			mobileCode = newCode;
+			cardChanged(cardInReader);
 		}
 		break;
 	}
@@ -214,16 +230,6 @@ void ContainerPage::forward(int code)
 		window()->setWindowTitle(tr("DigiDoc4 client"));
 		emit action(code);
 		break;
-	case SignatureSmartID:
-	{
-		SmartIDDialog dlg(qApp->activeWindow());
-		if(dlg.exec() == QDialog::Accepted)
-		{
-			if(checkAction(SignatureMobile, dlg.idCode(), QString()))
-				emit action(SignatureSmartID, dlg.country(), dlg.idCode());
-		}
-		break;
-	}
 	default:
 		if(checkAction(code, cardInReader, mobileCode))
 			emit action(code);
@@ -285,17 +291,23 @@ void ContainerPage::showMainAction(const QList<Actions> &actions)
 		mainAction.reset(new MainAction(this));
 		connect(mainAction.get(), &MainAction::action, this, &ContainerPage::forward);
 	}
-	mainAction->update(actions);
-	mainAction->setButtonEnabled(!isExpired || actions.contains(DecryptContainer) || actions.contains(DecryptToken) ||actions.contains(EncryptContainer));
+	mainAction->showActions(actions);
+	bool isSign = actions.contains(SignatureAdd) || actions.contains(SignatureToken);
+	bool isSignMobile = !isSign && (actions.contains(SignatureMobile) || actions.contains(SignatureSmartID));
+	bool isEncrypt = actions.contains(EncryptContainer) && !ui->rightPane->findChildren<AddressItem*>().isEmpty();
+	bool isDecrypt = actions.contains(DecryptContainer) || actions.contains(DecryptToken);
+	mainAction->setButtonEnabled(isEncrypt || isSignMobile || (!isBlocked && ((isSign && !isExpired) || isDecrypt)));
 	ui->mainActionSpacer->changeSize( 198, 20, QSizePolicy::Fixed );
 	ui->navigationArea->layout()->invalidate();
 }
 
 void ContainerPage::showSigningButton()
 {
-	if(cardInReader.isNull())
+	if(!isSupported)
+		hideMainAction();
+	else if(cardInReader.isEmpty())
 		showMainAction({ SignatureMobile, SignatureSmartID });
-	else if(seal)
+	else if(isSeal)
 		showMainAction({ SignatureToken, SignatureMobile, SignatureSmartID });
 	else
 		showMainAction({ SignatureAdd, SignatureMobile, SignatureSmartID });
@@ -304,7 +316,7 @@ void ContainerPage::showSigningButton()
 void ContainerPage::transition(CryptoDoc* container, bool canDecrypt)
 {
 	clear();
-	this->canDecrypt = canDecrypt;
+	isSupported = canDecrypt;
 	ContainerState state = container->state();
 	ui->leftPane->stateChange(state);
 	ui->rightPane->stateChange(state);
@@ -336,17 +348,16 @@ void ContainerPage::transition(DigiDoc* container)
 
 		for(const DigiDocSignature &c: container->timestamps())
 		{
-			SignatureItem *item = new SignatureItem(c, state, false, ui->rightPane);
+			SignatureItem *item = new SignatureItem(c, state, ui->rightPane);
 			if(item->isInvalid())
 				addError(item, errors);
 			ui->rightPane->addHeaderWidget(item);
 		}
 	}
 
-	bool enableSigning = container->isSupported();
 	for(const DigiDocSignature &c: container->signatures())
 	{
-		SignatureItem *item = new SignatureItem(c, state, enableSigning, ui->rightPane);
+		SignatureItem *item = new SignatureItem(c, state, ui->rightPane);
 		if(item->isInvalid())
 			addError(item, errors);
 		ui->rightPane->addWidget(item);
@@ -358,11 +369,11 @@ void ContainerPage::transition(DigiDoc* container)
 		for (i = errors.constBegin(); i != errors.constEnd(); ++i)
 			emit warning(WarningText(i.key(), i.value()));
 	}
+	if(container->fileName().endsWith(QStringLiteral("ddoc"), Qt::CaseInsensitive))
+		emit warning(UnsupportedDDocWarning);
 
-	if(enableSigning || container->isService())
-		showSigningButton();
-	else
-		hideMainAction();
+	isSupported = container->isSupported() || container->isService();
+	showSigningButton();
 
 	ui->leftPane->setModel(container->documentModel());
 	updatePanes(state);
@@ -370,7 +381,7 @@ void ContainerPage::transition(DigiDoc* container)
 
 void ContainerPage::update(bool canDecrypt, CryptoDoc* container)
 {
-	this->canDecrypt = canDecrypt;
+	isSupported = canDecrypt;
 	if(ui->leftPane->getState() & EncryptedContainer)
 		updateDecryptionButton();
 
@@ -380,13 +391,15 @@ void ContainerPage::update(bool canDecrypt, CryptoDoc* container)
 	ui->rightPane->clear();
 	for(const CKey &key: container->keys())
 		ui->rightPane->addWidget(new AddressItem(key, ui->rightPane, true));
+	if(ui->leftPane->getState() & UnencryptedContainer)
+		showMainAction({ EncryptContainer });
 }
 
 void ContainerPage::updateDecryptionButton()
 {
-	if(!canDecrypt || cardInReader.isNull())
+	if(!isSupported || cardInReader.isEmpty())
 		hideMainAction();
-	else if(seal)
+	else if(isSeal)
 		showMainAction({ DecryptToken });
 	else
 		showMainAction({ DecryptContainer });

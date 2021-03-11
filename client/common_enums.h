@@ -58,9 +58,6 @@ enum Actions {
     FileAdd,
     FileRemove,
 
-    HeadSettings,
-    HeadHelp,
-
     SignatureAdd,
     SignatureMobile,
     SignatureSmartID,
@@ -108,11 +105,11 @@ enum WarningType {
     UnblockPin1Warning,
     UnblockPin2Warning,
 
-    CheckConnectionWarning,
     InvalidSignatureWarning,
     InvalidTimestampWarning,
     UnknownSignatureWarning,
     UnknownTimestampWarning,
+    UnsupportedDDocWarning,
 };
 
 }

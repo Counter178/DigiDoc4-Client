@@ -22,19 +22,19 @@
         <translation>Juurdepääsutõend aegub %1. Juurdepääsutõendi uuendamiseks pöörduge palun oma asutuse IT-meeskonna poole. Täiendav informatsioon: &lt;a href=&quot;mailto:sales@sk.ee&quot;&gt;sales@sk.ee&lt;/a&gt; või (+372) 610 1885</translation>
     </message>
     <message>
-        <source>Your signing software needs an upgrade. Please update your ID software, which you can get from &lt;a href=&quot;http://www.id.ee&quot;&gt;www.id.ee&lt;/a&gt;. Additional information is available at ID-helpline (+372) 666 8888.</source>
-        <translation>Allkirjastamise tarkvara vajab uuendamist. Paigaldage uus ID-tarkvara veebilehelt &lt;a href=&quot;http://www.id.ee/?lang=et&quot;&gt;www.id.ee&lt;/a&gt;. Lisainfo ID-abiliini telefonil (+372) 666 8888.</translation>
+        <source>Server access certificate expired on %1. To renew the certificate please update your ID software, which you can get from &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;www.id.ee&lt;/a&gt;. Additional info is available ID-helpline (+372) 666 8888.</source>
+        <translation>Juurdepääsutõend aegus %1. Juurdepääsutõendi uuendamiseks paigaldage uus ID-tarkvara veebilehelt &lt;a href=&quot;https://www.id.ee/&quot;&gt;www.id.ee&lt;/a&gt;. Lisainfo ID-abiliini telefonil (+372) 666 8888.</translation>
     </message>
     <message>
-        <source>FREE_CERT_EXCEEDED</source>
-        <translation>Täitunud on tasuta teenuse 10 allkirja limiit. Vastavalt kehtivuskinnitusteenuse kasutamise tavatingimustele on lubatud allkirjastamise teenust kasutada mahus kuni 10 allkirja kuus. Teenuse kasutamiseks suuremas mahus või kommertseesmärkidel pöörduge palun oma asutuse IT-meeskonna poole või sõlmige teenuse kasutamiseks &lt;a href=&quot;https://sk.ee/teenused/kehtivuskinnituse-teenus&quot;&gt;leping&lt;/a&gt;. Lisainfo: &lt;a href=&quot;mailto:sales@sk.ee&quot;&gt;sales@sk.ee&lt;/a&gt; või (+372) 610 1885</translation>
+        <source>The limit of free digital signatures per month is about to exceed. To create more digital signatures you need to conclude a contract with a service provider. Read more &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;here&lt;/a&gt;</source>
+        <translation>Peagi on täitumas tasuta allkirjade kuulimiit. Suuremas mahus allkirjastamiseks tuleb sõlmida leping teenusepakkujaga. Loe rohkem &lt;a href=&quot;https://www.id.ee/artikkel/asutustele-kus-allkirjastatakse-digidoc4-kliendi-kaudu-suuremates-kogustes-dokumente/&quot;&gt;siit&lt;/a&gt;</translation>
     </message>
 </context>
 <context>
     <name>Accordion</name>
     <message>
         <source>PIN/PUK CODES AND CERTIFICATES</source>
-        <translation>PIN/PUK KOODID JA SERTIFIKAATIDE KONTROLL</translation>
+        <translation>PIN-/PUK-KOODID JA SERTIFIKAATIDE KONTROLL</translation>
     </message>
     <message>
         <source>REDIRECTION OF EESTI.EE E-MAIL</source>
@@ -86,8 +86,8 @@
         <translation>Isikukood pole korrektne!</translation>
     </message>
     <message>
-        <source>Person or company does not own a valid certificate.&lt;br /&gt;It is necessary to have a valid certificate for encryption.&lt;br /&gt;In case of questions please contact our support via &lt;a href=&quot;https://id.ee/?lang=en&quot;&gt;id.ee&lt;/a&gt;.</source>
-        <translation>Isikul või asutusel puudub kehtiv sertifikaat.&lt;br /&gt;Krüpteerimiseks on vaja kehtivat sertifikaati.&lt;br /&gt;Küsimuste korral pöörduge &lt;a href=&quot;https://id.ee/?lang=et&quot;&gt;id.ee&lt;/a&gt;.</translation>
+        <source>Person or company does not own a valid certificate.&lt;br /&gt;It is necessary to have a valid certificate for encryption.&lt;br /&gt;In case of questions please contact our support via &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;id.ee&lt;/a&gt;.</source>
+        <translation>Isikul või asutusel puudub kehtiv sertifikaat.&lt;br /&gt;Krüpteerimiseks on vaja kehtivat sertifikaati.&lt;br /&gt;Küsimuste korral võta ühendust &lt;a href=&quot;https://www.id.ee/&quot;&gt;ID-abikeskusega&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>Certificates (*.cer *.crt *.pem)</source>
@@ -134,6 +134,10 @@
         <extracomment>accessible</extracomment>
         <translation>Kinnita</translation>
     </message>
+    <message>
+        <source>The name you were looking for gave a very large number of results, not all of the search results will be shown. If the desired recipient is not on the list, please enter a more specific name in the search box.</source>
+        <translation>Sinu otsitud nimi andis väga palju vastuseid, kõiki otsingutulemusi ei näidata. Kui soovitud adressaati loendis ei ole, sisesta palun otsinguaknasse täpsem nimi.</translation>
+    </message>
 </context>
 <context>
     <name>AddressItem</name>
@@ -150,16 +154,16 @@
         <translation> (Sina ise)</translation>
     </message>
     <message>
-        <source>Digi-ID</source>
-        <translation>Digi-ID</translation>
+        <source>digi-ID</source>
+        <translation>digi-ID</translation>
     </message>
     <message>
         <source>ID-card</source>
         <translation>ID-kaart</translation>
     </message>
     <message>
-        <source>Mobile-ID</source>
-        <translation>Mobiil-ID</translation>
+        <source>mobile-ID</source>
+        <translation>mobiil-ID</translation>
     </message>
     <message>
         <source>Expires on</source>
@@ -183,6 +187,14 @@
         <source>Certificate for Encryption</source>
         <translation>Krüpteerimissertifikaat</translation>
     </message>
+    <message>
+        <source>e-Seal</source>
+        <translation>e-Tempel</translation>
+    </message>
+    <message>
+        <source>Authentication certificate</source>
+        <translation>Isikutuvastamise sertifikaat</translation>
+    </message>
 </context>
 <context>
     <name>Application</name>
@@ -191,32 +203,20 @@
         <translation>Käivitamine ebaõnnestus.</translation>
     </message>
     <message>
-        <source>Close window</source>
-        <translation>Sulge aken</translation>
-    </message>
-    <message>
         <source>Caught exception!</source>
         <translation>Tekkis viga!</translation>
-    </message>
-    <message>
-        <source>New Client window</source>
-        <translation>Ava uus Kliendi aken</translation>
     </message>
     <message>
         <source>New Crypto window</source>
         <translation>Ava uus Krüpto aken</translation>
     </message>
     <message>
-        <source>The renewal of Trust Service status List, used for digital signature validation, has failed. Please check your internet connection and make sure you have the latest ID-software version installed. An expired Trust Service List (TSL) will be used for signature validation. &lt;a href=&quot;http://www.id.ee/?id=37012&quot;&gt;Additional information&lt;/a&gt;</source>
-        <translation>Digiallkirjade kehtivuse kontrollimiseks kasutatava sertifikaatide usaldusnimekirja uuendamine ebaõnnestus. Palun kontrolli oma arvuti internetiühendust ja seda, kas arvutis on kõige uuem ID-tarkvara versioon. Allkirjade verifitseerimiseks kasutatakse aegunud nimekirja. &lt;a href=&quot;http://www.id.ee/?id=37011&quot;&gt;Lisainfo&lt;/a&gt;</translation>
+        <source>The renewal of Trust Service status List, used for digital signature validation, has failed. Please check your internet connection and make sure you have the latest ID-software version installed. An expired Trust Service List (TSL) will be used for signature validation. &lt;a href=&quot;https://www.id.ee/en/article/digidoc4-message-updating-the-list-of-trusted-certificates-was-unsuccessful/&quot;&gt;Additional information&lt;/a&gt;</source>
+        <translation>Digiallkirjade kehtivuse kontrollimiseks kasutatava sertifikaatide usaldusnimekirja uuendamine ebaõnnestus. Palun kontrolli oma arvuti internetiühendust ja seda, kas arvutis on kõige uuem ID-tarkvara versioon. Allkirjade verifitseerimiseks kasutatakse aegunud nimekirja. &lt;a href=&quot;https://www.id.ee/artikkel/digidoc4-teade-sertifikaatide-usaldusnimekirja-uuendamine-ebaonnestus/&quot;&gt;Lisainfo&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Loading TSL lists</source>
         <translation>Laadin TSL-nimekirja</translation>
-    </message>
-    <message>
-        <source>TSL signing certs</source>
-        <translation>TSL signeerimise sertifikaadid</translation>
     </message>
     <message>
         <source>Create %1</source>
@@ -235,8 +235,20 @@
         <translation>Mitte praegu</translation>
     </message>
     <message>
-        <source>In order to use digital signing in online services the browser token plugin must be enabled in Your web browser.&lt;br/&gt;Instructions on how to enable token plugin can be found &lt;a href=&quot;http://id.ee/?lang=en&amp;id=36639&quot;&gt;here&lt;/a&gt;.</source>
-        <translation>E-teenustes ID-kaardiga allkirjastamiseks on Teil vajalik veel aktiveerida veebilehitsejas allkirjastamise plugin.&lt;br/&gt;Juhend aktiveerimiseks on leitav &lt;a href=&quot;http://id.ee/?lang=et&amp;id=36636&quot;&gt;siit&lt;/a&gt;.</translation>
+        <source>In order to use digital signing in online services the browser token plugin must be enabled in Your web browser.&lt;br/&gt;Instructions on how to enable token plugin can be found &lt;a href=&quot;https://www.id.ee/en/article/configuring-browsers-for-using-id-card/&quot;&gt;here&lt;/a&gt;.</source>
+        <translation>E-teenustes ID-kaardiga allkirjastamiseks on Teil vajalik veel aktiveerida veebilehitsejas allkirjastamise plugin.&lt;br/&gt;Juhend aktiveerimiseks on leitav &lt;a href=&quot;https://www.id.ee/artikkel/veebibrauserite-seadistamine-id-kaardi-kasutamiseks/&quot;&gt;siit&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>DigiDoc4 Client Help</source>
+        <translation>DigiDoc4 klient abi</translation>
+    </message>
+    <message>
+        <source>Close Window</source>
+        <translation>Sulge aken</translation>
+    </message>
+    <message>
+        <source>New Window</source>
+        <translation>Ava uus aken</translation>
     </message>
 </context>
 <context>
@@ -257,17 +269,13 @@
         <source>YES</source>
         <translation>JAH</translation>
     </message>
+    <message>
+        <source>Added file(s) exceeds the maximum size limit of the container(120MB).</source>
+        <translation>Lisatud fail(id) ületab turvaümbriku maksimaalset suurust (~120MB).</translation>
+    </message>
 </context>
 <context>
     <name>CardWidget</name>
-    <message>
-        <source>ID card in reader</source>
-        <translation>Lugejas on ID-kaart</translation>
-    </message>
-    <message>
-        <source>%1 in reader</source>
-        <translation>Lugejas on %1</translation>
-    </message>
     <message>
         <source>LOAD</source>
         <translation>LAADI</translation>
@@ -301,6 +309,14 @@
     <message>
         <source>Authentication certificate</source>
         <translation>Isikutuvastamise sertifikaat</translation>
+    </message>
+    <message>
+        <source>Selected is %1</source>
+        <translation>Valitud on %1</translation>
+    </message>
+    <message>
+        <source>%1 in reader</source>
+        <translation>Lugejas on %1</translation>
     </message>
 </context>
 <context>
@@ -435,10 +451,6 @@
         <translation>SULGE</translation>
     </message>
     <message>
-        <source>SELECT</source>
-        <translation>VALI</translation>
-    </message>
-    <message>
         <source>REMOVE</source>
         <translation>EEMALDA</translation>
     </message>
@@ -482,7 +494,7 @@
     <message>
         <source>Select</source>
         <extracomment>accessible</extracomment>
-        <translation>Vali</translation>
+        <translation>Lisa</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -492,6 +504,10 @@
     <message>
         <source>Certificate for Encryption</source>
         <translation>Krüpteerimissertifikaat</translation>
+    </message>
+    <message>
+        <source>ADD</source>
+        <translation>LISA</translation>
     </message>
 </context>
 <context>
@@ -736,6 +752,22 @@
         <source>Certificate Propagation service status: </source>
         <translation>Certificate Propagation teenuse staatus: </translation>
     </message>
+    <message>
+        <source>is set manually</source>
+        <translation>käsitsi määratud</translation>
+    </message>
+    <message>
+        <source>is set by default</source>
+        <translation>vaikimisi määratud</translation>
+    </message>
+    <message>
+        <source>TSL signing certs</source>
+        <translation>TSL signeerimise sertifikaadid</translation>
+    </message>
+    <message>
+        <source>TSL cache</source>
+        <translation>TSL puhver</translation>
+    </message>
 </context>
 <context>
     <name>DigiDoc</name>
@@ -745,11 +777,11 @@
     </message>
     <message>
         <source>Cannot add files to signed container</source>
-        <translation>Ei saa lisada faile allkirjastatud ümbrikule</translation>
+        <translation>Allkirjastatud ümbrikule ei saa lisada faile</translation>
     </message>
     <message>
         <source>Cannot add signature to empty container</source>
-        <translation>Ei saa lisada allkirja tühjale ümbrikule</translation>
+        <translation>Tühjale ümbrikule ei saa lisada allkirja</translation>
     </message>
     <message>
         <source>Missing signature</source>
@@ -761,7 +793,7 @@
     </message>
     <message>
         <source>PIN Login failed</source>
-        <translation>PIN koodi valideerimine ebaõnnestus</translation>
+        <translation>PIN-koodi valideerimine ebaõnnestus</translation>
     </message>
     <message>
         <source>Certificate status revoked</source>
@@ -792,45 +824,51 @@
         <translation>Ümbriku salvestamine ebaõnnestus</translation>
     </message>
     <message>
-        <source>Failed to sign container</source>
-        <translation>Ümbriku allkirjastamine ebaõnnestus</translation>
+        <source>Failed to sign container. Check your Time-Stamping service access settings.</source>
+        <translation>Ümbriku allkirjastamine ebaõnnestus. Kontrolli ajatempliteenuse ligipääsu seadeid.</translation>
     </message>
     <message>
-        <source>You have not granted IP-based access. Check the settings of your server access certificate.</source>
-        <translation>Puudub IP-põhine ligipääs, kontrolli juurdepääsutõendi seadeid.</translation>
+        <source>You have not granted IP-based access. Check your validity confirmation service access settings.</source>
+        <translation>Puudub IP-põhine ligipääs. Kontrolli kehtivuskinnitusteenuse ligipääsu seadeid.</translation>
     </message>
     <message>
-        <source>The limit for digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/index.php?id=39023&quot;&gt;Additional information&lt;/a&gt;</source>
-        <translation>Sinu IP-aadressi tasuta allkirjade kuulimiit on ületatud. &lt;a href=&quot;https://www.id.ee/index.php?id=39021&quot;&gt;Loe täpsemalt siit&lt;/a&gt;</translation>
-    </message>
-    <message>
-        <source>The verification of digital signatures in PDF format is performed through an external service. The file requiring verification will be forwarded to the service.
-The Information System Authority does not retain information regarding the files and users of the service.</source>
-        <translation>PDF formaadis digitaalallkirjade kehtivuse kontrollimine toimub läbi teenuse. Kontrollitav fail edastatakse teenusele.
-Riigi Infosüsteemi Amet ei säilita informatsiooni teenuse kasutajate ja failide osas.</translation>
+        <source>The limit for digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;Additional information&lt;/a&gt;</source>
+        <translation>Sinu IP-aadressi tasuta allkirjade kuulimiit on ületatud. &lt;a href=&quot;https://www.id.ee/artikkel/asutustele-kus-allkirjastatakse-digidoc4-kliendi-kaudu-suuremates-kogustes-dokumente/&quot;&gt;Loe täpsemalt siit&lt;/a&gt;</translation>
     </message>
     <message>
         <source>CANCEL</source>
         <translation>KATKESTA</translation>
     </message>
     <message>
-        <source>OK</source>
-        <translation>OK</translation>
+        <source>YES</source>
+        <translation>JAH</translation>
     </message>
     <message>
-        <source>Please check your computer time. &lt;a href=&apos;https://id.ee/index.php?id=39513&apos;&gt;Additional information&lt;/a&gt;</source>
-        <translation>Palun kontrollige oma arvuti kellaaega. &lt;a href=&apos;https://id.ee/index.php?id=39512&apos;&gt;Loe täpsemalt siit&lt;/a&gt;</translation>
+        <source>Please check your computer time. &lt;a href=&apos;https://www.id.ee/en/article/digidoc4-client-error-please-check-your-computer-time-2/&apos;&gt;Additional information&lt;/a&gt;</source>
+        <translation>Palun kontrolli oma arvuti kellaaega. &lt;a href=&apos;https://www.id.ee/artikkel/digidoc4-klient-viga-palun-kontrollige-oma-arvuti-kellaaega-2/&apos;&gt;Loe täpsemalt siit&lt;/a&gt;</translation>
     </message>
     <message>
-        <source>The timestamp added to the signature must be taken before validity confirmation</source>
-        <translation>Allkirjale lisatud ajatempel peab olema varasem kehtivuskinnitusest</translation>
+        <source>The timestamp added to the signature must be taken before validity confirmation.</source>
+        <translation>Allkirjale lisatud ajatempel peab olema varasem kehtivuskinnitusest.</translation>
+    </message>
+    <message>
+        <source>Connecting to SiVa server failed! Please check your internet connection.</source>
+        <translation>Viga SiVa serveriga ühenduse saamisel! Palun kontrolli internetiühendust.</translation>
+    </message>
+    <message>
+        <source>Failed to sign container</source>
+        <translation>Ümbriku allkirjastamine ebaõnnestus.</translation>
+    </message>
+    <message>
+        <source>Signed document in PDF and DDOC format will be transmitted to the Digital Signature Validation Service SiVa to verify the validity of the digital signature. Read more information about transmitted data to Digital Signature Validation service from &lt;a href=&quot;https://www.id.ee/en/article/data-protection-conditions-for-the-id-software-of-the-national-information-system-authority/&quot;&gt;here&lt;/a&gt;.&lt;br /&gt;Do you want to continue?</source>
+        <translation>PDF ja DDOC formaadis digitaalallkirjade kehtivuse kontrollimiseks edastatakse fail valideerimisteenusele SiVa. Digitaalallkirjade kehtivuse kontrollimisel edastatud andmete kohta loe lähemalt &lt;a href=&quot;https://www.id.ee/artikkel/riigi-infosusteemi-ameti-id-tarkvara-andmekaitsetingimused/&quot;&gt;siit&lt;/a&gt;.&lt;br /&gt;Kas soovid jätkata?</translation>
     </message>
 </context>
 <context>
     <name>DocumentModel</name>
     <message>
-        <source>This is an executable file! Executable files may contain viruses or other malicious code that could harm your computer. Are you sure you want to launch this file?</source>
-        <translation>See on käivitatav fail! Käivitatavad failid võivad sisaldada viirusi või muud pahatahtlikku koodi, mis võib kahjustada Sinu arvutit. Kas oled kindel, et tahad seda faili käivitada?</translation>
+        <source>A file with this extension cannot be opened in the DigiDoc4 Client. Download the file to view it.</source>
+        <translation>Sellise laiendiga faili ei ole võimalik avada DigiDoc4 kliendis. Faili vaatamiseks laadi see alla.</translation>
     </message>
     <message>
         <source>Cannot add the file to the envelope. File &apos;%1&apos; is already in container.</source>
@@ -845,12 +883,8 @@ Riigi Infosüsteemi Amet ei säilita informatsiooni teenuse kasutajate ja failid
         <translation>Sisemine viga</translation>
     </message>
     <message>
-        <source>NO</source>
-        <translation>EI</translation>
-    </message>
-    <message>
-        <source>YES</source>
-        <translation>JAH</translation>
+        <source>OK</source>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -871,11 +905,6 @@ Riigi Infosüsteemi Amet ei säilita informatsiooni teenuse kasutajate ja failid
         <source>Download file</source>
         <extracomment>accessible</extracomment>
         <translation>Laadi fail alla</translation>
-    </message>
-    <message>
-        <source>To open file press space or enter</source>
-        <extracomment>accessible</extracomment>
-        <translation>Faili avamiseks vajuta space või enter</translation>
     </message>
 </context>
 <context>
@@ -964,16 +993,16 @@ Riigi Infosüsteemi Amet ei säilita informatsiooni teenuse kasutajate ja failid
         <translation>Oma eID-sid hallata</translation>
     </message>
     <message>
-        <source>DigiDoc Client can be used to sign digitally with ID-card and Mobile-ID, check the validity of digital signatures and open and save documents inside the signature container.</source>
-        <translation>DigiDoc rakendusega saad dokumentidele anda ID-kaardi ja Mobiil-ID-ga digitaalallkirju, kontrollida allkirjade kehtivust ning avada ja salvestada ümbrikus sisalduvaid dokumente.</translation>
+        <source>DigiDoc Client can be used to sign digitally with ID-card, mobile-ID and Smart-ID, check the validity of digital signatures and open and save documents inside the signature container.</source>
+        <translation>DigiDoc rakendusega saad dokumentidele anda ID-kaardi, mobiil-ID ja Smart-ID-ga digitaalallkirju, kontrollida allkirjade kehtivust ning avada ja salvestada ümbrikus sisalduvaid dokumente.</translation>
     </message>
     <message>
         <source>DigiDoc Client can also be used to encrypt data and decrypt the previously encrypted data. For encryption the program uses the authentication certificate of the ID-card.</source>
         <translation>DigiDoc rakendusega saad ka andmeid salasta­da ja krüpteeritud andmeid muuta uuesti kõigile loetavaks. Salastatud konfidentsiaalseid doku­mente saavad lugeda ainult soovitud inimesed.</translation>
     </message>
     <message>
-        <source>Manage your ID-card’s PIN/PUK codes and handle certificate renewals.</source>
-        <translation>Halda oma ID-kaardi PIN ja PUK koode ning teosta sertifikaatide uuendusi.</translation>
+        <source>Manage your ID-card’s PIN/PUK codes and check personal data.</source>
+        <translation>Halda oma ID-kaardi PIN- ja PUK-koode ning kontrolli isikuandmeid.</translation>
     </message>
     <message>
         <source>How to sign document digitally?</source>
@@ -996,12 +1025,12 @@ Riigi Infosüsteemi Amet ei säilita informatsiooni teenuse kasutajate ja failid
         <translation>Faili allkirjastamiseks lohista fail oma arvutist DigiDoc rakendusse või vajuta nupul “… või vali fail kettalt”. Võid lohistada või valida ka mitu faili korraga.</translation>
     </message>
     <message>
-        <source>Once the files have been selected, check them and choose whether you want to sign with ID-card or Mobile-ID. You can also save the container without signing.</source>
-        <translation>Kui failid on valitud, siis kontrolli need üle ning vali, kas soovid allkirjastada ID-kaardi või Mobiil-ID-ga. Võid salvestada ümbriku ka allkirjasta­mata.</translation>
+        <source>Once the files have been selected, check them and choose whether you want to sign with ID-card, mobile-ID or Smart-ID. You can also save the container without signing.</source>
+        <translation>Kui failid on valitud, siis kontrolli need üle ning vali, kas soovid allkirjastada ID-kaardi, mobiil-ID või Smart-ID-ga. Võid salvestada ümbriku ka allkirjasta­mata.</translation>
     </message>
     <message>
-        <source>By entering the PIN2 code, you will have signed the document with digital signature that by law is equal to the signature signed by hand. You will find the PIN2 code in the envelope that came with your ID-card or Mobile-ID.</source>
-        <translation>Sisestades PIN2 koodi, annad digitaalse allkirja, mis on seaduse ees võrdne omakäelise allkirja­ga. PIN2 koodi leiad koodiümbrikust, mille said koos ID-kaardi või Mobiili-ID-ga.</translation>
+        <source>By entering the PIN2 code, you will have signed the document with digital signature that by law is equal to the signature signed by hand.</source>
+        <translation>Sisestades PIN2-koodi, annad digitaalse allkirja, mis on seaduse ees võrdne omakäelise allkirja­ga.</translation>
     </message>
     <message>
         <source>How to encrypt documents?</source>
@@ -1033,7 +1062,7 @@ Riigi Infosüsteemi Amet ei säilita informatsiooni teenuse kasutajate ja failid
     </message>
     <message>
         <source>Manage PIN and PUK codes</source>
-        <translation>Halda PIN ja PUK koode</translation>
+        <translation>Halda PIN- ja PUK-koode</translation>
     </message>
     <message>
         <source>Check personal data</source>
@@ -1041,7 +1070,7 @@ Riigi Infosüsteemi Amet ei säilita informatsiooni teenuse kasutajate ja failid
     </message>
     <message>
         <source>Under &quot;My eID&quot;, you will find the option to modify your PIN1, PIN2 and PUK, and the details of the certificates. Here you can also unlock the PUK code of your blocked PIN.</source>
-        <translation>“Minu eID” alt leiad oma PIN1, PIN2 ja PUK koodi muutmise võimaluse ning sertifikaatide detail­andmed. Siin saad ka oma blokeeritud PIN-e PUK koodi abil lukust lahti teha.</translation>
+        <translation>“Minu eID” alt leiad oma PIN1-, PIN2- ja PUK-koodi muutmise võimaluse ning sertifikaatide detail­andmed. Siin saad ka oma blokeeritud PIN-e PUK-koodi abil lukust lahti teha.</translation>
     </message>
     <message>
         <source>&quot;My eID&quot; also provides a good overview of your contact information and offers the opportunity to forward your email to @eesti.ee address.</source>
@@ -1092,7 +1121,7 @@ Riigi Infosüsteemi Amet ei säilita informatsiooni teenuse kasutajate ja failid
     </message>
     <message>
         <source>GIVEN NAMES</source>
-        <translation>EESNIMED</translation>
+        <translation>EESNIMI</translation>
     </message>
     <message>
         <source>PERSONAL CODE</source>
@@ -1146,7 +1175,7 @@ Riigi Infosüsteemi Amet ei säilita informatsiooni teenuse kasutajate ja failid
     <message>
         <source>Given names</source>
         <extracomment>accessible</extracomment>
-        <translation>Eesnimed</translation>
+        <translation>Eesnimi</translation>
     </message>
     <message>
         <source>Surname</source>
@@ -1177,7 +1206,7 @@ Riigi Infosüsteemi Amet ei säilita informatsiooni teenuse kasutajate ja failid
     </message>
     <message>
         <source>Enter the personal code, institution or registry code</source>
-        <translation>Sisteta isikukood, asutus või registri kood</translation>
+        <translation>Sisesta isikukood, asutus või registrikood</translation>
     </message>
     <message>
         <source>+ ADD MORE FILES</source>
@@ -1269,10 +1298,6 @@ Riigi Infosüsteemi Amet ei säilita informatsiooni teenuse kasutajate ja failid
         <translation>NÄITA SERTIFIKAATI</translation>
     </message>
     <message>
-        <source>Key</source>
-        <translation>Adressaat</translation>
-    </message>
-    <message>
         <source>Crypto method</source>
         <translation>Krüpteerimismeetod</translation>
     </message>
@@ -1282,15 +1307,11 @@ Riigi Infosüsteemi Amet ei säilita informatsiooni teenuse kasutajate ja failid
     </message>
     <message>
         <source>Key derivation method</source>
-        <translation>Key derivation method</translation>
+        <translation>Võtme tuletamise meetod</translation>
     </message>
     <message>
         <source>ConcatKDF digest method</source>
-        <translation>ConcatKDF digest method</translation>
-    </message>
-    <message>
-        <source>Expires</source>
-        <translation>Aegub</translation>
+        <translation>ConcatKDF referaatmeetod</translation>
     </message>
     <message>
         <source>Issuer</source>
@@ -1305,6 +1326,14 @@ Riigi Infosüsteemi Amet ei säilita informatsiooni teenuse kasutajate ja failid
         <source>Show certificate</source>
         <extracomment>accessible</extracomment>
         <translation>Näita sertifikaati</translation>
+    </message>
+    <message>
+        <source>Recipient</source>
+        <translation>Adressaat</translation>
+    </message>
+    <message>
+        <source>Expiry date</source>
+        <translation>Aegumiskuupäev</translation>
     </message>
 </context>
 <context>
@@ -1338,6 +1367,29 @@ LDAP serveriga ei saa ühendust.</translation>
     <message>
         <source>Failed to start ssl</source>
         <translation>Ssl käivitamine ebaõnnestus</translation>
+    </message>
+</context>
+<context>
+    <name>MacMenuBar</name>
+    <message>
+        <source>&amp;File</source>
+        <translation>&amp;Fail</translation>
+    </message>
+    <message>
+        <source>Info</source>
+        <translation>Info</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Sulge</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Seaded</translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
+        <translation>&amp;Abi</translation>
     </message>
 </context>
 <context>
@@ -1383,6 +1435,10 @@ ID-KAARDIGA</translation>
 </context>
 <context>
     <name>MainWindow</name>
+    <message>
+        <source>YES</source>
+        <translation>JAH</translation>
+    </message>
     <message>
         <source>Help</source>
         <translation>Abi</translation>
@@ -1526,16 +1582,12 @@ ID-KAARDIGA</translation>
         <translation>Digitaalallkirjade kinnituslehe kuvamiseks peab olema arvutis vähemalt üks printer seadistatud!</translation>
     </message>
     <message>
-        <source>Documents (%1%2)</source>
-        <translation>Dokumendid (%1%2)</translation>
-    </message>
-    <message>
         <source>%1 has been changed and the certificate has been unblocked!</source>
-        <translation>%1 kood on muudetud ja sertifikaadi blokeering tühistatud!</translation>
+        <translation>%1-kood on muudetud ja sertifikaadi blokeering tühistatud!</translation>
     </message>
     <message>
         <source>%1 changed!</source>
-        <translation>%1 kood muudetud!</translation>
+        <translation>%1-kood muudetud!</translation>
     </message>
     <message>
         <source>E-mail address missing or invalid!</source>
@@ -1563,18 +1615,18 @@ ID-KAARDIGA</translation>
     </message>
     <message>
         <source>%1 length has to be between %2 and 12</source>
-        <translation>%1 koodi pikkus peab olema %2-12 numbrit</translation>
+        <translation>%1-koodi pikkus peab olema %2-12 numbrit</translation>
     </message>
     <message numerus="yes">
         <source>Wrong %1 code. You can try %n more time(s).</source>
         <translation>
-            <numerusform>Vale %1 kood. Saad veel proovida %n kord.</numerusform>
-            <numerusform>Vale %1 kood. Saad veel proovida %n korda.</numerusform>
+            <numerusform>Vale %1-kood. Saad veel proovida %n kord.</numerusform>
+            <numerusform>Vale %1-kood. Saad veel proovida %n korda.</numerusform>
         </translation>
     </message>
     <message>
         <source>%1 blocked</source>
-        <translation>%1 kood blokeeritud</translation>
+        <translation>%1-kood blokeeritud</translation>
     </message>
     <message>
         <source>Old and new %1 has to be different!</source>
@@ -1582,11 +1634,11 @@ ID-KAARDIGA</translation>
     </message>
     <message>
         <source>New %1 codes doesn&apos;t match</source>
-        <translation>Uued %1 koodid on erinevad</translation>
+        <translation>Uued %1-koodid on erinevad</translation>
     </message>
     <message>
         <source>%1 timeout</source>
-        <translation>%1 päringu kannatus katkes</translation>
+        <translation>%1 päring aegus</translation>
     </message>
     <message>
         <source>Success</source>
@@ -1598,7 +1650,7 @@ ID-KAARDIGA</translation>
     </message>
     <message>
         <source>Wrong PIN was entered or cancelled, there was a problem with certificates or browser does not support ID-card.</source>
-        <translation>Sisestati vale PIN kood, katkestati PIN koodi sisestamine, tekkisid probleemid sertifikaatidega või puudub ID-kaardi tugi brauseris.</translation>
+        <translation>Sisestati vale PIN-kood, katkestati PIN-koodi sisestamine, tekkisid probleemid sertifikaatidega või puudub ID-kaardi tugi brauseris.</translation>
     </message>
     <message>
         <source>ID-card certificate is not valid.</source>
@@ -1621,8 +1673,8 @@ ID-KAARDIGA</translation>
         <translation>Ühtegi ametliku e-posti suunamist ei leitud</translation>
     </message>
     <message>
-        <source>Your email account has been blocked. To open it, please send an email to toimetaja@eesti.ee or call 663 0215.</source>
-        <translation>Sinu e-posti konto on suletud. Avamiseks saatke palun e-kiri aadressil toimetaja@eesti.ee või helistage telefonil 663 0215.</translation>
+        <source>Your email account has been blocked. To open it, please send an email to help@ria.ee.</source>
+        <translation>Sinu e-posti konto on suletud. Avamiseks saatke palun e-kiri aadressil help@ria.ee.</translation>
     </message>
     <message>
         <source>Invalid email address</source>
@@ -1631,10 +1683,6 @@ ID-KAARDIGA</translation>
     <message>
         <source>Forwarding is activated and you have been sent an email with activation key. Forwarding will be activated only after confirming the key.</source>
         <translation>Suunamine on salvestatud, ning Sinule on saadetud kiri edasisuunamisaadressi aktiveerimisvõtmega. Suunamine on kasutatav ainult pärast aktiveerimisvõtme sisestamist.</translation>
-    </message>
-    <message>
-        <source>Opening</source>
-        <translation>Avamine</translation>
     </message>
     <message>
         <source>Signing</source>
@@ -1685,12 +1733,16 @@ ID-KAARDIGA</translation>
         <source>The card in the card reader is not an Estonian ID-card</source>
         <translation>Lugejas olev kaart ei ole Eesti ID-kaart</translation>
     </message>
+    <message>
+        <source>Decrypting</source>
+        <translation>Dekrüpteerin</translation>
+    </message>
 </context>
 <context>
     <name>MobileDialog</name>
     <message>
-        <source>Enter your phone number to sign with Mobile ID</source>
-        <translation>&lt;b&gt;Sisesta oma telefoninumber Mobiil-IDga&lt;br/&gt;allkirjastamiseks&lt;/b&gt;</translation>
+        <source>Enter your phone number to sign with mobile-ID</source>
+        <translation>&lt;b&gt;Sisesta oma telefoninumber mobiil-IDga&lt;br/&gt;allkirjastamiseks&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Remember me</source>
@@ -1724,11 +1776,15 @@ ID-KAARDIGA</translation>
     </message>
     <message>
         <source>Country code and phone number</source>
-        <translation>Riigi kood ja telefoninumber</translation>
+        <translation>Riigikood ja telefoninumber</translation>
     </message>
     <message>
         <source>Personal code</source>
         <translation>Isikukood</translation>
+    </message>
+    <message>
+        <source>Invalid country code</source>
+        <translation>Vigane riigikood</translation>
     </message>
 </context>
 <context>
@@ -1742,7 +1798,7 @@ ID-KAARDIGA</translation>
         <translation>Toimub allkirjastamine</translation>
     </message>
     <message>
-        <source>Phone absent</source>
+        <source>Phone is not in coverage area</source>
         <translation>Telefon ei ole levis</translation>
     </message>
     <message>
@@ -1751,23 +1807,25 @@ ID-KAARDIGA</translation>
     </message>
     <message>
         <source>SIM error</source>
-        <translation>SIM kaardi viga</translation>
+        <translation>SIM-kaardi viga</translation>
     </message>
     <message>
         <source>Connecting to SK server failed! Please check your internet connection.</source>
-        <translation>Viga SK serveriga ühenduse saamisel!&lt;br/&gt;Palun kontrollige internetiühendust.</translation>
+        <translation>Viga SK serveriga ühenduse saamisel!&lt;br/&gt;Palun kontrolli internetiühendust.</translation>
     </message>
     <message>
-        <source>User is not a Mobile-ID client</source>
-        <translation>Kasutaja ei ole Mobiil-ID klient</translation>
+        <source>User is not a mobile-ID client</source>
+        <translation>Kasutaja ei ole mobiil-ID klient</translation>
     </message>
     <message>
         <source>Make sure control code matches with one in phone screen
-and enter Mobile-ID PIN2-code.
-Control code: %1</source>
+and enter mobile-ID PIN2-code.</source>
         <translation>Veendu kontrollkoodi õigsuses
-ja sisesta telefonil Mobiil-ID PIN2-kood.
-Kontrollkood: %1</translation>
+ja sisesta telefonil mobiil-ID PIN2-kood.</translation>
+    </message>
+    <message>
+        <source>Control code:</source>
+        <translation>Kontrollkood:</translation>
     </message>
     <message>
         <source>SSL handshake failed. Check the proxy settings of your computer or software upgrades.</source>
@@ -1784,11 +1842,7 @@ Kontrollkood: %1</translation>
     </message>
     <message>
         <source>%1 service has encountered technical errors. Please try again later.</source>
-        <translation>%1 teenuses esinevad tehnilised tõrked. Palun proovige mõne aja pärast uuesti.</translation>
-    </message>
-    <message>
-        <source>Failed to send request. </source>
-        <translation>Päringu saatmine ebaõnnestus. </translation>
+        <translation>%1 teenuses esinevad tehnilised tõrked. Palun proovi mõne aja pärast uuesti.</translation>
     </message>
     <message>
         <source>Invalid content type header </source>
@@ -1812,11 +1866,11 @@ Kontrollkood: %1</translation>
     </message>
     <message>
         <source>Session not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessiooni ei leitud</translation>
     </message>
     <message>
-        <source>Mobile-ID</source>
-        <translation>Mobiil-ID</translation>
+        <source>mobile-ID</source>
+        <translation>mobiil-ID</translation>
     </message>
     <message>
         <source>Smart-ID</source>
@@ -1828,31 +1882,29 @@ Kontrollkood: %1</translation>
     </message>
     <message>
         <source>Make sure control code matches with one in phone screen
-and enter Smart-ID PIN2-code.
-Control code: %1</source>
+and enter Smart-ID PIN2-code.</source>
         <translation>Veendu kontrollkoodi õigsuses
-ja sisesta nutiseadmes Smart-ID PIN2-kood.
-Kontrollkood: %1</translation>
+ja sisesta nutiseadmes Smart-ID PIN2-kood.</translation>
     </message>
     <message>
-        <source>Failed to sign container. Check your %1 service access settings. &lt;a href=&quot;https://www.id.ee/index.php?id=39023&quot;&gt;Additional information&lt;/a&gt;</source>
-        <translation>Ümbriku allkirjastamine ebaõnnestus. Kontrolli %1 teenuse ligipääsu seadeid. &lt;a href=&quot;https://www.id.ee/index.php?id=39021&quot;&gt;Loe täpsemalt siit&lt;/a&gt;</translation>
+        <source>Failed to sign container. Check your %1 service access settings. &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;Additional information&lt;/a&gt;</source>
+        <translation>Ümbriku allkirjastamine ebaõnnestus. Kontrolli %1 teenuse ligipääsu seadeid. &lt;a href=&quot;https://www.id.ee/artikkel/asutustele-kus-allkirjastatakse-digidoc4-kliendi-kaudu-suuremates-kogustes-dokumente/&quot;&gt;Loe täpsemalt siit&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Your Smart-ID certificate level must be qualified to sign documents in DigiDoc4 Client.</source>
-        <translation>DigiDoc4 kliendis allkirjastamiseks peab teie Smart-ID vastama tasemele kõrge.</translation>
+        <translation>DigiDoc4 kliendis allkirjastamiseks peab sinu Smart-ID vastama tasemele kõrge.</translation>
     </message>
     <message>
-        <source>Your signing software needs an upgrade. Please update your ID software, which you can get from &lt;a href=&quot;http://www.id.ee/?lang=en&quot;&gt;www.id.ee&lt;/a&gt;. Additional info is available ID-helpline (+372) 666 8888.</source>
-        <translation>Allkirjastamise tarkvara vajab uuendamist. Paigaldage uus ID-tarkvara veebilehelt &lt;a href=&quot;http://www.id.ee/?lang=et&quot;&gt;www.id.ee&lt;/a&gt;. Lisainfo ID-abiliini telefonil (+372) 666 8888.</translation>
+        <source>Your signing software needs an upgrade. Please update your ID software, which you can get from &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;www.id.ee&lt;/a&gt;. Additional info is available ID-helpline (+372) 666 8888.</source>
+        <translation>Allkirjastamise tarkvara vajab uuendamist. Paigalda uus ID-tarkvara veebilehelt &lt;a href=&quot;https://www.id.ee/&quot;&gt;www.id.ee&lt;/a&gt;. Lisainfo ID-abiliini telefonil (+372) 666 8888.</translation>
     </message>
     <message>
         <source>Open the Smart-ID application on your smart device and confirm device for signing.</source>
         <translation>Ava oma nutiseadmes Smart-ID rakendus ja kinnita seade allkirjastamiseks.</translation>
     </message>
     <message>
-        <source>The limit for digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/index.php?id=39023&quot;&gt;Additional information&lt;/a&gt;</source>
-        <translation>Sinu IP-aadressi tasuta allkirjade kuulimiit on ületatud. &lt;a href=&quot;https://www.id.ee/index.php?id=39021&quot;&gt;Loe täpsemalt siit&lt;/a&gt;</translation>
+        <source>The limit for %1 digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;Additional information&lt;/a&gt;</source>
+        <translation>Selle IP-aadressi %1 tasuta allkirjade kuulimiit on ületatud. &lt;a href=&quot;https://www.id.ee/artikkel/asutustele-kus-allkirjastatakse-digidoc4-kliendi-kaudu-suuremates-kogustes-dokumente/&quot;&gt;Loe täpsemalt siit&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Please include correct country code.</source>
@@ -1862,6 +1914,47 @@ Kontrollkood: %1</translation>
         <source>Error: an incorrect control code was chosen</source>
         <translation>Viga: valiti vale kontrollkood</translation>
     </message>
+    <message>
+        <source>Sign document</source>
+        <comment>Do not translate to RUS (IB-6416)</comment>
+        <translation>Allkirjasta dokument</translation>
+    </message>
+    <message>
+        <source>Your mobile-ID transaction has failed. Please contact your mobile network operator.</source>
+        <translation>Sinu mobiil-ID toiming ebaõnnestus. Palun võta ühendust enda mobiilioperaatoriga.</translation>
+    </message>
+    <message>
+        <source>User denied or cancelled</source>
+        <translation>Kasutaja keeldus või katkestas</translation>
+    </message>
+    <message>
+        <source>Your mobile-ID transaction has expired. Please try again.</source>
+        <translation>Sinu mobiil-ID toiming aegus. Palun proovi uuesti.</translation>
+    </message>
+    <message>
+        <source>Your Smart-ID transaction has expired. Please try again.</source>
+        <translation>Sinu Smart-ID toiming aegus. Palun proovi uuesti.</translation>
+    </message>
+    <message>
+        <source>Failed to connect with service server. Please check your network settings or try again later.</source>
+        <translation>Teenuse serveriga ühendus ebaõnnestus. Palun kontrolli võrgu sätteid või proovi hiljem uuesti.</translation>
+    </message>
+    <message>
+        <source>Failed to send request. Check your %1 service access settings.</source>
+        <translation>Päringu saatmine ebaõnnestus. Kontrolli %1 teenuse ligipääsu seadeid.</translation>
+    </message>
+    <message>
+        <source>Your Smart-ID transaction has failed. Please check your Smart-ID application or contact Smart-ID customer support.</source>
+        <translation>Sinu Smart-ID toiming ebaõnnestus. Palun kontrolli Smart-ID rakendust või võta ühendust Smart-ID klienditoega.</translation>
+    </message>
+    <message>
+        <source>Mobile-ID</source>
+        <translation>Mobiil-ID</translation>
+    </message>
+    <message>
+        <source>Failed to send request. %1 service has encountered technical errors. Please try again later.</source>
+        <translation>Päringu saatmine ebaõnnestus. %1 teenuses esinevad tehnilised tõrked. Palun proovige mõne aja pärast uuesti.</translation>
+    </message>
 </context>
 <context>
     <name>NoCardInfo</name>
@@ -1870,16 +1963,16 @@ Kontrollkood: %1</translation>
         <translation>Lugejas ei ole kaarti; kontrolli, kas ID-kaart on õiget pidi lugejas</translation>
     </message>
     <message>
-        <source>PCSC service is not running</source>
-        <translation>PCSC teenus ei tööta</translation>
-    </message>
-    <message>
         <source>No readers found</source>
         <translation>Ühtegi kiipkaardilugejat pole ühendatud</translation>
     </message>
     <message>
         <source>Loading data</source>
         <translation>Loen andmeid</translation>
+    </message>
+    <message>
+        <source>The PCSC service, required for using the ID-card, is not working. Check your computer settings.</source>
+        <translation>ID-kaardi kasutamiseks vajalik PCSC teenus ei tööta. Kontrolli arvuti seadeid.</translation>
     </message>
 </context>
 <context>
@@ -1893,16 +1986,8 @@ Kontrollkood: %1</translation>
         <translation>KONTROLLI @EESTI.EE E-POSTI STAATUST</translation>
     </message>
     <message>
-        <source>No official email redirects found. To send email to @eesti.ee, please enter your email address:</source>
-        <translation>Ühtegi ametlikku e-posti suunamist ei leitud.  @eesti.ee kirjade suunamiseks palun sisesta oma e-posti aadress:</translation>
-    </message>
-    <message>
         <source>ACTIVATE REDIRECTION</source>
         <translation>AKTIVEERI SUUNAMINE</translation>
-    </message>
-    <message>
-        <source>For more detailed official email address forwarding, please visit &lt;a href=&apos;http://www.eesti.ee/en/&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;eesti.ee&lt;/span&gt;&lt;/a&gt;</source>
-        <translation>Täiuslikuma ametliku e-posti häälestamisvahendi leiad portaalist &lt;a href=&apos;http://www.eesti.ee/et/&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;eesti.ee&lt;/span&gt;&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Your @eesti.ee e-mail has been forwarded to </source>
@@ -1925,6 +2010,14 @@ Kontrollkood: %1</translation>
         <source>Activate redirection</source>
         <extracomment>accessible</extracomment>
         <translation>Aktiveeri suunamine</translation>
+    </message>
+    <message>
+        <source>For more detailed official email address forwarding, please visit &lt;a href=&apos;http://www.eesti.ee/en/&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;eesti.ee&lt;/span&gt;&lt;/a&gt;. &lt;a href=&apos;https://www.eesti.ee/en/using-the-state-portal#terms-of-the-official-email-service-of-eestiee&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;Terms&lt;/span&gt;&lt;/a&gt; of the official email service of eesti.ee.</source>
+        <translation>Täiuslikuma ametliku e-posti häälestamisvahendi leiad portaalist &lt;a href=&apos;http://www.eesti.ee/et/&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;eesti.ee&lt;/span&gt;&lt;/a&gt;. Eesti.ee ametliku postkasti teenuse &lt;a href=&apos;https://www.eesti.ee/et/riigiportaali-abi#eestiee-ametliku-postkasti-teenuse-kasutustingimused&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;kasutustingimused&lt;/span&gt;&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>To send email to @eesti.ee, please enter your email address:</source>
+        <translation>@eesti.ee kirjade suunamiseks palun sisesta oma e-posti aadress:</translation>
     </message>
 </context>
 <context>
@@ -1998,7 +2091,7 @@ Kontrollkood: %1</translation>
     <name>PinUnblock</name>
     <message>
         <source>VALID PUK CODE</source>
-        <translation>KEHTIV PUK KOOD</translation>
+        <translation>KEHTIV PUK-KOOD</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -2010,11 +2103,11 @@ Kontrollkood: %1</translation>
     </message>
     <message>
         <source>PIN2 code is used to digitally sign documents.</source>
-        <translation>PIN2 koodi kasutatakse digitaalallkirja andmiseks.</translation>
+        <translation>PIN2-koodi kasutatakse digitaalallkirja andmiseks.</translation>
     </message>
     <message>
         <source>PIN1 code is used for confirming the identity of a person.</source>
-        <translation>PIN1 koodi kasutatakse isikutuvastamiseks.</translation>
+        <translation>PIN1-koodi kasutatakse isikutuvastamiseks.</translation>
     </message>
     <message>
         <source>%1 unblocking</source>
@@ -2022,11 +2115,11 @@ Kontrollkood: %1</translation>
     </message>
     <message>
         <source>%1 code change</source>
-        <translation>%1 koodi vahetus</translation>
+        <translation>%1-koodi vahetus</translation>
     </message>
     <message>
         <source>VALID %1 CODE</source>
-        <translation>KEHTIV %1 KOOD</translation>
+        <translation>KEHTIV %1-KOOD</translation>
     </message>
     <message>
         <source>CHANGE</source>
@@ -2034,11 +2127,11 @@ Kontrollkood: %1</translation>
     </message>
     <message>
         <source>NEW %1 CODE</source>
-        <translation>UUS %1 KOOD</translation>
+        <translation>UUS %1-KOOD</translation>
     </message>
     <message>
         <source>NEW %1 CODE AGAIN</source>
-        <translation>UUS %1 KOOD UUESTI</translation>
+        <translation>UUS %1-KOOD UUESTI</translation>
     </message>
     <message>
         <source>PUK remaining attempts: %1</source>
@@ -2070,7 +2163,7 @@ Kontrollkood: %1</translation>
     </message>
     <message>
         <source>Current %1 code and new %1 code must be different</source>
-        <translation>Kehtiv %1 kood ja uus %1 kood peavad olema erinevad</translation>
+        <translation>Kehtiv %1-kood ja uus %1-kood peavad olema erinevad</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2089,31 +2182,31 @@ Kontrollkood: %1</translation>
     </message>
     <message>
         <source>PUK code is used for unblocking the certificates, when PIN1 or PIN2 has been entered 3 times incorrectly.</source>
-        <translation>PUK koodi abil saab tühistada sertifikaadi blokeeringu, kui PIN1 või PIN2 koodi on 3 korda järjest valesti sisestatud.</translation>
+        <translation>PUK-koodi abil saab tühistada sertifikaadi blokeeringu, kui PIN1- või PIN2-koodi on 3 korda järjest valesti sisestatud.</translation>
     </message>
     <message>
         <source>If you forget the PUK code or the certificates remain blocked, you have to visit the &lt;a href=&quot;https://www.politsei.ee/en/&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;service center&lt;/span&gt;&lt;/a&gt; to obtain new codes.</source>
-        <translation>Kui peale vahetamist PUK kood läheb meelest ära ja sertifikaat jääb blokeerituks kolme vale PIN1 või PIN2 sisetamise järel, siis ainus võimalus ID-kaart jälle tööle saada on pöörduda &lt;a href=&quot;https://www.politsei.ee&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;klienditeeninduspunkti&lt;/span&gt;&lt;/a&gt; poole.</translation>
+        <translation>Kui peale vahetamist PUK-kood läheb meelest ära ja sertifikaat jääb blokeerituks kolme vale PIN1 või PIN2 sisetamise järel, siis ainus võimalus ID-kaart jälle tööle saada on pöörduda &lt;a href=&quot;https://www.politsei.ee&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;klienditeeninduspunkti&lt;/span&gt;&lt;/a&gt; poole.</translation>
     </message>
     <message>
         <source>To unblock the certificate you have to enter the PUK code.</source>
-        <translation>Sertifikaadi blokeeringu tühistamiseks sisesta kaardi PUK kood.</translation>
+        <translation>Sertifikaadi blokeeringu tühistamiseks sisesta kaardi PUK-kood.</translation>
     </message>
     <message>
         <source>You can find your PUK code inside the ID-card codes envelope.</source>
-        <translation>PUK koodi leiad ID-kaardi koodiümbrikus, kui sa pole seda vahepeal muutnud.</translation>
+        <translation>PUK-koodi leiad ID-kaardi koodiümbrikus, kui sa pole seda vahepeal muutnud.</translation>
     </message>
     <message>
         <source>If you have forgotten the PUK code for your ID card, please visit &lt;a href=&quot;https://www.politsei.ee/en/&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;the Police and Border Guard Board service center&lt;/span&gt;&lt;/a&gt; to obtain new PIN codes.</source>
-        <translation>Kui sa oled unustanud enda ID-kaardi PUK koodi, külasta &lt;a href=&quot;https://www.politsei.ee&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;Politsei- ja Piirivalve esindust&lt;/span&gt;&lt;/a&gt;, kus väljastatakse uus koodiümbrik.</translation>
+        <translation>Kui sa oled unustanud enda ID-kaardi PUK-koodi, külasta &lt;a href=&quot;https://www.politsei.ee&quot;&gt;&lt;span style=&quot;color: #006EB5; text-decoration: none;&quot;&gt;Politsei- ja Piirivalve esindust&lt;/span&gt;&lt;/a&gt;, kus väljastatakse uus koodiümbrik.</translation>
     </message>
     <message>
         <source>PUK code is written in the envelope, that is given with the ID-card.</source>
-        <translation>PUK koodi leiad ID-kaardi koodiümbrikus, kui sa pole seda vahepeal muutnud.</translation>
+        <translation>PUK-koodi leiad ID-kaardi koodiümbrikus, kui sa pole seda vahepeal muutnud.</translation>
     </message>
     <message>
         <source>If PIN%1 is inserted incorrectly 3 times the %2 certificate will be blocked and it will be impossible to use ID-card to %3, until it is unblocked via the PUK code.</source>
-        <translation>Kui sisestad PIN%1 koodi kolm korda valesti, siis %2 sertifikaat blokeeritakse ning ID-kaarti pole võimalik %3 kasutada enne blokeeringu tühistamist PUK koodi abil.</translation>
+        <translation>Kui sisestad PIN%1-koodi kolm korda valesti, siis %2 sertifikaat blokeeritakse ning ID-kaarti pole võimalik %3 kasutada enne blokeeringu tühistamist PUK-koodi abil.</translation>
     </message>
     <message>
         <source>signing</source>
@@ -2133,7 +2226,7 @@ Kontrollkood: %1</translation>
     </message>
     <message>
         <source>If you have forgotten PIN%1, but know PUK, then here you can enter new PIN%1.</source>
-        <translation>Kui oled unustanud PIN%1 koodi, kuid tead PUK koodi, siis siin saad määrata uue PIN%1 koodi.</translation>
+        <translation>Kui oled unustanud PIN%1-koodi, kuid tead PUK-koodi, siis siin saad määrata uue PIN%1-koodi.</translation>
     </message>
 </context>
 <context>
@@ -2248,14 +2341,7 @@ Kontrollkood: %1</translation>
     </message>
 </context>
 <context>
-    <name>QFileDialog</name>
-    <message>
-        <source>All Files (*)</source>
-        <translation>Kõik failid (*)</translation>
-    </message>
-</context>
-<context>
-    <name>QPKCS11</name>
+    <name>QCryptoBackend</name>
     <message>
         <source>PIN Canceled</source>
         <translation>PIN katkestatud</translation>
@@ -2277,8 +2363,15 @@ Kontrollkood: %1</translation>
         <translation>PKCS11 seadme viga</translation>
     </message>
     <message>
-        <source>PKCS11 unknown error</source>
-        <translation>PKCS11 tundmatu viga</translation>
+        <source>Unknown error</source>
+        <translation>Tundmatu viga</translation>
+    </message>
+</context>
+<context>
+    <name>QFileDialog</name>
+    <message>
+        <source>All Files (*)</source>
+        <translation>Kõik failid (*)</translation>
     </message>
 </context>
 <context>
@@ -2293,7 +2386,7 @@ Kontrollkood: %1</translation>
     </message>
     <message>
         <source>Failed to login token</source>
-        <translation>PIN koodi valideerimine ebaõnnestus</translation>
+        <translation>PIN-koodi valideerimine ebaõnnestus</translation>
     </message>
     <message>
         <source>Failed to sign document</source>
@@ -2334,12 +2427,12 @@ Kontrollkood: %1</translation>
 <context>
     <name>RoleAddressDialog</name>
     <message>
-        <source>Role / resolution</source>
-        <translation>Roll / resolutsioon</translation>
+        <source>Enter your role and address info</source>
+        <translation>Sisesta oma roll ja aadress</translation>
     </message>
     <message>
-        <source>Address</source>
-        <translation>Aadress</translation>
+        <source>Role / resolution</source>
+        <translation>Roll / resolutsioon</translation>
     </message>
     <message>
         <source>City</source>
@@ -2360,6 +2453,18 @@ Kontrollkood: %1</translation>
     <message>
         <source>SIGN</source>
         <translation>ALLKIRJASTAN</translation>
+    </message>
+    <message>
+        <source>Sign</source>
+        <translation>Allkirjastan</translation>
+    </message>
+    <message>
+        <source>CANCEL</source>
+        <translation>KATKESTA</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Katkesta</translation>
     </message>
 </context>
 <context>
@@ -2483,10 +2588,6 @@ Kontrollkood: %1</translation>
         <translation>Soovin allkirjastada Leedu, Läti ID-kaardiga</translation>
     </message>
     <message>
-        <source>Restart now</source>
-        <translation>Taaskäivita rakendus</translation>
-    </message>
-    <message>
         <source>Show print summary</source>
         <translation>Näita kinnituslehte</translation>
     </message>
@@ -2499,8 +2600,8 @@ Kontrollkood: %1</translation>
         <translation>Ligipääs kehtivuskinnitusteenusele</translation>
     </message>
     <message>
-        <source>https://www.id.ee/index.php?id=39245</source>
-        <translation>https://www.id.ee/index.php?id=39244</translation>
+        <source>https://www.id.ee/en/article/access-certificate-what-is-it/</source>
+        <translation>https://www.id.ee/artikkel/juurdepaasutoend-mis-see-on/</translation>
     </message>
     <message>
         <source>Server access certificate</source>
@@ -2527,8 +2628,8 @@ Kontrollkood: %1</translation>
         <translation>Ligipääs ajatempliteenusele</translation>
     </message>
     <message>
-        <source>https://www.id.ee/index.php?id=39076</source>
-        <translation>https://www.id.ee/index.php?id=39062</translation>
+        <source>https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/</source>
+        <translation>https://www.id.ee/artikkel/asutustele-kus-allkirjastatakse-digidoc4-kliendi-kaudu-suuremates-kogustes-dokumente/</translation>
     </message>
     <message>
         <source>No proxy</source>
@@ -2567,16 +2668,8 @@ Kontrollkood: %1</translation>
         <translation>Interneti seaded on korrektsed, kehtivuskinnitusteenus on kättesaadav!</translation>
     </message>
     <message>
-        <source>Base version:</source>
-        <translation>Baasversioon:</translation>
-    </message>
-    <message>
         <source>DigiDoc4 client</source>
         <translation>DigiDoc4 klient</translation>
-    </message>
-    <message>
-        <source>%1 version %2, released %3%4</source>
-        <translation>%1 versioon %2, avalikustatud %3%4</translation>
     </message>
     <message>
         <source>Checking updates has failed.</source>
@@ -2604,10 +2697,10 @@ Kontrollkood: %1</translation>
     </message>
     <message>
         <source>&lt;p&gt;Estonian ID-software is released by Information Systems&apos;s Authority&lt;br /&gt;
-In case of questions please contact our support via &lt;a href=&quot;https://id.ee/?lang=en&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;id.ee&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
+In case of questions please contact our support via &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;id.ee&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
 Additional licenses and components</source>
         <translation>&lt;p&gt;ID-tarkvara arendaja Riigi Infosüsteemi Amet&lt;br /&gt;
-Küsimuste korral pöörduge &lt;a href=&quot;https://id.ee/?lang=et&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;id.ee&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
+Küsimuste korral võta ühendust &lt;a href=&quot;https://www.id.ee/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;ID-abikeskusega&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
 Täiendavad litsentsid ja komponendid</translation>
     </message>
     <message>
@@ -2629,10 +2722,6 @@ Täiendavad litsentsid ja komponendid</translation>
     <message>
         <source>Text files (*.txt)</source>
         <translation>Tekstifailid (*.txt)</translation>
-    </message>
-    <message>
-        <source>Error occurred</source>
-        <translation>Tekkis viga</translation>
     </message>
     <message>
         <source>Failed write to file!</source>
@@ -2707,16 +2796,57 @@ Täiendavad litsentsid ja komponendid</translation>
         <translation>Abi</translation>
     </message>
     <message>
-        <source>Access to Mobile-ID and Smart-ID service</source>
+        <source>Access to mobile-ID and Smart-ID service</source>
         <translation>Ligipääs mobiil-ID ja Smart-ID teenusele</translation>
     </message>
     <message>
-        <source>https://www.id.ee/index.php?id=39023</source>
-        <translation>https://www.id.ee/index.php?id=39021</translation>
+        <source>DigiDoc4 client configuration update was successful.</source>
+        <translation>DigiDoc4 kliendi konfiguratsiooni värskendamine õnnestus.</translation>
     </message>
     <message>
-        <source>Digidoc4 client configuration update was successful.</source>
-        <translation>Digidoc4 kliendi konfiguratsiooni värskendamine õnnestus.</translation>
+        <source>%1 version %2, released %3</source>
+        <translation>%1 versioon %2, avalikustatud %3</translation>
+    </message>
+    <message>
+        <source>Applying this setting requires application restart. Restart now?</source>
+        <translation>Selle seadistuse rakendamine vajab rakenduse taaskäivitamist. Taaskäivita rakendus?</translation>
+    </message>
+    <message>
+        <source>YES</source>
+        <translation>JAH</translation>
+    </message>
+    <message>
+        <source>NO</source>
+        <translation>EI</translation>
+    </message>
+    <message>
+        <source>Use default access</source>
+        <translation>Kasutan vaikimisi määratud ligipääsu</translation>
+    </message>
+    <message>
+        <source>Use manually configured access</source>
+        <translation>Kasutan käsitsi määratud ligipääsu</translation>
+    </message>
+    <message>
+        <source>Enable one-time log generation</source>
+        <translation>Aktiveeri ühekordne logifaili genereerimine</translation>
+    </message>
+    <message>
+        <source>Save log</source>
+        <extracomment>accessible</extracomment>
+        <translation>Salvesta logifail</translation>
+    </message>
+    <message>
+        <source>SAVE LOG</source>
+        <translation>SALVESTA LOGIFAIL</translation>
+    </message>
+    <message>
+        <source>Restart DigiDoc4 Client to activate logging. Read more &lt;a href=&quot;https://www.id.ee/en/article/log-file-generation-in-digidoc4-client/&quot;&gt;here&lt;/a&gt;. Restart now?</source>
+        <translation>Logimise aktiveerimiseks taaskäivita DigiDoc4 klient. Loe täpsemalt &lt;a href=&quot;https://www.id.ee/artikkel/logifaili-genereerimine-digidoc4-kliendis/&quot;&gt;siit&lt;/a&gt;. Taaskäivita rakendus?</translation>
+    </message>
+    <message>
+        <source>Restart DigiDoc4 Client to activate logging. Read more &lt;a href=&quot;https://www.id.ee/en/article/log-file-generation-in-digidoc4-client/&quot;&gt;here&lt;/a&gt;.</source>
+        <translation>Logimise aktiveerimiseks taaskäivita DigiDoc4 klient. Loe täpsemalt &lt;a href=&quot;https://www.id.ee/artikkel/logifaili-genereerimine-digidoc4-kliendis/&quot;&gt;siit&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -2798,24 +2928,24 @@ Täiendavad litsentsid ja komponendid</translation>
         <translation>Tundmatu viga</translation>
     </message>
     <message>
-        <source>Test signature is signed with test certificates that are similar to the certificates of real tokens, but digital signatures with legal force cannot be given with them as there is no actual owner of the card. &lt;a href=&apos;http://www.id.ee/index.php?id=30494&apos;&gt;Additional information&lt;/a&gt;.</source>
-        <translation>Testallkiri on allkirjastatud testsertifikaadiga, mis sarnaneb päris sertifikaadiga, kuid sellega ei saa anda õigusjõuga digitaalallkirju, sest kaardi omanikku tegelikkuses ei eksisteeri. &lt;a href=&apos;http://www.id.ee/index.php?id=30379&apos;&gt;Täiendav info&lt;/a&gt;.</translation>
+        <source>Test signature is signed with test certificates that are similar to the certificates of real tokens, but digital signatures with legal force cannot be given with them as there is no actual owner of the card. &lt;a href=&apos;https://www.id.ee/en/article/verifying-signatures-given-with-test-certificates-in-the-digidoc4-client/&apos;&gt;Additional information&lt;/a&gt;.</source>
+        <translation>Testallkiri on allkirjastatud testsertifikaadiga, mis sarnaneb päris sertifikaadiga, kuid sellega ei saa anda õigusjõuga digitaalallkirju, sest kaardi omanikku tegelikkuses ei eksisteeri. &lt;a href=&apos;https://www.id.ee/artikkel/testsertifikaatidega-antud-allkirjade-kontrollimine-digidoc4-kliendis/&apos;&gt;Täiendav info&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>This is an invalid signature or malformed digitally signed file. The signature is not valid.</source>
         <translation>See allkiri või allkirjastatud fail on vigane. Allkiri ei ole kehtiv.</translation>
     </message>
     <message>
-        <source>Signature status is displayed &quot;unknown&quot; if you don&apos;t have all validity confirmation service certificates and/or certificate authority certificates installed into your computer (&lt;a href=&apos;http://id.ee/?lang=en&amp;id=34317&apos;&gt;additional information&lt;/a&gt;).</source>
-        <translation>Allkirja staatust kuvatakse &quot;teadmata&quot;, kui Sinu arvutisse pole lisatud kõiki kehtivuskinnituse teenuse sertifikaate ja/või nende kontrolliks vajalikke sertifikaate (&lt;a href=&apos;http://www.id.ee/?id=35939&apos;&gt;lisainformatsioon&lt;/a&gt;).</translation>
+        <source>Signature status is displayed &quot;unknown&quot; if you don&apos;t have all validity confirmation service certificates and/or certificate authority certificates installed into your computer (&lt;a href=&apos;https://www.id.ee/en/article/digidoc4-klient-viga-36-failed-to-validate-signature-libdigidoc-code-36-message-signers-cert-not-trusted-missing-ca-cert/&apos;&gt;additional information&lt;/a&gt;).</source>
+        <translation>Allkirja staatust kuvatakse &quot;teadmata&quot;, kui Sinu arvutisse pole lisatud kõiki kehtivuskinnituse teenuse sertifikaate ja/või nende kontrolliks vajalikke sertifikaate (&lt;a href=&apos;https://www.id.ee/artikkel/digidoc4-klient-viga-36-failed-to-validate-signature-libdigidoc-code-36-message-signers-cert-not-trusted-missing-ca-cert/&apos;&gt;lisainformatsioon&lt;/a&gt;).</translation>
     </message>
     <message>
         <source>Signer&apos;s Certificate issuer</source>
-        <translation>Allkirja sertifikaadi väljastaja</translation>
+        <translation>Allkirjastaja sertifikaadi väljaandja</translation>
     </message>
     <message>
         <source>Signer&apos;s Certificate</source>
-        <translation>Allkirja sertifikaat</translation>
+        <translation>Allkirjastaja sertifikaat</translation>
     </message>
     <message>
         <source>Signature method</source>
@@ -2878,12 +3008,12 @@ Täiendavad litsentsid ja komponendid</translation>
         <translation>Kehtivuskinnituse aeg</translation>
     </message>
     <message>
-        <source>Signer&apos;s computer time (UTC)</source>
-        <translation>Allkirjastaja arvuti kellaaeg (UTC)</translation>
+        <source>Claimed signing time (UTC)</source>
+        <translation>Väidetav allkirjastamise aeg (UTC)</translation>
     </message>
     <message>
         <source>SIGNATURE_WARNING</source>
-        <translation>Allkiri on kehtiv, aga ümbrikul on mingi eripära. Tavaliselt on selline eripära tekkinud ümbriku loomisel. Kuna ümbrikku ei ole võimalik muuta ilma, et allkiri kehtetuks muutuks, näidatakse selliste ümbrike puhul &lt;a href=&apos;https://www.id.ee/index.php?id=38498&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: underline; font-weight: 900;&apos;&gt;hoiatust&lt;/span&gt;&lt;/a&gt;.</translation>
+        <translation>Allkiri on kehtiv, aga ümbrikul on mingi eripära. Tavaliselt on selline eripära tekkinud ümbriku loomisel. Kuna ümbrikku ei ole võimalik muuta ilma, et allkiri kehtetuks muutuks, näidatakse selliste ümbrike puhul &lt;a href=&apos;https://www.id.ee/artikkel/digitaalne-allkirjastamine-ja-elektroonilised-allkirjad/&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: underline; font-weight: 900;&apos;&gt;hoiatust&lt;/span&gt;&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>is valid</source>
@@ -2914,16 +3044,19 @@ Täiendavad litsentsid ja komponendid</translation>
         <source>is unknown</source>
         <comment>Signature</comment>
         <translation>on teadmata</translation>
-    </message>
-    <message>
-        <source>Technical information</source>
-        <comment>accessible</comment>
-        <translation>Tehniline informatsioon</translation>
     </message>
     <message>
         <source>Close</source>
         <extracomment>accessible</extracomment>
         <translation>Sulge</translation>
+    </message>
+    <message>
+        <source>Signing time (UTC)</source>
+        <translation>Allkirjastamise aeg (UTC)</translation>
+    </message>
+    <message>
+        <source>ROLE AND ADDRESS</source>
+        <translation>ROLL JA AADRESS</translation>
     </message>
 </context>
 <context>
@@ -3126,6 +3259,10 @@ Täiendavad litsentsid ja komponendid</translation>
         <source>Digi-ID</source>
         <translation>Digi-ID</translation>
     </message>
+    <message>
+        <source>Digi-ID E-RESIDENT</source>
+        <translation>Digi-ID E-RESIDENT</translation>
+    </message>
 </context>
 <context>
     <name>VerifyCert</name>
@@ -3155,7 +3292,7 @@ Täiendavad litsentsid ja komponendid</translation>
     </message>
     <message>
         <source>Forgot PIN%1?</source>
-        <translation>Unustasid PIN%1 koodi?</translation>
+        <translation>Unustasid PIN%1-koodi?</translation>
     </message>
     <message>
         <source>Signing certificate</source>
@@ -3175,11 +3312,11 @@ Täiendavad litsentsid ja komponendid</translation>
     </message>
     <message>
         <source>PUK code</source>
-        <translation>PUK kood</translation>
+        <translation>PUK-kood</translation>
     </message>
     <message>
         <source>The PUK code is located in your envelope</source>
-        <translation>PUK kood asub Sinu koodiümbrikus</translation>
+        <translation>PUK-kood asub Sinu koodiümbrikus</translation>
     </message>
     <message>
         <source>CHANGE PUK</source>
@@ -3187,11 +3324,11 @@ Täiendavad litsentsid ja komponendid</translation>
     </message>
     <message>
         <source>PUK code is blocked because the PUK code has been entered 3 times incorrectly. You can not unblock the PUK code yourself. As long as the PUK code is blocked, all eID options can be used, except PUK code. Please visit the service center to obtain new codes. &lt;a href=&quot;https://www.politsei.ee/en/instructions/applying-for-an-id-card-for-an-adult/reminders-for-id-card-holders/&quot;&gt;Additional information&lt;/a&gt;.</source>
-        <translation>PUK kood on blokeeritud, kuna PUK koodi on sisestatud 3 korda valesti. PUK koodi ei saa ise lahti blokeerida. &lt;br&gt;&lt;br&gt;Kuigi PUK kood on blokeeritud, saab kõiki eID võimalusi kasutada, välja arvatud PUK koodi vajavaid. &lt;br&gt;&lt;br&gt;Uue PUK koodi saamiseks külasta klienditeeninduspunkti, kust saad koodiümbriku uute koodidega. &lt;a href=&quot;https://www.politsei.ee/et/juhend/id-kaardi-taotlemine-taeiskasvanule/id-kaardi-kasutaja-meelespea/&quot;&gt;Lisainfo&lt;/a&gt;.</translation>
+        <translation>PUK-kood on blokeeritud, kuna PUK-koodi on sisestatud 3 korda valesti. PUK-koodi ei saa ise lahti blokeerida. &lt;br&gt;&lt;br&gt;Kuigi PUK-kood on blokeeritud, saab kõiki eID võimalusi kasutada, välja arvatud PUK-koodi vajavaid. &lt;br&gt;&lt;br&gt;Uue PUK-koodi saamiseks külasta klienditeeninduspunkti, kust saad koodiümbriku uute koodidega. &lt;a href=&quot;https://www.politsei.ee/et/juhend/id-kaardi-taotlemine-taeiskasvanule/id-kaardi-kasutaja-meelespea/&quot;&gt;Lisainfo&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>PIN can be changed only using eToken utility</source>
-        <translation>PIN koodi saab muuta ainult e-Templi tarkvaraga</translation>
+        <translation>PIN-koodi saab muuta ainult e-Templi tarkvaraga</translation>
     </message>
     <message>
         <source>key has been used %1 times</source>
@@ -3209,18 +3346,35 @@ Täiendavad litsentsid ja komponendid</translation>
     </message>
     <message>
         <source>PIN%1 has been blocked because PIN%1 code has been entered incorrectly 3 times.</source>
-        <translation>PIN%1 on blokeeritud, kuna PIN%1 koodi on sisestatud 3 korda valesti.</translation>
+        <translation>PIN%1 on blokeeritud, kuna PIN%1-koodi on sisestatud 3 korda valesti.</translation>
     </message>
     <message>
         <source>Unblock to reuse PIN%1.</source>
         <translation>Tühista blokeering, et PIN%1 taas kasutada.</translation>
     </message>
-</context>
-<context>
-    <name>WaitDialog</name>
     <message>
-        <source>Decrypting</source>
-        <translation>Dekrüpteerin</translation>
+        <source>Check certificate status</source>
+        <translation>Kontrolli sertifikaadi staatust</translation>
+    </message>
+    <message>
+        <source>Your ID-card authentication certificate is valid. </source>
+        <translation>Sinu ID-kaardi isikutuvastamise sertifikaat kehtib. </translation>
+    </message>
+    <message>
+        <source>Your ID-card signing certificate is valid. </source>
+        <translation>Sinu ID-kaardi allkirjastamise sertifikaat kehtib. </translation>
+    </message>
+    <message>
+        <source>Your ID-card signing certificate is not valid. You need valid certificates to use your ID-card electronically. </source>
+        <translation>Sinu ID-kaardi allkirjastamise sertifikaat ei kehti. ID-kaardi elektrooniliseks kasutamiseks on vaja kehtivaid sertifikaate. </translation>
+    </message>
+    <message>
+        <source>Your ID-card authentication certificate is not valid. You need valid certificates to use your ID-card electronically. </source>
+        <translation>Sinu ID-kaardi isikutuvastamise sertifikaat ei kehti. ID-kaardi elektrooniliseks kasutamiseks on vaja kehtivaid sertifikaate. </translation>
+    </message>
+    <message>
+        <source>Read more &lt;a href=&quot;https://www.id.ee/en/article/validity-of-id-card-certificates/&quot;&gt;here&lt;/a&gt;.</source>
+        <translation>Loe rohkem &lt;a href=&quot;https://www.id.ee/artikkel/id-kaardi-sertifikaatide-kehtivus/&quot;&gt;siit&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -3253,6 +3407,14 @@ Täiendavad litsentsid ja komponendid</translation>
         <source>Certificates are revoked!</source>
         <translation>Sertifikaadid on tühistatud!</translation>
     </message>
+    <message>
+        <source>Additional information</source>
+        <translation>Täiendav informatsioon</translation>
+    </message>
+    <message>
+        <source>https://www.id.ee/en/article/the-majority-of-electronically-used-id-cards-were-renewed/</source>
+        <translation>https://www.id.ee/artikkel/uuendati-enamik-elektrooniliselt-kasutatud-id-kaartidest/</translation>
+    </message>
     <message numerus="yes">
         <source>%n signatures are not valid</source>
         <translation>
@@ -3282,16 +3444,20 @@ Täiendavad litsentsid ja komponendid</translation>
         </translation>
     </message>
     <message>
-        <source>http://id.ee/?lang=en&amp;id=34317</source>
-        <translation>https://www.id.ee/index.php?id=38498</translation>
-    </message>
-    <message>
-        <source>https://www.id.ee/index.php?id=30591</source>
-        <translation>https://www.id.ee/index.php?id=38498</translation>
+        <source>https://www.id.ee/en/article/digital-signing-and-electronic-signatures/</source>
+        <translation>https://www.id.ee/artikkel/digitaalne-allkirjastamine-ja-elektroonilised-allkirjad/</translation>
     </message>
     <message>
         <source>More information</source>
         <translation>Rohkem infot</translation>
+    </message>
+    <message>
+        <source>https://www.id.ee/en/article/digidoc-container-format-life-cycle-2/</source>
+        <translation>https://www.id.ee/artikkel/digidoc-konteineri-formaatide-elutsukkel/</translation>
+    </message>
+    <message>
+        <source>The current file is a DigiDoc container that is not supported officially any longer. You are not allowed to add or remove signatures to this container.</source>
+        <translation>Tegemist on vanas formaadis DigiDoc ümbrikuga. Sellele ümbrikule ei saa allkirja lisada ega eemaldada.</translation>
     </message>
 </context>
 <context>

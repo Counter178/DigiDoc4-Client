@@ -30,9 +30,9 @@ AccordionTitle::AccordionTitle(QWidget *parent)
 	, ui(new Ui::AccordionTitle)
 {
 	ui->setupUi(this);
-	ui->icon->resize( 12, 6 );
-	ui->icon->move( 15, 17 );
 	ui->label->setFont( Styles::font( Styles::Condensed, 16 ) );
+	ui->label->setStyleSheet(QStringLiteral("border: none; color: #006EB5;"));
+	ui->icon->load(QStringLiteral(":/images/accordion_arrow_down.svg"));
 }
 
 AccordionTitle::~AccordionTitle()
@@ -40,40 +40,26 @@ AccordionTitle::~AccordionTitle()
 	delete ui;
 }
 
-void AccordionTitle::borderless()
-{
-	setStyleSheet(QStringLiteral("background-color: #FFFFFF; border: none;"));
-}
-
 bool AccordionTitle::event(QEvent *e)
 {
-	auto process = [&]{
-		if(!content->isVisible())
-		{
-			setSectionOpen(true);
-			emit opened(this);
-		}
-		else if(closable)
-		{
-			setSectionOpen(false);
-			emit closed(this);
-		}
-		else
-			return StyledWidget::event(e);
-		return true;
-	};
 	switch(e->type())
 	{
 	case QEvent::MouseButtonRelease:
-		return process();
+		setSectionOpen(!isOpen());
+		break;
 	case QEvent::KeyRelease:
 		if(QKeyEvent *ke = static_cast<QKeyEvent*>(e))
 			if(ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Space)
-				return process();
+				setSectionOpen(!isOpen());
 		break;
 	default: break;
 	}
 	return StyledWidget::event(e);
+}
+
+void AccordionTitle::init(bool open, const QString &caption, QWidget *content)
+{
+	init(open, caption, caption.toLower(), content);
 }
 
 void AccordionTitle::init(bool open, const QString &caption, const QString &accessible, QWidget *content)
@@ -83,32 +69,50 @@ void AccordionTitle::init(bool open, const QString &caption, const QString &acce
 	setSectionOpen(open);
 }
 
+bool AccordionTitle::isOpen() const
+{
+	return _isOpen;
+}
+
+void AccordionTitle::openSection(AccordionTitle *opened)
+{
+	setSectionOpen(this == opened);
+}
+
 void AccordionTitle::setSectionOpen(bool open)
 {
-	content->setVisible(open);
+	if(_isOpen == open)
+		return;
+	_isOpen = open;
+	if(content)
+		content->setVisible(open && !isHidden());
 	if(open)
 	{
 		ui->label->setStyleSheet(QStringLiteral("border: none; color: #006EB5;"));
 		ui->icon->resize( 12, 6 );
-		ui->icon->move( 15, 17 );
+		ui->icon->move(15, 17);
 		ui->icon->load(QStringLiteral(":/images/accordion_arrow_down.svg"));
+		emit opened(this);
 	}
 	else
 	{
 		ui->label->setStyleSheet(QStringLiteral("border: none; color: #353739;"));
 		ui->icon->resize( 6, 12 );
-		ui->icon->move( 18, 14 );
+		ui->icon->move(18, 14);
 		ui->icon->load(QStringLiteral(":/images/accordion_arrow_right.svg"));
+		emit closed(this);
 	}
-}
-
-void AccordionTitle::setClosable(bool closable)
-{
-	this->closable = closable;
 }
 
 void AccordionTitle::setText(const QString &caption, const QString &accessible)
 {
 	ui->label->setText(caption);
 	ui->label->setAccessibleName(accessible);
+}
+
+void AccordionTitle::setVisible(bool visible)
+{
+	StyledWidget::setVisible(visible);
+	if(content)
+		content->setVisible(visible && isOpen());
 }

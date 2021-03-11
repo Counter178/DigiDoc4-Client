@@ -21,20 +21,18 @@
 #include "ui_CertificateHistory.h"
 
 #include "Styles.h"
-#include "effects/Overlay.h"
 
-
-bool HistoryCertData::operator==(const HistoryCertData& other)
+bool HistoryCertData::operator==(const HistoryCertData& other) const
 {
-	return	this->CN == other.CN &&
-			this->type == other.type &&
-			this->issuer == other.issuer &&
-			this->expireDate == other.expireDate;
+	return	CN == other.CN &&
+			type == other.type &&
+			issuer == other.issuer &&
+			expireDate == other.expireDate;
 }
 
 QString HistoryCertData::typeName() const
 {
-	switch (QString(type).toInt())
+	switch (type.toInt())
 	{
 	case CertificateHistory::DigiID:
 		return CertificateHistory::tr("Digi-ID");
@@ -54,30 +52,35 @@ CertificateHistory::CertificateHistory(QList<HistoryCertData> &_historyCertData,
 {
 	ui->setupUi(this);
 	setWindowFlags( Qt::Dialog | Qt::CustomizeWindowHint );
-	setWindowModality( Qt::ApplicationModal );
+	setMinimumSize(parent->frameSize());
+	move(parent->frameGeometry().center() - frameGeometry().center());
 
 	QFont condensed = Styles::font(Styles::Condensed, 12);
+	QFont regular = Styles::font(Styles::Regular, 14);
+	ui->view->header()->setFont(regular);
+	ui->view->setFont(regular);
 	ui->close->setFont(condensed);
 	ui->select->setFont(condensed);
 	ui->remove->setFont(condensed);
 
 	connect(ui->close, &QPushButton::clicked, this, &CertificateHistory::reject);
-	connect(ui->select, &QPushButton::clicked, this, [&]{
+	connect(ui->select, &QPushButton::clicked, this, [this]{
 		emit addSelectedCerts(selectedItems());
 	});
 	connect(ui->select, &QPushButton::clicked, this, &CertificateHistory::reject);
-	connect(ui->remove, &QPushButton::clicked, this, [&]{
+	connect(ui->remove, &QPushButton::clicked, this, [this]{
 		emit removeSelectedCerts(selectedItems());
 		fillView();
 	});
 	connect(ui->view, &QTreeWidget::itemActivated, ui->select, &QPushButton::clicked);
 
 	fillView();
+	ui->view->header()->setMinimumSectionSize(
+		ui->view->fontMetrics().boundingRect(ui->view->headerItem()->text(3)).width() + 25);
 	ui->view->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui->view->header()->setSectionResizeMode(0, QHeaderView::Stretch);
 	adjustSize();
 }
-
 
 CertificateHistory::~CertificateHistory()
 {
@@ -87,6 +90,7 @@ CertificateHistory::~CertificateHistory()
 void CertificateHistory::fillView()
 {
 	ui->view->clear();
+	ui->view->header()->setSortIndicatorShown(!historyCertData.isEmpty());
 	for(const HistoryCertData& certData : historyCertData)
 	{
 		QTreeWidgetItem *i = new QTreeWidgetItem( ui->view );
@@ -112,14 +116,4 @@ QList<HistoryCertData> CertificateHistory::selectedItems() const
 		});
 	}
 	return selectedCertData;
-}
-
-int CertificateHistory::exec()
-{
-	Overlay overlay(parentWidget());
-	overlay.show();
-	auto rc = QDialog::exec();
-	overlay.close();
-
-	return rc;
 }

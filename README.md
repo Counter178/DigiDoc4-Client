@@ -1,14 +1,13 @@
 # DigiDoc4 Client
 
-![European Regional Development Fund](https://github.com/e-gov/RIHA-Frontend/raw/master/logo/EU/EU.png "European Regional Development Fund - DO NOT REMOVE THIS IMAGE BEFORE 05.03.2020")
+![European Regional Development Fund](client/images/EL_Regionaalarengu_Fond.png "European Regional Development Fund - DO NOT REMOVE THIS IMAGE BEFORE 05.03.2020")
 
  * License: LGPL 2.1
  * &copy; Estonian Information System Authority
  * [Architecture of ID-software](http://open-eid.github.io)
 
 ## Building
-[![Build Status](https://travis-ci.org/open-eid/DigiDoc4-Client.svg?branch=master)](https://travis-ci.org/open-eid/DigiDoc4-Client)
-[![Build status](https://ci.appveyor.com/api/projects/status/github/open-eid/DigiDoc4-Client?branch=master&svg=true)](https://ci.appveyor.com/project/uudisaru/digidoc4-client/branch/master)
+[![Build Status](https://github.com/open-eid/DigiDoc4-Client/workflows/CI/badge.svg?branch=master)](https://github.com/open-eid/DigiDoc4-Client/actions)
 * [Ubuntu](#ubuntu)
 * [macOS](#macos)
 * [Windows](#windows)
@@ -24,9 +23,9 @@
 
    * Install
 
-         sudo apt-get install cmake qttools5-dev libqt5svg5-dev qttools5-dev-tools libpcsclite-dev libssl-dev libdigidocpp-dev libldap2-dev
+         sudo apt-get install cmake qttools5-dev libqt5svg5-dev qttools5-dev-tools libpcsclite-dev libssl-dev libdigidocpp-dev libldap2-dev gettext pkg-config
 
-   * Also runtime dependency opensc-pkcs11 is needed with the [EstEID ECDH token support](https://github.com/OpenSC/OpenSC/commit/2846295e1f12790bd9d8b01531affbf6feccf22c); until OpenSC distribution with these changes is not released the library has to be built manually or downloaded from [installer.id.ee](https://installer.id.ee/media/ubuntu/pool/main/o/opensc/)
+   * Also runtime dependency opensc-pkcs11 and pcscd is needed
 
 2. Fetch the source
 
@@ -72,7 +71,7 @@
 
         mkdir build
         cd build
-        cmake -DQt5_DIR="~/cmake_builds/Qt-5.9.1-OpenSSL/lib/cmake/Qt5" -DCMAKE_EXE_LINKER_FLAGS="-F/Library/Frameworks" ..
+        cmake -DQt5_DIR="~/cmake_builds/Qt-5.12.10-OpenSSL/lib/cmake/Qt5" -DCMAKE_EXE_LINKER_FLAGS="-F/Library/Frameworks" ..
 
 4. Build
 
@@ -90,7 +89,7 @@
 ### Windows
 
 1. Install dependencies from
-    * [Visual Studio Community 2015](https://www.visualstudio.com/downloads/)
+    * [Visual Studio Community 2017](https://www.visualstudio.com/downloads/)
     * [http://www.cmake.org](http://www.cmake.org)
     * [http://qt-project.org](http://qt-project.org)
     * [libdigidocpp-*.msi](https://github.com/open-eid/libdigidocpp/releases)
@@ -103,7 +102,7 @@
 
         mkdir build
         cd build
-        cmake -G"NMAKE Makefiles" -DQt5_DIR="C:\Qt\5.9\msvc2015\lib\cmake\Qt5" ..
+        cmake -G"NMAKE Makefiles" -DQt5_DIR="C:\Qt\5.12.10\msvc2017\lib\cmake\Qt5" ..
 
 4. Build
 
@@ -115,6 +114,6 @@
 
 
 ## Support
-Official builds are provided through official distribution point [installer.id.ee](https://installer.id.ee). If you want support, you need to be using official builds. Contact our support via www.id.ee for assistance.
+Official builds are provided through official distribution point [id.ee](https://www.id.ee/en/article/install-id-software/). If you want support, you need to be using official builds. Contact our support via www.id.ee for assistance.
 
 Source code is provided on "as is" terms with no warranty (see license for more information). Do not file Github issues with generic support requests.

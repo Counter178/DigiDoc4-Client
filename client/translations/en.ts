@@ -22,12 +22,12 @@
         <translation>Server access certificate is about to expire on %1. To renew the certificate please contact IT support team of your company. Additional information is available &lt;a href=&quot;mailto:sales@sk.ee&quot;&gt;sales@sk.ee&lt;/a&gt; or phone (+372) 610 1885</translation>
     </message>
     <message>
-        <source>Your signing software needs an upgrade. Please update your ID software, which you can get from &lt;a href=&quot;http://www.id.ee&quot;&gt;www.id.ee&lt;/a&gt;. Additional information is available at ID-helpline (+372) 666 8888.</source>
-        <translation>Your signing software needs an upgrade. Please update your ID software, which you can get from &lt;a href=&quot;http://www.id.ee/?lang=en&quot;&gt;www.id.ee&lt;/a&gt;. Additional info is available ID-helpline (+372) 666 8888.</translation>
+        <source>Server access certificate expired on %1. To renew the certificate please update your ID software, which you can get from &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;www.id.ee&lt;/a&gt;. Additional info is available ID-helpline (+372) 666 8888.</source>
+        <translation>Server access certificate expired on %1. To renew the certificate please update your ID software, which you can get from &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;www.id.ee&lt;/a&gt;. Additional info is available ID-helpline (+372) 666 8888.</translation>
     </message>
     <message>
-        <source>FREE_CERT_EXCEEDED</source>
-        <translation>You have reached the free service limit - 10 signatures. Regarding to terms and conditions of validity confirmation service you&apos;re allowed to use the service in extent of 10 signatures per month. If you are going to exceed the limit of 10 signatures per month or/and will use the service for commercial purposes, please contact to IT support team of your company or sign a contract to use the &lt;a href=&quot;https://sk.ee/en/services/validity-confirmation-services&quot;&gt;service&lt;/a&gt;. Additional information is available &lt;a href=&quot;mailto:sales@sk.ee&quot;&gt;sales@sk.ee&lt;/a&gt; or phone (+372) 610 1885</translation>
+        <source>The limit of free digital signatures per month is about to exceed. To create more digital signatures you need to conclude a contract with a service provider. Read more &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;here&lt;/a&gt;</source>
+        <translation>The limit of free digital signatures per month is about to exceed. To create more digital signatures you need to conclude a contract with a service provider. Read more &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;here&lt;/a&gt;</translation>
     </message>
 </context>
 <context>
@@ -86,8 +86,8 @@
         <translation>Personal code is not valid!</translation>
     </message>
     <message>
-        <source>Person or company does not own a valid certificate.&lt;br /&gt;It is necessary to have a valid certificate for encryption.&lt;br /&gt;In case of questions please contact our support via &lt;a href=&quot;https://id.ee/?lang=en&quot;&gt;id.ee&lt;/a&gt;.</source>
-        <translation>Person or company does not own a valid certificate.&lt;br /&gt;It is necessary to have a valid certificate for encryption.&lt;br /&gt;In case of questions please contact our support via &lt;a href=&quot;https://id.ee/?lang=en&quot;&gt;id.ee&lt;/a&gt;.</translation>
+        <source>Person or company does not own a valid certificate.&lt;br /&gt;It is necessary to have a valid certificate for encryption.&lt;br /&gt;In case of questions please contact our support via &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;id.ee&lt;/a&gt;.</source>
+        <translation>Person or company does not own a valid certificate.&lt;br /&gt;It is necessary to have a valid certificate for encryption.&lt;br /&gt;In case of questions please contact our support via &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;id.ee&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>Certificates (*.cer *.crt *.pem)</source>
@@ -134,6 +134,10 @@
         <extracomment>accessible</extracomment>
         <translation>Confirm</translation>
     </message>
+    <message>
+        <source>The name you were looking for gave a very large number of results, not all of the search results will be shown. If the desired recipient is not on the list, please enter a more specific name in the search box.</source>
+        <translation>The name you were looking for gave a very large number of results, not all of the search results will be shown. If the desired recipient is not on the list, please enter a more specific name in the search box.</translation>
+    </message>
 </context>
 <context>
     <name>AddressItem</name>
@@ -150,16 +154,16 @@
         <translation> (Yourself)</translation>
     </message>
     <message>
-        <source>Digi-ID</source>
-        <translation>Digi-ID</translation>
+        <source>digi-ID</source>
+        <translation>digi-ID</translation>
     </message>
     <message>
         <source>ID-card</source>
         <translation>ID-card</translation>
     </message>
     <message>
-        <source>Mobile-ID</source>
-        <translation>Mobiil-ID</translation>
+        <source>mobile-ID</source>
+        <translation>mobile-ID</translation>
     </message>
     <message>
         <source>Expires on</source>
@@ -183,6 +187,14 @@
         <source>Certificate for Encryption</source>
         <translation>Certificate for Encryption</translation>
     </message>
+    <message>
+        <source>e-Seal</source>
+        <translation>e-Seal</translation>
+    </message>
+    <message>
+        <source>Authentication certificate</source>
+        <translation>Authentication certificate</translation>
+    </message>
 </context>
 <context>
     <name>Application</name>
@@ -191,32 +203,20 @@
         <translation>Failed to initalize.</translation>
     </message>
     <message>
-        <source>Close window</source>
-        <translation>Close window</translation>
-    </message>
-    <message>
         <source>Caught exception!</source>
         <translation>Caught exception!</translation>
-    </message>
-    <message>
-        <source>New Client window</source>
-        <translation>New Client window</translation>
     </message>
     <message>
         <source>New Crypto window</source>
         <translation>New Crypto window</translation>
     </message>
     <message>
-        <source>The renewal of Trust Service status List, used for digital signature validation, has failed. Please check your internet connection and make sure you have the latest ID-software version installed. An expired Trust Service List (TSL) will be used for signature validation. &lt;a href=&quot;http://www.id.ee/?id=37012&quot;&gt;Additional information&lt;/a&gt;</source>
-        <translation>The renewal of Trust Service status List, used for digital signature validation, has failed. Please check your internet connection and make sure you have the latest ID-software version installed. An expired Trust Service List (TSL) will be used for signature validation. &lt;a href=&quot;http://www.id.ee/?id=37012&quot;&gt;Additional information&lt;/a&gt;</translation>
+        <source>The renewal of Trust Service status List, used for digital signature validation, has failed. Please check your internet connection and make sure you have the latest ID-software version installed. An expired Trust Service List (TSL) will be used for signature validation. &lt;a href=&quot;https://www.id.ee/en/article/digidoc4-message-updating-the-list-of-trusted-certificates-was-unsuccessful/&quot;&gt;Additional information&lt;/a&gt;</source>
+        <translation>The renewal of Trust Service status List, used for digital signature validation, has failed. Please check your internet connection and make sure you have the latest ID-software version installed. An expired Trust Service List (TSL) will be used for signature validation. &lt;a href=&quot;https://www.id.ee/en/article/digidoc4-message-updating-the-list-of-trusted-certificates-was-unsuccessful/&quot;&gt;Additional information&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Loading TSL lists</source>
         <translation>Loading TSL lists</translation>
-    </message>
-    <message>
-        <source>TSL signing certs</source>
-        <translation>TSL signing certs</translation>
     </message>
     <message>
         <source>Create %1</source>
@@ -235,8 +235,20 @@
         <translation>Remind later</translation>
     </message>
     <message>
-        <source>In order to use digital signing in online services the browser token plugin must be enabled in Your web browser.&lt;br/&gt;Instructions on how to enable token plugin can be found &lt;a href=&quot;http://id.ee/?lang=en&amp;id=36639&quot;&gt;here&lt;/a&gt;.</source>
-        <translation>In order to use digital signing in online services the browser token plugin must be enabled in Your web browser.&lt;br/&gt;Instructions on how to enable token plugin can be found &lt;a href=&quot;http://id.ee/?lang=en&amp;id=36639&quot;&gt;here&lt;/a&gt;.</translation>
+        <source>In order to use digital signing in online services the browser token plugin must be enabled in Your web browser.&lt;br/&gt;Instructions on how to enable token plugin can be found &lt;a href=&quot;https://www.id.ee/en/article/configuring-browsers-for-using-id-card/&quot;&gt;here&lt;/a&gt;.</source>
+        <translation>In order to use digital signing in online services the browser token plugin must be enabled in Your web browser.&lt;br/&gt;Instructions on how to enable token plugin can be found &lt;a href=&quot;https://www.id.ee/en/article/configuring-browsers-for-using-id-card/&quot;&gt;here&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>DigiDoc4 Client Help</source>
+        <translation>DigiDoc4 Client Help</translation>
+    </message>
+    <message>
+        <source>Close Window</source>
+        <translation>Close Window</translation>
+    </message>
+    <message>
+        <source>New Window</source>
+        <translation>New Window</translation>
     </message>
 </context>
 <context>
@@ -257,17 +269,13 @@
         <source>YES</source>
         <translation>YES</translation>
     </message>
+    <message>
+        <source>Added file(s) exceeds the maximum size limit of the container(120MB).</source>
+        <translation>Added file(s) exceeds the maximum size limit of the container (~120MB).</translation>
+    </message>
 </context>
 <context>
     <name>CardWidget</name>
-    <message>
-        <source>ID card in reader</source>
-        <translation>ID-card in card reader</translation>
-    </message>
-    <message>
-        <source>%1 in reader</source>
-        <translation>%1 in card reader</translation>
-    </message>
     <message>
         <source>LOAD</source>
         <translation>LOAD</translation>
@@ -301,6 +309,14 @@
     <message>
         <source>Authentication certificate</source>
         <translation>Authentication certificate</translation>
+    </message>
+    <message>
+        <source>Selected is %1</source>
+        <translation>Selected is %1</translation>
+    </message>
+    <message>
+        <source>%1 in reader</source>
+        <translation>%1 in reader</translation>
     </message>
 </context>
 <context>
@@ -435,10 +451,6 @@
         <translation>CLOSE</translation>
     </message>
     <message>
-        <source>SELECT</source>
-        <translation>SELECT</translation>
-    </message>
-    <message>
         <source>REMOVE</source>
         <translation>REMOVE</translation>
     </message>
@@ -492,6 +504,10 @@
     <message>
         <source>Certificate for Encryption</source>
         <translation>Certificate for Encryption</translation>
+    </message>
+    <message>
+        <source>ADD</source>
+        <translation>ADD</translation>
     </message>
 </context>
 <context>
@@ -736,6 +752,22 @@
         <source>Certificate Propagation service status: </source>
         <translation>Certificate Propagation service status: </translation>
     </message>
+    <message>
+        <source>is set manually</source>
+        <translation>is set manually</translation>
+    </message>
+    <message>
+        <source>is set by default</source>
+        <translation>is set by default</translation>
+    </message>
+    <message>
+        <source>TSL signing certs</source>
+        <translation>TSL signing certs</translation>
+    </message>
+    <message>
+        <source>TSL cache</source>
+        <translation>TSL cache</translation>
+    </message>
 </context>
 <context>
     <name>DigiDoc</name>
@@ -792,45 +824,51 @@
         <translation>Failed to save container</translation>
     </message>
     <message>
-        <source>Failed to sign container</source>
-        <translation>Failed to sign container</translation>
+        <source>Failed to sign container. Check your Time-Stamping service access settings.</source>
+        <translation>Failed to sign container. Check your Time-Stamping service access settings.</translation>
     </message>
     <message>
-        <source>You have not granted IP-based access. Check the settings of your server access certificate.</source>
-        <translation>You have not granted IP-based access. Check the settings of your server access certificate.</translation>
+        <source>You have not granted IP-based access. Check your validity confirmation service access settings.</source>
+        <translation>You have not granted IP-based access. Check your validity confirmation service access settings.</translation>
     </message>
     <message>
-        <source>The limit for digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/index.php?id=39023&quot;&gt;Additional information&lt;/a&gt;</source>
-        <translation>The limit for digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/index.php?id=39023&quot;&gt;Additional information&lt;/a&gt;</translation>
-    </message>
-    <message>
-        <source>The verification of digital signatures in PDF format is performed through an external service. The file requiring verification will be forwarded to the service.
-The Information System Authority does not retain information regarding the files and users of the service.</source>
-        <translation>The verification of digital signatures in PDF format is performed through an external service. The file requiring verification will be forwarded to the service.
-The Information System Authority does not retain information regarding the files and users of the service.</translation>
+        <source>The limit for digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;Additional information&lt;/a&gt;</source>
+        <translation>The limit for digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;Additional information&lt;/a&gt;</translation>
     </message>
     <message>
         <source>CANCEL</source>
         <translation>CANCEL</translation>
     </message>
     <message>
-        <source>OK</source>
-        <translation>OK</translation>
+        <source>YES</source>
+        <translation>YES</translation>
     </message>
     <message>
-        <source>Please check your computer time. &lt;a href=&apos;https://id.ee/index.php?id=39513&apos;&gt;Additional information&lt;/a&gt;</source>
-        <translation>Please check your computer time. &lt;a href=&apos;https://id.ee/index.php?id=39513&apos;&gt;Additional information&lt;/a&gt;</translation>
+        <source>Please check your computer time. &lt;a href=&apos;https://www.id.ee/en/article/digidoc4-client-error-please-check-your-computer-time-2/&apos;&gt;Additional information&lt;/a&gt;</source>
+        <translation>Please check your computer time. &lt;a href=&apos;https://www.id.ee/en/article/digidoc4-client-error-please-check-your-computer-time-2/&apos;&gt;Additional information&lt;/a&gt;</translation>
     </message>
     <message>
-        <source>The timestamp added to the signature must be taken before validity confirmation</source>
-        <translation>The timestamp added to the signature must be taken before validity confirmation</translation>
+        <source>The timestamp added to the signature must be taken before validity confirmation.</source>
+        <translation>The timestamp added to the signature must be taken before validity confirmation.</translation>
+    </message>
+    <message>
+        <source>Connecting to SiVa server failed! Please check your internet connection.</source>
+        <translation>Connecting to SiVa server failed! Please check your internet connection.</translation>
+    </message>
+    <message>
+        <source>Failed to sign container</source>
+        <translation>Failed to sign container</translation>
+    </message>
+    <message>
+        <source>Signed document in PDF and DDOC format will be transmitted to the Digital Signature Validation Service SiVa to verify the validity of the digital signature. Read more information about transmitted data to Digital Signature Validation service from &lt;a href=&quot;https://www.id.ee/en/article/data-protection-conditions-for-the-id-software-of-the-national-information-system-authority/&quot;&gt;here&lt;/a&gt;.&lt;br /&gt;Do you want to continue?</source>
+        <translation>Signed document in PDF and DDOC format will be transmitted to the Digital Signature Validation Service SiVa to verify the validity of the digital signature. Read more information about transmitted data to Digital Signature Validation service from &lt;a href=&quot;https://www.id.ee/en/article/data-protection-conditions-for-the-id-software-of-the-national-information-system-authority/&quot;&gt;here&lt;/a&gt;.&lt;br /&gt;Do you want to continue?</translation>
     </message>
 </context>
 <context>
     <name>DocumentModel</name>
     <message>
-        <source>This is an executable file! Executable files may contain viruses or other malicious code that could harm your computer. Are you sure you want to launch this file?</source>
-        <translation>This is an executable file! Executable files may contain viruses or other malicious code that could harm your computer. Are you sure you want to launch this file?</translation>
+        <source>A file with this extension cannot be opened in the DigiDoc4 Client. Download the file to view it.</source>
+        <translation>A file with this extension cannot be opened in the DigiDoc4 Client. Download the file to view it.</translation>
     </message>
     <message>
         <source>Cannot add the file to the envelope. File &apos;%1&apos; is already in container.</source>
@@ -845,12 +883,8 @@ The Information System Authority does not retain information regarding the files
         <translation>Internal error</translation>
     </message>
     <message>
-        <source>NO</source>
-        <translation>NO</translation>
-    </message>
-    <message>
-        <source>YES</source>
-        <translation>YES</translation>
+        <source>OK</source>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -871,11 +905,6 @@ The Information System Authority does not retain information regarding the files
         <source>Download file</source>
         <extracomment>accessible</extracomment>
         <translation>Download file</translation>
-    </message>
-    <message>
-        <source>To open file press space or enter</source>
-        <extracomment>accessible</extracomment>
-        <translation>To open file press space or enter</translation>
     </message>
 </context>
 <context>
@@ -964,16 +993,16 @@ The Information System Authority does not retain information regarding the files
         <translation>Manage your eID-s</translation>
     </message>
     <message>
-        <source>DigiDoc Client can be used to sign digitally with ID-card and Mobile-ID, check the validity of digital signatures and open and save documents inside the signature container.</source>
-        <translation>DigiDoc Client can be used to sign digitally with ID-card and Mobile-ID, check the validity of digital signatures and open and save documents inside the signature container.</translation>
+        <source>DigiDoc Client can be used to sign digitally with ID-card, mobile-ID and Smart-ID, check the validity of digital signatures and open and save documents inside the signature container.</source>
+        <translation>DigiDoc Client can be used to sign digitally with ID-card, mobile-ID and Smart-ID, check the validity of digital signatures and open and save documents inside the signature container.</translation>
     </message>
     <message>
         <source>DigiDoc Client can also be used to encrypt data and decrypt the previously encrypted data. For encryption the program uses the authentication certificate of the ID-card.</source>
         <translation>DigiDoc Client can also be used to encrypt data and decrypt the previously encrypted data. For encryption the program uses the authentication certificate of the ID-card.</translation>
     </message>
     <message>
-        <source>Manage your ID-card’s PIN/PUK codes and handle certificate renewals.</source>
-        <translation>Manage your ID-card’s PIN/PUK codes and handle certificate renewals.</translation>
+        <source>Manage your ID-card’s PIN/PUK codes and check personal data.</source>
+        <translation>Manage your ID-card’s PIN/PUK codes and check personal data.</translation>
     </message>
     <message>
         <source>How to sign document digitally?</source>
@@ -996,12 +1025,12 @@ The Information System Authority does not retain information regarding the files
         <translation>To sign the file, drag it from your computer to the DigiDoc application or click the &quot;... or load a file from disk&quot; button. You can drag or select multiple files at a time.</translation>
     </message>
     <message>
-        <source>Once the files have been selected, check them and choose whether you want to sign with ID-card or Mobile-ID. You can also save the container without signing.</source>
-        <translation>Once the files have been selected, check them and choose whether you want to sign with ID-card or Mobile-ID. You can also save the container without signing.</translation>
+        <source>Once the files have been selected, check them and choose whether you want to sign with ID-card, mobile-ID or Smart-ID. You can also save the container without signing.</source>
+        <translation>Once the files have been selected, check them and choose whether you want to sign with ID-card, mobile-ID or Smart-ID. You can also save the container without signing.</translation>
     </message>
     <message>
-        <source>By entering the PIN2 code, you will have signed the document with digital signature that by law is equal to the signature signed by hand. You will find the PIN2 code in the envelope that came with your ID-card or Mobile-ID.</source>
-        <translation>By entering the PIN2 code, you will have signed the document with digital signature that by law is equal to the signature signed by hand. You will find the PIN2 code in the envelope that came with your ID-card or Mobile-ID.</translation>
+        <source>By entering the PIN2 code, you will have signed the document with digital signature that by law is equal to the signature signed by hand.</source>
+        <translation>By entering the PIN2 code, you will have signed the document with digital signature that by law is equal to the signature signed by hand.</translation>
     </message>
     <message>
         <source>How to encrypt documents?</source>
@@ -1269,10 +1298,6 @@ The Information System Authority does not retain information regarding the files
         <translation>SHOW CERTIFICATE</translation>
     </message>
     <message>
-        <source>Key</source>
-        <translation>Key</translation>
-    </message>
-    <message>
         <source>Crypto method</source>
         <translation>Crypto method</translation>
     </message>
@@ -1289,10 +1314,6 @@ The Information System Authority does not retain information regarding the files
         <translation>ConcatKDF digest method</translation>
     </message>
     <message>
-        <source>Expires</source>
-        <translation>Expires</translation>
-    </message>
-    <message>
         <source>Issuer</source>
         <translation>Issuer</translation>
     </message>
@@ -1305,6 +1326,14 @@ The Information System Authority does not retain information regarding the files
         <source>Show certificate</source>
         <extracomment>accessible</extracomment>
         <translation>Show certificate</translation>
+    </message>
+    <message>
+        <source>Recipient</source>
+        <translation>Recipient</translation>
+    </message>
+    <message>
+        <source>Expiry date</source>
+        <translation>Expiry date</translation>
     </message>
 </context>
 <context>
@@ -1341,11 +1370,34 @@ LDAP server is unavailable.</translation>
     </message>
 </context>
 <context>
+    <name>MacMenuBar</name>
+    <message>
+        <source>&amp;File</source>
+        <translation>&amp;File</translation>
+    </message>
+    <message>
+        <source>Info</source>
+        <translation>About</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Close</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Settings</translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
+        <translation>&amp;Help</translation>
+    </message>
+</context>
+<context>
     <name>MainAction</name>
     <message>
         <source>SignatureMobile</source>
         <translation>SIGN WITH
-MOBIIL-ID</translation>
+MOBILE-ID</translation>
     </message>
     <message>
         <source>SignatureSmartID</source>
@@ -1383,6 +1435,10 @@ ID-CARD</translation>
 </context>
 <context>
     <name>MainWindow</name>
+    <message>
+        <source>YES</source>
+        <translation>YES</translation>
+    </message>
     <message>
         <source>Help</source>
         <translation>Help</translation>
@@ -1526,10 +1582,6 @@ ID-CARD</translation>
         <translation>In order to view Validity Confirmation Sheet there has to be at least one printer installed!</translation>
     </message>
     <message>
-        <source>Documents (%1%2)</source>
-        <translation>Documents (%1%2)</translation>
-    </message>
-    <message>
         <source>%1 has been changed and the certificate has been unblocked!</source>
         <translation>%1 has been changed and the certificate has been unblocked!</translation>
     </message>
@@ -1621,8 +1673,8 @@ ID-CARD</translation>
         <translation>No official email forwarding addresses was found</translation>
     </message>
     <message>
-        <source>Your email account has been blocked. To open it, please send an email to toimetaja@eesti.ee or call 663 0215.</source>
-        <translation>Your email account has been blocked. To open it, please send an email to toimetaja@eesti.ee or call 663 0215.</translation>
+        <source>Your email account has been blocked. To open it, please send an email to help@ria.ee.</source>
+        <translation>Your email account has been blocked. To open it, please send an email to help@ria.ee.</translation>
     </message>
     <message>
         <source>Invalid email address</source>
@@ -1631,10 +1683,6 @@ ID-CARD</translation>
     <message>
         <source>Forwarding is activated and you have been sent an email with activation key. Forwarding will be activated only after confirming the key.</source>
         <translation>Forwarding is activated and you have been sent an email with activation key. Forwarding will be activated only after confirming the key.</translation>
-    </message>
-    <message>
-        <source>Opening</source>
-        <translation>Opening</translation>
     </message>
     <message>
         <source>Signing</source>
@@ -1685,12 +1733,16 @@ ID-CARD</translation>
         <source>The card in the card reader is not an Estonian ID-card</source>
         <translation>The card in the card reader is not an Estonian ID-card</translation>
     </message>
+    <message>
+        <source>Decrypting</source>
+        <translation>Decrypting</translation>
+    </message>
 </context>
 <context>
     <name>MobileDialog</name>
     <message>
-        <source>Enter your phone number to sign with Mobile ID</source>
-        <translation>&lt;b&gt;Enter your phone number to sign&lt;br/&gt;with Mobiil-ID&lt;/b&gt;</translation>
+        <source>Enter your phone number to sign with mobile-ID</source>
+        <translation>&lt;b&gt;Enter your phone number to sign&lt;br/&gt;with mobile-ID&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Remember me</source>
@@ -1730,6 +1782,10 @@ ID-CARD</translation>
         <source>Personal code</source>
         <translation>Personal code</translation>
     </message>
+    <message>
+        <source>Invalid country code</source>
+        <translation>Invalid country code</translation>
+    </message>
 </context>
 <context>
     <name>MobileProgress</name>
@@ -1742,8 +1798,8 @@ ID-CARD</translation>
         <translation>Signing in process</translation>
     </message>
     <message>
-        <source>Phone absent</source>
-        <translation>Phone absent</translation>
+        <source>Phone is not in coverage area</source>
+        <translation>Phone is not in coverage area</translation>
     </message>
     <message>
         <source>Request sending error</source>
@@ -1758,16 +1814,18 @@ ID-CARD</translation>
         <translation>Connecting to SK server failed!&lt;br/&gt;Please check your internet connection.</translation>
     </message>
     <message>
-        <source>User is not a Mobile-ID client</source>
-        <translation>User is not a Mobiil-ID client</translation>
+        <source>User is not a mobile-ID client</source>
+        <translation>User is not a mobile-ID client</translation>
     </message>
     <message>
         <source>Make sure control code matches with one in phone screen
-and enter Mobile-ID PIN2-code.
-Control code: %1</source>
+and enter mobile-ID PIN2-code.</source>
         <translation>Make sure control code matches with one in phone screen
-and enter Mobiil-ID PIN2-code.
-Control code: %1</translation>
+and enter mobile-ID PIN2-code.</translation>
+    </message>
+    <message>
+        <source>Control code:</source>
+        <translation>Control code:</translation>
     </message>
     <message>
         <source>SSL handshake failed. Check the proxy settings of your computer or software upgrades.</source>
@@ -1785,10 +1843,6 @@ Control code: %1</translation>
     <message>
         <source>%1 service has encountered technical errors. Please try again later.</source>
         <translation>%1 service has encountered technical errors. Please try again later.</translation>
-    </message>
-    <message>
-        <source>Failed to send request. </source>
-        <translation>Failed to send request. </translation>
     </message>
     <message>
         <source>Invalid content type header </source>
@@ -1815,8 +1869,8 @@ Control code: %1</translation>
         <translation>Session not found</translation>
     </message>
     <message>
-        <source>Mobile-ID</source>
-        <translation>Mobile-ID</translation>
+        <source>mobile-ID</source>
+        <translation>mobile-ID</translation>
     </message>
     <message>
         <source>Smart-ID</source>
@@ -1828,31 +1882,29 @@ Control code: %1</translation>
     </message>
     <message>
         <source>Make sure control code matches with one in phone screen
-and enter Smart-ID PIN2-code.
-Control code: %1</source>
+and enter Smart-ID PIN2-code.</source>
         <translation>Make sure control code matches with one in phone screen
-and enter Smart-ID PIN2-code.
-Control code: %1</translation>
+and enter Smart-ID PIN2-code.</translation>
     </message>
     <message>
-        <source>Failed to sign container. Check your %1 service access settings. &lt;a href=&quot;https://www.id.ee/index.php?id=39023&quot;&gt;Additional information&lt;/a&gt;</source>
-        <translation>Failed to sign container. Check your %1 service access settings. &lt;a href=&quot;https://www.id.ee/index.php?id=39023&quot;&gt;Additional information&lt;/a&gt;</translation>
+        <source>Failed to sign container. Check your %1 service access settings. &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;Additional information&lt;/a&gt;</source>
+        <translation>Failed to sign container. Check your %1 service access settings. &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;Additional information&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Your Smart-ID certificate level must be qualified to sign documents in DigiDoc4 Client.</source>
         <translation>Your Smart-ID certificate level must be qualified to sign documents in DigiDoc4 Client.</translation>
     </message>
     <message>
-        <source>Your signing software needs an upgrade. Please update your ID software, which you can get from &lt;a href=&quot;http://www.id.ee/?lang=en&quot;&gt;www.id.ee&lt;/a&gt;. Additional info is available ID-helpline (+372) 666 8888.</source>
-        <translation>Your signing software needs an upgrade. Please update your ID software, which you can get from &lt;a href=&quot;http://www.id.ee/?lang=en&quot;&gt;www.id.ee&lt;/a&gt;. Additional info is available ID-helpline (+372) 666 8888.</translation>
+        <source>Your signing software needs an upgrade. Please update your ID software, which you can get from &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;www.id.ee&lt;/a&gt;. Additional info is available ID-helpline (+372) 666 8888.</source>
+        <translation>Your signing software needs an upgrade. Please update your ID software, which you can get from &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;www.id.ee&lt;/a&gt;. Additional info is available ID-helpline (+372) 666 8888.</translation>
     </message>
     <message>
         <source>Open the Smart-ID application on your smart device and confirm device for signing.</source>
         <translation>Open the Smart-ID application on your smart device and confirm device for signing.</translation>
     </message>
     <message>
-        <source>The limit for digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/index.php?id=39023&quot;&gt;Additional information&lt;/a&gt;</source>
-        <translation>The limit for digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/index.php?id=39023&quot;&gt;Additional information&lt;/a&gt;</translation>
+        <source>The limit for %1 digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;Additional information&lt;/a&gt;</source>
+        <translation>The limit for %1 digital signatures per month has been reached for this IP address. &lt;a href=&quot;https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/&quot;&gt;Additional information&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Please include correct country code.</source>
@@ -1862,6 +1914,47 @@ Control code: %1</translation>
         <source>Error: an incorrect control code was chosen</source>
         <translation>Error: an incorrect control code was chosen</translation>
     </message>
+    <message>
+        <source>Sign document</source>
+        <comment>Do not translate to RUS (IB-6416)</comment>
+        <translation>Sign document</translation>
+    </message>
+    <message>
+        <source>Your mobile-ID transaction has failed. Please contact your mobile network operator.</source>
+        <translation>Your mobile-ID transaction has failed. Please contact your mobile network operator.</translation>
+    </message>
+    <message>
+        <source>User denied or cancelled</source>
+        <translation>User denied or cancelled</translation>
+    </message>
+    <message>
+        <source>Your mobile-ID transaction has expired. Please try again.</source>
+        <translation>Your mobile-ID transaction has expired. Please try again.</translation>
+    </message>
+    <message>
+        <source>Your Smart-ID transaction has expired. Please try again.</source>
+        <translation>Your Smart-ID transaction has expired. Please try again.</translation>
+    </message>
+    <message>
+        <source>Failed to connect with service server. Please check your network settings or try again later.</source>
+        <translation>Failed to connect with service server. Please check your network settings or try again later.</translation>
+    </message>
+    <message>
+        <source>Failed to send request. Check your %1 service access settings.</source>
+        <translation>Failed to send request. Check your %1 service access settings.</translation>
+    </message>
+    <message>
+        <source>Your Smart-ID transaction has failed. Please check your Smart-ID application or contact Smart-ID customer support.</source>
+        <translation>Your Smart-ID transaction has failed. Please check your Smart-ID application or contact Smart-ID customer support.</translation>
+    </message>
+    <message>
+        <source>Mobile-ID</source>
+        <translation>Mobile-ID</translation>
+    </message>
+    <message>
+        <source>Failed to send request. %1 service has encountered technical errors. Please try again later.</source>
+        <translation>Failed to send request. %1 service has encountered technical errors. Please try again later.</translation>
+    </message>
 </context>
 <context>
     <name>NoCardInfo</name>
@@ -1870,16 +1963,16 @@ Control code: %1</translation>
         <translation>No card in card reader; check if ID-card is inserted correctly</translation>
     </message>
     <message>
-        <source>PCSC service is not running</source>
-        <translation>PCSC service is not running</translation>
-    </message>
-    <message>
         <source>No readers found</source>
         <translation>No card readers found</translation>
     </message>
     <message>
         <source>Loading data</source>
         <translation>Loading data</translation>
+    </message>
+    <message>
+        <source>The PCSC service, required for using the ID-card, is not working. Check your computer settings.</source>
+        <translation>The PCSC service, required for using the ID-card, is not working. Check your computer settings.</translation>
     </message>
 </context>
 <context>
@@ -1893,16 +1986,8 @@ Control code: %1</translation>
         <translation>CHECK @EESTI.EE E-MAIL STATUS</translation>
     </message>
     <message>
-        <source>No official email redirects found. To send email to @eesti.ee, please enter your email address:</source>
-        <translation>No official email redirects found. To send email to @eesti.ee, please enter your email address:</translation>
-    </message>
-    <message>
         <source>ACTIVATE REDIRECTION</source>
         <translation>ACTIVATE REDIRECTION</translation>
-    </message>
-    <message>
-        <source>For more detailed official email address forwarding, please visit &lt;a href=&apos;http://www.eesti.ee/en/&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;eesti.ee&lt;/span&gt;&lt;/a&gt;</source>
-        <translation>For more detailed official email address forwarding, please visit &lt;a href=&apos;http://www.eesti.ee/en/&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;eesti.ee&lt;/span&gt;&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Your @eesti.ee e-mail has been forwarded to </source>
@@ -1925,6 +2010,14 @@ Control code: %1</translation>
         <source>Activate redirection</source>
         <extracomment>accessible</extracomment>
         <translation>Activate redirection</translation>
+    </message>
+    <message>
+        <source>For more detailed official email address forwarding, please visit &lt;a href=&apos;http://www.eesti.ee/en/&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;eesti.ee&lt;/span&gt;&lt;/a&gt;. &lt;a href=&apos;https://www.eesti.ee/en/using-the-state-portal#terms-of-the-official-email-service-of-eestiee&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;Terms&lt;/span&gt;&lt;/a&gt; of the official email service of eesti.ee.</source>
+        <translation>For more detailed official email address forwarding, please visit &lt;a href=&apos;http://www.eesti.ee/en/&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;eesti.ee&lt;/span&gt;&lt;/a&gt;. &lt;a href=&apos;https://www.eesti.ee/en/using-the-state-portal#terms-of-the-official-email-service-of-eestiee&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: none; font-weight: 900;&apos;&gt;Terms&lt;/span&gt;&lt;/a&gt; of the official email service of eesti.ee.</translation>
+    </message>
+    <message>
+        <source>To send email to @eesti.ee, please enter your email address:</source>
+        <translation>To send email to @eesti.ee, please enter your email address:</translation>
     </message>
 </context>
 <context>
@@ -2248,14 +2341,7 @@ Control code: %1</translation>
     </message>
 </context>
 <context>
-    <name>QFileDialog</name>
-    <message>
-        <source>All Files (*)</source>
-        <translation>All Files (*)</translation>
-    </message>
-</context>
-<context>
-    <name>QPKCS11</name>
+    <name>QCryptoBackend</name>
     <message>
         <source>PIN Canceled</source>
         <translation>PIN Canceled</translation>
@@ -2277,8 +2363,15 @@ Control code: %1</translation>
         <translation>PKCS11 device error</translation>
     </message>
     <message>
-        <source>PKCS11 unknown error</source>
-        <translation>PKCS11 unknown error</translation>
+        <source>Unknown error</source>
+        <translation>Unknown error</translation>
+    </message>
+</context>
+<context>
+    <name>QFileDialog</name>
+    <message>
+        <source>All Files (*)</source>
+        <translation>All Files (*)</translation>
     </message>
 </context>
 <context>
@@ -2334,12 +2427,12 @@ Control code: %1</translation>
 <context>
     <name>RoleAddressDialog</name>
     <message>
-        <source>Role / resolution</source>
-        <translation>Role / resolution</translation>
+        <source>Enter your role and address info</source>
+        <translation>Enter your role and address info</translation>
     </message>
     <message>
-        <source>Address</source>
-        <translation>Address</translation>
+        <source>Role / resolution</source>
+        <translation>Role / resolution</translation>
     </message>
     <message>
         <source>City</source>
@@ -2360,6 +2453,18 @@ Control code: %1</translation>
     <message>
         <source>SIGN</source>
         <translation>SIGN</translation>
+    </message>
+    <message>
+        <source>Sign</source>
+        <translation>Sign</translation>
+    </message>
+    <message>
+        <source>CANCEL</source>
+        <translation>CANCEL</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
     </message>
 </context>
 <context>
@@ -2479,10 +2584,6 @@ Control code: %1</translation>
         <translation>I would like to sign with Lithuanian, Latvian ID-card</translation>
     </message>
     <message>
-        <source>Restart now</source>
-        <translation>Restart now</translation>
-    </message>
-    <message>
         <source>Show print summary</source>
         <translation>Show print summary</translation>
     </message>
@@ -2495,8 +2596,8 @@ Control code: %1</translation>
         <translation>Access to validity confirmation service</translation>
     </message>
     <message>
-        <source>https://www.id.ee/index.php?id=39245</source>
-        <translation>https://www.id.ee/index.php?id=39245</translation>
+        <source>https://www.id.ee/en/article/access-certificate-what-is-it/</source>
+        <translation>https://www.id.ee/en/article/access-certificate-what-is-it/</translation>
     </message>
     <message>
         <source>Server access certificate</source>
@@ -2523,8 +2624,8 @@ Control code: %1</translation>
         <translation>Access to Time-Stamping service</translation>
     </message>
     <message>
-        <source>https://www.id.ee/index.php?id=39076</source>
-        <translation>https://www.id.ee/index.php?id=39076</translation>
+        <source>https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/</source>
+        <translation>https://www.id.ee/en/article/for-organisations-that-sign-large-quantities-of-documents-using-digidoc4-client/</translation>
     </message>
     <message>
         <source>No proxy</source>
@@ -2563,16 +2664,8 @@ Control code: %1</translation>
         <translation>Network settings are correct, certificate status service is accessible!</translation>
     </message>
     <message>
-        <source>Base version:</source>
-        <translation>Base version:</translation>
-    </message>
-    <message>
         <source>DigiDoc4 client</source>
         <translation>DigiDoc4 client</translation>
-    </message>
-    <message>
-        <source>%1 version %2, released %3%4</source>
-        <translation>%1 version %2, released %3%4</translation>
     </message>
     <message>
         <source>Checking updates has failed.</source>
@@ -2600,10 +2693,10 @@ Control code: %1</translation>
     </message>
     <message>
         <source>&lt;p&gt;Estonian ID-software is released by Information Systems&apos;s Authority&lt;br /&gt;
-In case of questions please contact our support via &lt;a href=&quot;https://id.ee/?lang=en&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;id.ee&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
+In case of questions please contact our support via &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;id.ee&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
 Additional licenses and components</source>
         <translation>&lt;p&gt;Estonian ID-software is released by Information Systems&apos;s Authority&lt;br /&gt;
-In case of questions please contact our support via &lt;a href=&quot;https://id.ee/?lang=en&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;id.ee&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
+In case of questions please contact our support via &lt;a href=&quot;https://www.id.ee/en/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006eb5;&quot;&gt;id.ee&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
 Additional licenses and components</translation>
     </message>
     <message>
@@ -2629,10 +2722,6 @@ Additional licenses and components</translation>
     <message>
         <source>Text files (*.txt)</source>
         <translation>Text files (*.txt)</translation>
-    </message>
-    <message>
-        <source>Error occurred</source>
-        <translation>Error occurred</translation>
     </message>
     <message>
         <source>Failed write to file!</source>
@@ -2707,16 +2796,57 @@ Additional licenses and components</translation>
         <translation>Help</translation>
     </message>
     <message>
-        <source>Access to Mobile-ID and Smart-ID service</source>
-        <translation>Access to Mobile-ID and Smart-ID service</translation>
+        <source>Access to mobile-ID and Smart-ID service</source>
+        <translation>Access to mobile-ID and Smart-ID service</translation>
     </message>
     <message>
-        <source>https://www.id.ee/index.php?id=39023</source>
-        <translation>https://www.id.ee/index.php?id=39023</translation>
+        <source>DigiDoc4 client configuration update was successful.</source>
+        <translation>DigiDoc4 client configuration update was successful.</translation>
     </message>
     <message>
-        <source>Digidoc4 client configuration update was successful.</source>
-        <translation>Digidoc4 client configuration update was successful.</translation>
+        <source>%1 version %2, released %3</source>
+        <translation>%1 version %2, released %3</translation>
+    </message>
+    <message>
+        <source>Applying this setting requires application restart. Restart now?</source>
+        <translation>Applying this setting requires application restart. Restart now?</translation>
+    </message>
+    <message>
+        <source>YES</source>
+        <translation>YES</translation>
+    </message>
+    <message>
+        <source>NO</source>
+        <translation>NO</translation>
+    </message>
+    <message>
+        <source>Use default access</source>
+        <translation>Use default access</translation>
+    </message>
+    <message>
+        <source>Use manually configured access</source>
+        <translation>Use manually configured access</translation>
+    </message>
+    <message>
+        <source>Enable one-time log generation</source>
+        <translation>Enable one-time log generation</translation>
+    </message>
+    <message>
+        <source>Save log</source>
+        <extracomment>accessible</extracomment>
+        <translation>Save log</translation>
+    </message>
+    <message>
+        <source>SAVE LOG</source>
+        <translation>SAVE LOG</translation>
+    </message>
+    <message>
+        <source>Restart DigiDoc4 Client to activate logging. Read more &lt;a href=&quot;https://www.id.ee/en/article/log-file-generation-in-digidoc4-client/&quot;&gt;here&lt;/a&gt;. Restart now?</source>
+        <translation>Restart DigiDoc4 Client to activate logging. Read more &lt;a href=&quot;https://www.id.ee/en/article/log-file-generation-in-digidoc4-client/&quot;&gt;here&lt;/a&gt;. Restart now?</translation>
+    </message>
+    <message>
+        <source>Restart DigiDoc4 Client to activate logging. Read more &lt;a href=&quot;https://www.id.ee/en/article/log-file-generation-in-digidoc4-client/&quot;&gt;here&lt;/a&gt;.</source>
+        <translation>Restart DigiDoc4 Client to activate logging. Read more &lt;a href=&quot;https://www.id.ee/en/article/log-file-generation-in-digidoc4-client/&quot;&gt;here&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -2798,16 +2928,16 @@ Additional licenses and components</translation>
         <translation>Unknown error</translation>
     </message>
     <message>
-        <source>Test signature is signed with test certificates that are similar to the certificates of real tokens, but digital signatures with legal force cannot be given with them as there is no actual owner of the card. &lt;a href=&apos;http://www.id.ee/index.php?id=30494&apos;&gt;Additional information&lt;/a&gt;.</source>
-        <translation>Test signature is signed with test certificates that are similar to the certificates of real tokens, but digital signatures with legal force cannot be given with them as there is no actual owner of the card. &lt;a href=&apos;http://www.id.ee/index.php?id=30494&apos;&gt;Additional information&lt;/a&gt;.</translation>
+        <source>Test signature is signed with test certificates that are similar to the certificates of real tokens, but digital signatures with legal force cannot be given with them as there is no actual owner of the card. &lt;a href=&apos;https://www.id.ee/en/article/verifying-signatures-given-with-test-certificates-in-the-digidoc4-client/&apos;&gt;Additional information&lt;/a&gt;.</source>
+        <translation>Test signature is signed with test certificates that are similar to the certificates of real tokens, but digital signatures with legal force cannot be given with them as there is no actual owner of the card. &lt;a href=&apos;https://www.id.ee/en/article/verifying-signatures-given-with-test-certificates-in-the-digidoc4-client/&apos;&gt;Additional information&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>This is an invalid signature or malformed digitally signed file. The signature is not valid.</source>
         <translation>This is an invalid signature or malformed digitally signed file. The signature is not valid.</translation>
     </message>
     <message>
-        <source>Signature status is displayed &quot;unknown&quot; if you don&apos;t have all validity confirmation service certificates and/or certificate authority certificates installed into your computer (&lt;a href=&apos;http://id.ee/?lang=en&amp;id=34317&apos;&gt;additional information&lt;/a&gt;).</source>
-        <translation>Signature status is displayed &quot;unknown&quot; if you don&apos;t have all validity confirmation service certificates and/or certificate authority certificates installed into your computer (&lt;a href=&apos;http://id.ee/?lang=en&amp;id=34317&apos;&gt;additional information&lt;/a&gt;).</translation>
+        <source>Signature status is displayed &quot;unknown&quot; if you don&apos;t have all validity confirmation service certificates and/or certificate authority certificates installed into your computer (&lt;a href=&apos;https://www.id.ee/en/article/digidoc4-klient-viga-36-failed-to-validate-signature-libdigidoc-code-36-message-signers-cert-not-trusted-missing-ca-cert/&apos;&gt;additional information&lt;/a&gt;).</source>
+        <translation>Signature status is displayed &quot;unknown&quot; if you don&apos;t have all validity confirmation service certificates and/or certificate authority certificates installed into your computer (&lt;a href=&apos;https://www.id.ee/en/article/digidoc4-klient-viga-36-failed-to-validate-signature-libdigidoc-code-36-message-signers-cert-not-trusted-missing-ca-cert/&apos;&gt;additional information&lt;/a&gt;).</translation>
     </message>
     <message>
         <source>Signer&apos;s Certificate issuer</source>
@@ -2878,12 +3008,12 @@ Additional licenses and components</translation>
         <translation>OCSP time</translation>
     </message>
     <message>
-        <source>Signer&apos;s computer time (UTC)</source>
-        <translation>Signer&apos;s computer time (UTC)</translation>
+        <source>Claimed signing time (UTC)</source>
+        <translation>Claimed signing time (UTC)</translation>
     </message>
     <message>
         <source>SIGNATURE_WARNING</source>
-        <translation>The signature is valid, but the container has a specific feature. Usually, this feature has arisen accidentally when containers were created. However, as it is not possible to edit a container without invalidating the signature, &lt;a href=&apos;https://www.id.ee/?lang=en&amp;id=38499&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: underline; font-weight: 900;&apos;&gt;a warning&lt;/span&gt;&lt;/a&gt; is displayed.</translation>
+        <translation>The signature is valid, but the container has a specific feature. Usually, this feature has arisen accidentally when containers were created. However, as it is not possible to edit a container without invalidating the signature, &lt;a href=&apos;https://www.id.ee/en/article/digital-signing-and-electronic-signatures/&apos;&gt;&lt;span style=&apos;color: #006EB5; text-decoration: underline; font-weight: 900;&apos;&gt;a warning&lt;/span&gt;&lt;/a&gt; is displayed.</translation>
     </message>
     <message>
         <source>is valid</source>
@@ -2914,16 +3044,19 @@ Additional licenses and components</translation>
         <source>is unknown</source>
         <comment>Signature</comment>
         <translation>is unknown</translation>
-    </message>
-    <message>
-        <source>Technical information</source>
-        <comment>accessible</comment>
-        <translation>Technical information</translation>
     </message>
     <message>
         <source>Close</source>
         <extracomment>accessible</extracomment>
         <translation>Close</translation>
+    </message>
+    <message>
+        <source>Signing time (UTC)</source>
+        <translation>Signing time (UTC)</translation>
+    </message>
+    <message>
+        <source>ROLE AND ADDRESS</source>
+        <translation>ROLE AND ADDRESS</translation>
     </message>
 </context>
 <context>
@@ -3126,6 +3259,10 @@ Additional licenses and components</translation>
         <source>Digi-ID</source>
         <translation>Digi-ID</translation>
     </message>
+    <message>
+        <source>Digi-ID E-RESIDENT</source>
+        <translation>Digi-ID E-RESIDENT</translation>
+    </message>
 </context>
 <context>
     <name>VerifyCert</name>
@@ -3215,12 +3352,29 @@ Additional licenses and components</translation>
         <source>Unblock to reuse PIN%1.</source>
         <translation>Unblock to reuse PIN%1.</translation>
     </message>
-</context>
-<context>
-    <name>WaitDialog</name>
     <message>
-        <source>Decrypting</source>
-        <translation>Decrypting</translation>
+        <source>Check certificate status</source>
+        <translation>Check certificate status</translation>
+    </message>
+    <message>
+        <source>Your ID-card authentication certificate is valid. </source>
+        <translation>Your ID-card authentication certificate is valid. </translation>
+    </message>
+    <message>
+        <source>Your ID-card signing certificate is valid. </source>
+        <translation>Your ID-card signing certificate is valid. </translation>
+    </message>
+    <message>
+        <source>Your ID-card signing certificate is not valid. You need valid certificates to use your ID-card electronically. </source>
+        <translation>Your ID-card signing certificate is not valid. You need valid certificates to use your ID-card electronically. </translation>
+    </message>
+    <message>
+        <source>Your ID-card authentication certificate is not valid. You need valid certificates to use your ID-card electronically. </source>
+        <translation>Your ID-card authentication certificate is not valid. You need valid certificates to use your ID-card electronically. </translation>
+    </message>
+    <message>
+        <source>Read more &lt;a href=&quot;https://www.id.ee/en/article/validity-of-id-card-certificates/&quot;&gt;here&lt;/a&gt;.</source>
+        <translation>Read more &lt;a href=&quot;https://www.id.ee/en/article/validity-of-id-card-certificates/&quot;&gt;here&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -3253,6 +3407,14 @@ Additional licenses and components</translation>
         <source>Certificates are revoked!</source>
         <translation>Certificates are revoked!</translation>
     </message>
+    <message>
+        <source>Additional information</source>
+        <translation>Additional information</translation>
+    </message>
+    <message>
+        <source>https://www.id.ee/en/article/the-majority-of-electronically-used-id-cards-were-renewed/</source>
+        <translation>https://www.id.ee/en/article/the-majority-of-electronically-used-id-cards-were-renewed/</translation>
+    </message>
     <message numerus="yes">
         <source>%n signatures are not valid</source>
         <translation>
@@ -3282,16 +3444,20 @@ Additional licenses and components</translation>
         </translation>
     </message>
     <message>
-        <source>http://id.ee/?lang=en&amp;id=34317</source>
-        <translation>https://www.id.ee/index.php?id=38499</translation>
-    </message>
-    <message>
-        <source>https://www.id.ee/index.php?id=30591</source>
-        <translation>https://www.id.ee/index.php?id=38499</translation>
+        <source>https://www.id.ee/en/article/digital-signing-and-electronic-signatures/</source>
+        <translation>https://www.id.ee/en/article/digital-signing-and-electronic-signatures/</translation>
     </message>
     <message>
         <source>More information</source>
         <translation>More information</translation>
+    </message>
+    <message>
+        <source>https://www.id.ee/en/article/digidoc-container-format-life-cycle-2/</source>
+        <translation>https://www.id.ee/en/article/digidoc-container-format-life-cycle-2/</translation>
+    </message>
+    <message>
+        <source>The current file is a DigiDoc container that is not supported officially any longer. You are not allowed to add or remove signatures to this container.</source>
+        <translation>The current file is a DigiDoc container that is not supported officially any longer. You are not allowed to add or remove signatures to this container.</translation>
     </message>
 </context>
 <context>

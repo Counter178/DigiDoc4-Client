@@ -20,18 +20,13 @@
 #include "QPKCS11_p.h"
 
 #include "SslCertificate.h"
+#include "TokenData.h"
 #include "dialogs/PinPopup.h"
+
 #include <common/QPCSC.h>
-#ifndef NO_PKCS11_CRYPTO
 #include <crypto/CryptoDoc.h>
-#endif
 
 #include <QtCore/QDebug>
-#include <QtCore/QEventLoop>
-#include <QtCore/QFile>
-#include <QtCore/QHash>
-#include <QtCore/QMutex>
-#include <QtCore/QStringList>
 #include <QtWidgets/QApplication>
 
 #include <openssl/obj_mac.h>
@@ -125,18 +120,11 @@ std::vector<CK_SLOT_ID> QPKCS11::Private::slotIds(bool token_present) const
 	return result;
 }
 
-void QPKCS11::Private::updateTokenFlags(TokenData &t, CK_ULONG f) const
-{
-	t.setFlag( TokenData::PinCountLow, f & CKF_USER_PIN_COUNT_LOW );
-	t.setFlag( TokenData::PinFinalTry, f & CKF_USER_PIN_FINAL_TRY );
-	t.setFlag( TokenData::PinLocked, f & CKF_USER_PIN_LOCKED );
-}
-
 
 
 QPKCS11::QPKCS11( QObject *parent )
-:	QObject( parent )
-,	d(new Private)
+	: QCryptoBackend(parent)
+	, d(new Private)
 {
 }
 
@@ -144,20 +132,6 @@ QPKCS11::~QPKCS11()
 {
 	unload();
 	delete d;
-}
-
-QString QPKCS11::errorString( PinStatus error )
-{
-	switch( error )
-	{
-	case QPKCS11::PinOK: return QString();
-	case QPKCS11::PinCanceled: return tr("PIN Canceled");
-	case QPKCS11::PinLocked: return tr("PIN locked");
-	case QPKCS11::PinIncorrect: return tr("PIN Incorrect");
-	case QPKCS11::GeneralError: return tr("PKCS11 general error");
-	case QPKCS11::DeviceError: return tr("PKCS11 device error");
-	default: return tr("PKCS11 unknown error");
-	}
 }
 
 QByteArray QPKCS11::derive(const QByteArray &publicKey) const
@@ -178,18 +152,16 @@ QByteArray QPKCS11::derive(const QByteArray &publicKey) const
 	};
 	CK_OBJECT_HANDLE newkey = CK_INVALID_HANDLE;
 	if(d->f->C_DeriveKey(d->session, &mech, key[0], newkey_template.data(), CK_ULONG(newkey_template.size()), &newkey) != CKR_OK)
-		return QByteArray();
+		return {};
 
 	return d->attribute(d->session, newkey, CKA_VALUE);
 }
 
-#ifndef NO_PKCS11_CRYPTO
 QByteArray QPKCS11::deriveConcatKDF(const QByteArray &publicKey, const QString &digest, int keySize,
 	const QByteArray &algorithmID, const QByteArray &partyUInfo, const QByteArray &partyVInfo) const
 {
 	return CryptoDoc::concatKDF(digest, quint32(keySize), derive(publicKey), algorithmID + partyUInfo + partyVInfo);
 }
-#endif
 
 QByteArray QPKCS11::decrypt( const QByteArray &data ) const
 {
@@ -251,57 +223,41 @@ bool QPKCS11::load( const QString &driver )
 	return true;
 }
 
-QPKCS11::PinStatus QPKCS11::login( const TokenData &_t )
+QPKCS11::PinStatus QPKCS11::lastError() const
+{
+	return d->lastError;
+}
+
+QPKCS11::PinStatus QPKCS11::login(const TokenData &t)
 {
 	logout();
 
-	CK_SLOT_ID currentSlot = 0;
-	d->id = [&]{
-		for(CK_SLOT_ID slot: d->slotIds(true))
-		{
-			if(d->session)
-				d->f->C_CloseSession(d->session);
-			d->session = 0;
-			if(d->f->C_OpenSession(slot, CKF_SERIAL_SESSION, nullptr, nullptr, &d->session) != CKR_OK)
-				continue;
-			currentSlot = slot;
-			bool isAuthSlot = false;
-			for(CK_OBJECT_HANDLE obj: d->findObject(d->session, CKO_CERTIFICATE))
-			{
-				SslCertificate cert(d->attribute(d->session, obj, CKA_VALUE), QSsl::Der);
-				// Hack: Workaround broken FIN pkcs11 drivers showing non-repu certificates in auth slot
-				if(d->isFinDriver)
-				{
-					if(isAuthSlot)
-						continue;
-					if(!cert.keyUsage().contains(SslCertificate::NonRepudiation))
-						isAuthSlot = true;
-				}
-				if(_t.cert() == cert)
-					return d->attribute(d->session, obj, CKA_ID);
-			}
-		}
-		return QByteArray();
-	}();
+	CK_SLOT_ID currentSlot = t.data(QStringLiteral("slot")).value<CK_SLOT_ID>();
+	d->id = t.data(QStringLiteral("id")).toByteArray();
 
 	CK_TOKEN_INFO token;
-	if(d->id.isEmpty() || d->f->C_GetTokenInfo(currentSlot, &token) != CKR_OK)
+	if(d->f->C_GetTokenInfo(currentSlot, &token) != CKR_OK ||
+		d->f->C_OpenSession(currentSlot, CKF_SERIAL_SESSION, nullptr, nullptr, &d->session) != CKR_OK)
+		return UnknownError;
+
+	std::vector<CK_OBJECT_HANDLE> list = d->findObject(d->session, CKO_CERTIFICATE, d->id);
+	if(list.size() != 1 || QSslCertificate(d->attribute(d->session, list[0], CKA_VALUE), QSsl::Der) != t.cert())
 		return UnknownError;
 
 	// Hack: Workaround broken FIN pkcs11 drivers not providing CKF_LOGIN_REQUIRED info
 	if(!d->isFinDriver && !(token.flags & CKF_LOGIN_REQUIRED))
 		return PinOK;
 
-	TokenData t = _t;
-	d->updateTokenFlags( t, token.flags );
-	if( t.flags() & TokenData::PinLocked )
-		return PinLocked;
-
 	CK_RV err = CKR_OK;
-	bool pin2 = SslCertificate( t.cert() ).keyUsage().keys().contains( SslCertificate::NonRepudiation );
-	if( token.flags & CKF_PROTECTED_AUTHENTICATION_PATH )
+	SslCertificate cert(t.cert());
+	bool isSign = cert.keyUsage().keys().contains(SslCertificate::NonRepudiation);
+	PinPopup::TokenFlags f;
+	if(token.flags & CKF_USER_PIN_LOCKED) return PinLocked;
+	if(token.flags & CKF_USER_PIN_COUNT_LOW) f = PinPopup::PinCountLow;
+	if(token.flags & CKF_USER_PIN_FINAL_TRY) f = PinPopup::PinFinalTry;
+	if(token.flags & CKF_PROTECTED_AUTHENTICATION_PATH)
 	{
-		PinPopup p(pin2 ? PinPopup::Pin2PinpadType : PinPopup::Pin1PinpadType, t, rootWindow());
+		PinPopup p(isSign ? PinPopup::Pin2PinpadType : PinPopup::Pin1PinpadType, cert, f, rootWindow());
 		connect(d, &Private::started, &p, &PinPopup::startTimer);
 		connect(d, &Private::finished, &p, &PinPopup::accept);
 		d->start();
@@ -310,7 +266,7 @@ QPKCS11::PinStatus QPKCS11::login( const TokenData &_t )
 	}
 	else
 	{
-		PinPopup p(pin2 ? PinPopup::Pin2Type : PinPopup::Pin1Type, t, rootWindow());
+		PinPopup p(isSign ? PinPopup::Pin2Type : PinPopup::Pin1Type, cert, f, rootWindow());
 		p.setPinLen(token.ulMinPinLen, token.ulMaxPinLen < 12 ? 12 : token.ulMaxPinLen);
 		if( !p.exec() )
 			return PinCanceled;
@@ -318,8 +274,7 @@ QPKCS11::PinStatus QPKCS11::login( const TokenData &_t )
 		err = d->f->C_Login(d->session, CKU_USER, CK_UTF8CHAR_PTR(pin.constData()), CK_ULONG(pin.size()));
 	}
 
-	if(d->f->C_GetTokenInfo(currentSlot, &token) == CKR_OK)
-		d->updateTokenFlags( t, token.flags );
+	d->f->C_GetTokenInfo(currentSlot, &token);
 
 	switch( err )
 	{
@@ -327,7 +282,7 @@ QPKCS11::PinStatus QPKCS11::login( const TokenData &_t )
 	case CKR_USER_ALREADY_LOGGED_IN: return PinOK;
 	case CKR_CANCEL:
 	case CKR_FUNCTION_CANCELED: return PinCanceled;
-	case CKR_PIN_INCORRECT: return (t.flags() & TokenData::PinLocked) ? PinLocked : PinIncorrect;
+	case CKR_PIN_INCORRECT: return (token.flags & CKF_USER_PIN_LOCKED) ? PinLocked : PinIncorrect;
 	case CKR_PIN_LOCKED: return PinLocked;
 	case CKR_DEVICE_ERROR: return DeviceError;
 	case CKR_GENERAL_ERROR: return GeneralError;
@@ -351,30 +306,29 @@ QList<TokenData> QPKCS11::tokens() const
 	QList<TokenData> list;
 	for( CK_SLOT_ID slot: d->slotIds( true ) )
 	{
+		CK_SLOT_INFO slotInfo;
 		CK_TOKEN_INFO token;
-		if( d->f->C_GetTokenInfo( slot, &token ) != CKR_OK )
-			continue;
 		CK_SESSION_HANDLE session = 0;
-		if(d->f->C_OpenSession(slot, CKF_SERIAL_SESSION, nullptr, nullptr, &session) != CKR_OK)
+		if(d->f->C_GetSlotInfo(slot, &slotInfo) != CKR_OK ||
+			d->f->C_GetTokenInfo(slot, &token) != CKR_OK ||
+			d->f->C_OpenSession(slot, CKF_SERIAL_SESSION, nullptr, nullptr, &session) != CKR_OK)
 			continue;
-		bool isAuthSlot = false;
 		for( CK_OBJECT_HANDLE obj: d->findObject( session, CKO_CERTIFICATE ) )
 		{
 			SslCertificate cert(d->attribute(session, obj, CKA_VALUE), QSsl::Der);
 			if(cert.isCA())
 				continue;
+			QByteArray id = d->attribute(session, obj, CKA_ID);
 			// Hack: Workaround broken FIN pkcs11 drivers showing non-repu certificates in auth slot
-			if(d->isFinDriver)
-			{
-				if(isAuthSlot)
-					continue;
-				if(!cert.keyUsage().contains(SslCertificate::NonRepudiation))
-					isAuthSlot = true;
-			}
+			if(d->isFinDriver && d->findObject(session, CKO_PUBLIC_KEY, id).empty())
+				continue;
 			TokenData t;
-			t.setCard(toQByteArray(token.serialNumber).trimmed());
+			t.setCard(cert.type() & SslCertificate::EstEidType || cert.type() & SslCertificate::DigiIDType ?
+				toQByteArray(token.serialNumber).trimmed() : cert.subjectInfo(QSslCertificate::CommonName) + "-" + cert.serialNumber());
 			t.setCert(cert);
-			d->updateTokenFlags( t, token.flags );
+			t.setReader(QByteArray::fromRawData((const char*)slotInfo.slotDescription, sizeof(slotInfo.slotDescription)).trimmed());
+			t.setData(QStringLiteral("slot"), QVariant::fromValue(slot));
+			t.setData(QStringLiteral("id"), id);
 			list << t;
 		}
 		d->f->C_CloseSession( session );
@@ -387,26 +341,37 @@ bool QPKCS11::reload()
 	static QMultiHash<QString,QByteArray> drivers {
 #ifdef Q_OS_MAC
 		{ qApp->applicationDirPath() + "/opensc-pkcs11.so", QByteArray() },
-		{ "/Library/latvia-eid/lib/otlv-pkcs11.so", "3BDD18008131FE45904C41545649412D65494490008C" },
+		{ "/Library/latvia-eid/lib/eidlv-pkcs11.bundle/Contents/MacOS/eidlv-pkcs11", "3BDD18008131FE45904C41545649412D65494490008C" },
+		{ "/Library/latvia-eid/lib/eidlv-pkcs11.bundle/Contents/MacOS/eidlv-pkcs11", "3BDB960080B1FE451F830012428F536549440F900020" },
 		{ "/Library/Security/tokend/CCSuite.tokend/Contents/Frameworks/libccpkip11.dylib", "3BF81300008131FE45536D617274417070F8" },
 		{ "/Library/Security/tokend/CCSuite.tokend/Contents/Frameworks/libccpkip11.dylib", "3B7D94000080318065B08311C0A983009000" },
 		{ "/Library/mPolluxDigiSign/libcryptoki.dylib", "3B7F9600008031B865B0850300EF1200F6829000" },
 		{ "/Library/mPolluxDigiSign/libcryptoki.dylib", "3B7B940000806212515646696E454944" },
-		{ "/Library/OpenSC/lib/opensc-pkcs11.so", "3B7B940000806212515646696E454944" },
 		{ "/Library/Frameworks/eToken.framework/Versions/Current/libeToken.dylib", "3BD5180081313A7D8073C8211030" },
 		{ "/Library/Frameworks/eToken.framework/Versions/Current/libeToken.dylib", "3BD518008131FE7D8073C82110F4" },
+		{ "/Library/Frameworks/eToken.framework/Versions/Current/libIDPrimePKCS11.dylib", "3BFF9600008131804380318065B0850300EF120FFE82900066" },
 #elif defined(Q_OS_WIN)
 		{ "opensc-pkcs11.dll", QByteArray() },
-		{ "OTLvP11.dll", "3BDD18008131FE45904C41545649412D65494490008C" },
 		{ qApp->applicationDirPath() + "/../CryptoTech/CryptoCard/CCPkiP11.dll", "3BF81300008131FE45536D617274417070F8" },
 		{ qApp->applicationDirPath() + "/../CryptoTech/CryptoCard/CCPkiP11.dll", "3B7D94000080318065B08311C0A983009000" },
 #else
 		{ "opensc-pkcs11.so", QByteArray() },
-		{ "otlv-pkcs11.so", "3BDD18008131FE45904C41545649412D65494490008C" },
-		{ "/usr/lib/ccs/libccpkip11.so", "3BF81300008131FE45536D617274417070F8" },
-		{ "/usr/lib/ccs/libccpkip11.so", "3B7D94000080318065B08311C0A983009000" },
+		{ "/opt/latvia-eid/lib/eidlv-pkcs11.so", "3BDD18008131FE45904C41545649412D65494490008C" },
+		{ "/opt/latvia-eid/lib/eidlv-pkcs11.so", "3BDB960080B1FE451F830012428F536549440F900020" },
+#if Q_PROCESSOR_WORDSIZE == 8
+		{ "/usr/lib64/pwpw-card-pkcs11.so", "3BF81300008131FE45536D617274417070F8" },
+		{ "/usr/lib64/pwpw-card-pkcs11.so", "3B7D94000080318065B08311C0A983009000" },
+		{ "/usr/lib64/libcryptoki.so", "3B7F9600008031B865B0850300EF1200F6829000" },
+		{ "/usr/lib64/libcryptoki.so", "3B7B940000806212515646696E454944" },
+#else
+		{ "pwpw-card-pkcs11.so", "3BF81300008131FE45536D617274417070F8" },
+		{ "pwpw-card-pkcs11.so", "3B7D94000080318065B08311C0A983009000" },
 		{ "libcryptoki.so", "3B7F9600008031B865B0850300EF1200F6829000" },
+		{ "libcryptoki.so", "3B7B940000806212515646696E454944" },
+#endif
+		{ "/usr/lib/libeTPkcs11.so", "3BD5180081313A7D8073C8211030" },
 		{ "/usr/lib/libeTPkcs11.so", "3BD518008131FE7D8073C82110F4" },
+		{ "/usr/lib/libIDPrimePKCS11.so", "3BFF9600008131804380318065B0850300EF120FFE82900066" },
 #endif
 	};
 	for(const QString &reader: QPCSC::instance().readers())

@@ -19,36 +19,31 @@
 
 #pragma once
 
-#include "Styles.h"
+#include "TokenData.h"
 #include "widgets/StyledWidget.h"
 
-#include <QScopedPointer>
-#include <QSharedPointer>
-
-struct QCardInfo;
 class QSvgWidget;
 namespace Ui {
 class CardWidget;
 }
 
-class CardWidget : public StyledWidget, public PictureInterface
+class CardWidget : public StyledWidget
 {
 	Q_OBJECT
 
 public:
-	explicit CardWidget( QWidget *parent = nullptr );
-	explicit CardWidget(QString id, QWidget *parent = nullptr);
+	explicit CardWidget(QWidget *parent = nullptr);
+	explicit CardWidget(bool popup, QWidget *parent = nullptr);
 	~CardWidget() final;
 
-	void clearPicture() override;
-	QString id() const;
-	bool isLoading() const;
-	void showPicture( const QPixmap &pix ) override;
-	void update(const QSharedPointer<const QCardInfo> &ci, const QString &cardId);
+	void clearPicture();
+	TokenData token() const;
+	void showPicture( const QPixmap &pix );
+	void update(const TokenData &token, bool multiple);
 
 signals:
 	void photoClicked( const QPixmap &pixmap );
-	void selected( const QString &card );
+	void selected(const TokenData &token);
 
 private:
 	bool event(QEvent *ev) override;
@@ -56,7 +51,8 @@ private:
 	void clearSeal();
 
 	Ui::CardWidget *ui;
-	QString card;
-	QSharedPointer<const QCardInfo> cardInfo;
+	TokenData t;
 	QSvgWidget *seal = nullptr;
+	bool isPopup = false;
+	bool isMultiple = false;
 };
